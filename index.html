@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>悉曇梵字發音辭典 (考試備考詳解版)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Siddham&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "Noto Sans Siddham";
+      src: url("./fonts/NotoSansSiddham-Regular.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-hover: #f1f5f9;
+      --card-active: #e0e7ff;
+      --primary: #4338ca;
+      --border: #cbd5e1;
+      --text: #0f172a;
+      --subtext: #64748b;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header { text-align: center; margin-bottom: 1rem; }
+    h1 { margin: 0 0 0.4rem 0; font-size: 1.6rem; font-weight: 700; }
+    .desc { color: var(--subtext); font-size: 0.9rem; margin: 0; }
+    
+    .tab-bar { 
+      display: flex; 
+      gap: 6px; 
+      margin-bottom: 2rem; 
+      flex-wrap: wrap; 
+      justify-content: center; 
+      max-width: 950px; 
+    }
+    .tab-btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--subtext);
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover { background: #f1f5f9; color: var(--text); }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 4px rgba(67, 56, 202, 0.25);
+    }
+    .tab-content { display: none; width: 100%; max-width: 860px; }
+    .tab-content.active { display: block; }
+    
+    .vowels-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    
+    .table-section {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .table-header {
+      display: grid;
+      grid-template-columns: 100px repeat(5, 1fr);
+      gap: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--subtext);
+      text-align: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 10px;
+    }
+    .table-row {
+      display: grid;
+      grid-template-columns: 100px repeat(5, 1fr);
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .row-label { font-size: 0.9rem; font-weight: 600; color: #334155; }
+    .two-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1rem; }
+    .sub-section-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin: 1.2rem 0 0.6rem 0;
+      padding-left: 4px;
+      border-left: 4px solid var(--primary);
+    }
+    .char-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 4px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .char-card:hover { background: var(--card-hover); transform: translateY(-2px); box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+    .char-card.playing { background: var(--card-active) !important; border-color: var(--primary) !important; transform: scale(0.97); }
+    .siddham-char { font-family: "Noto Sans Siddham", "Muktamsiddham", serif; font-size: 2.1rem; line-height: 1.1; color: var(--text); margin-bottom: 2px; }
+    .roman-text { font-size: 1.05rem; font-weight: 600; color: var(--primary); }
+    .meta-text { font-size: 0.72rem; color: var(--subtext); margin-top: 2px; }
+
+    /* 12 摩多清單排版 */
+    .row-list { display: flex; flex-direction: column; gap: 10px; max-width: 720px; margin: 0 auto; }
+    .item-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+    .item-card:hover { background: var(--card-hover); transform: translateX(4px); box-shadow: 0 3px 6px rgba(0,0,0,0.06); }
+    .item-card.playing { background: var(--card-active) !important; border-color: var(--primary) !important; }
+    .item-siddham { font-family: "Noto Sans Siddham", "Muktamsiddham", serif; font-size: 2.3rem; line-height: 1; width: 65px; color: var(--text); }
+    .item-roman { font-size: 1.2rem; font-weight: 700; color: var(--primary); width: 80px; }
+    .item-note { font-size: 0.9rem; color: var(--text); flex: 1; line-height: 1.4; }
+
+    @media (max-width: 600px) {
+      .table-header, .table-row { grid-template-columns: repeat(5, 1fr); }
+      .row-label { grid-column: span 5; text-align: left; padding-top: 6px; }
+      .vowels-grid, .two-col-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>悉曇梵字互動發音辭典 (考試備考詳解版)</h1>
+    <p class="desc">點擊任一字卡或行即可即時發音聆聽（含詳細字義與摩多合成義理）</p>
+  </header>
+
+  <div class="tab-bar" id="tabBar"></div>
+  <div id="containerWrapper"></div>
+
+  <!-- 35 子音總表 -->
+  <div id="consonants-tab" class="tab-content">
+    <div class="table-section">
+      <div class="table-header">
+        <div>音部</div><div>全清</div><div>次清</div><div>全濁</div><div>次濁</div><div>鼻音</div>
+      </div>
+      <div class="table-row">
+        <div class="row-label">ka 行 (喉音)</div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 0.181, 0.816, this)"><div class="siddham-char">𑖎</div><div class="roman-text">ka</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 1.406, 2.250, this)"><div class="siddham-char">𑖏</div><div class="roman-text">kha</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 2.585, 3.537, this)"><div class="siddham-char">𑖐</div><div class="roman-text">ga</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 3.673, 4.490, this)"><div class="siddham-char">𑖑</div><div class="roman-text">gha</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 4.853, 5.624, this)"><div class="siddham-char">𑖒</div><div class="roman-text">ṅa</div></div>
+      </div>
+      <div class="table-row">
+        <div class="row-label">ca 行 (口蓋)</div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 6.576, 7.302, this)"><div class="siddham-char">𑖓</div><div class="roman-text">ca</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 7.937, 8.662, this)"><div class="siddham-char">𑖔</div><div class="roman-text">cha</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 9.206, 10.068, this)"><div class="siddham-char">𑖕</div><div class="roman-text">ja</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 10.385, 11.247, this)"><div class="siddham-char">𑖖</div><div class="roman-text">jha</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 11.383, 12.245, this)"><div class="siddham-char">𑖗</div><div class="roman-text">ña</div></div>
+      </div>
+      <div class="table-row">
+        <div class="row-label">ṭa 行 (反舌)</div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 12.562, 13.243, this)"><div class="siddham-char">𑖘</div><div class="roman-text">ṭa</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 13.832, 14.558, this)"><div class="siddham-char">𑖙</div><div class="roman-text">ṭha</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 14.921, 15.646, this)"><div class="siddham-char">𑖚</div><div class="roman-text">ḍa</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 16.009, 16.780, this)"><div class="siddham-char">𑖛</div><div class="roman-text">ḍha</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 16.916, 17.642, this)"><div class="siddham-char">𑖜</div><div class="roman-text">ṇa</div></div>
+      </div>
+      <div class="table-row">
+        <div class="row-label">ta 行 (齒音)</div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 18.277, 18.912, this)"><div class="siddham-char">𑖝</div><div class="roman-text">ta</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 19.501, 20.181, this)"><div class="siddham-char">𑖞</div><div class="roman-text">tha</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 20.680, 21.406, this)"><div class="siddham-char">𑖟</div><div class="roman-text">da</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 21.769, 22.494, this)"><div class="siddham-char">𑖠</div><div class="roman-text">dha</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 23.175, 23.810, this)"><div class="siddham-char">𑖡</div><div class="roman-text">na</div></div>
+      </div>
+      <div class="table-row">
+        <div class="row-label">pa 行 (唇音)</div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 24.172, 24.671, this)"><div class="siddham-char">𑖢</div><div class="roman-text">pa</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 25.306, 26.213, this)"><div class="siddham-char">𑖣</div><div class="roman-text">pha</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 26.667, 27.347, this)"><div class="siddham-char">𑖤</div><div class="roman-text">ba</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 27.846, 28.617, this)"><div class="siddham-char">𑖥</div><div class="roman-text">bha</div></div>
+        <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 29.070, 29.751, this)"><div class="siddham-char">𑖦</div><div class="roman-text">ma</div></div>
+      </div>
+    </div>
+
+    <div class="sub-section-title">摩擦音</div>
+    <div class="two-col-grid">
+      <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 30.930, 31.655, this)"><div class="siddham-char">𑖧</div><div class="roman-text">ya</div><div class="meta-text">口蓋音</div></div>
+      <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 32.109, 32.744, this)"><div class="siddham-char">𑖨</div><div class="roman-text">ra</div><div class="meta-text">彈舌音</div></div>
+      <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 33.379, 34.150, this)"><div class="siddham-char">𑖩</div><div class="roman-text">la</div><div class="meta-text">齒音</div></div>
+      <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 34.921, 35.646, this)"><div class="siddham-char">𑖪</div><div class="roman-text">va</div><div class="meta-text">唇音</div></div>
+    </div>
+
+    <div class="sub-section-title">吹氣音</div>
+    <div class="two-col-grid">
+      <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 36.508, 37.188, this)"><div class="siddham-char">𑖫</div><div class="roman-text">śa</div><div class="meta-text">口蓋音</div></div>
+      <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 37.642, 38.277, this)"><div class="siddham-char">𑖬</div><div class="roman-text">ṣa</div><div class="meta-text">反舌音</div></div>
+      <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 38.821, 39.456, this)"><div class="siddham-char">𑖭</div><div class="roman-text">sa</div><div class="meta-text">齒音</div></div>
+      <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 40.272, 40.816, this)"><div class="siddham-char">𑖮</div><div class="roman-text">ha</div><div class="meta-text">喉音</div></div>
+    </div>
+
+    <div class="sub-section-title">複合子音</div>
+    <div class="two-col-grid">
+      <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 41.814, 42.721, this)"><div class="siddham-char">𑖯𑖩𑖼</div><div class="roman-text">llaṃ</div><div class="meta-text">二合音</div></div>
+      <div class="char-card" onclick="playRange('audio/35consonants_clean.mp3', 43.175, 43.855, this)"><div class="siddham-char">𑖎𑖿𑖬</div><div class="roman-text">kṣa</div><div class="meta-text">合體字 (ka+ṣa)</div></div>
+    </div>
+  </div>
+
+  <!-- 16 母音總表 -->
+  <div id="vowels-tab" class="tab-content">
+    <div class="vowels-grid" id="vowelsContainer"></div>
+  </div>
+
+  <script>
+    const dataMap = {
+      da: [
+        { char: "𑖟", roman: "da", note: "【字義：怨敵（怨對）】發音濁，須振動聲帶", file: "audio/da_01.mp3" },
+        { char: "𑖟𑖯", roman: "dā", note: "【字義：怨敵 + 延長成就】dā 長音", file: "audio/da_02.mp3" },
+        { char: "𑖟𑖰", roman: "di", note: "【字義：怨敵之根 ＝ 煩惱魔障產生的根源】di 短音", file: "audio/da_03.mp3" },
+        { char: "𑖟𑖱", roman: "dī", note: "【字義：怨敵之根延伸 ＝ 災禍危機】dī 長音", file: "audio/da_04.mp3" },
+        { char: "𑖟𑖲", roman: "du", note: "【字義：怨敵之譬喻 ＝ 障礙幻化】du 短音", file: "audio/da_05.mp3" },
+        { char: "𑖟𑖳", roman: "dū", note: "【字義：怨敵障礙之損減與消融】dū 長音", file: "audio/da_06.mp3" },
+        { char: "𑖟𑖸", roman: "de", note: "【字義：對對立與煩惱之強烈求索】de 長音", file: "audio/da_07.mp3" },
+        { char: "𑖟𑖹", roman: "dai", note: "【字義：於煩惱中見自在自相】dai 雙母音", file: "audio/da_08.mp3" },
+        { char: "𑖟𑖺", roman: "do", note: "【字義：深陷煩惱濁水之狂猛瀑流】do 長音", file: "audio/da_09.mp3" },
+        { char: "𑖟𑖻", roman: "dau", note: "【字義：煩惱種子之化生與變化】dau 雙母音", file: "audio/da_10.mp3" },
+        { char: "𑖟𑖼", roman: "daṃ", note: "【字義：煩惱與清淨交界之邊際】da 接鼻音 ṃ", file: "audio/da_11.mp3" },
+        { char: "𑖟𑖾", roman: "daḥ", note: "【字義：究竟解脫、徹底遠離怨敵】da 接氣音 ḥ", file: "audio/da_12.mp3" }
+      ],
+      na: [
+        { char: "𑖡", roman: "na", note: "【字義：名】發音：na ㄋㄚ，舌頭在 4 號齒音", file: "audio/na_01.mp3" },
+        { char: "𑖡𑖯", roman: "nā", note: "【字義：名（長音）】", file: "audio/na_02.mp3" },
+        { char: "𑖡𑖰", roman: "ni", note: "【字義：名相之根源】", file: "audio/na_03.mp3" },
+        { char: "𑖡𑖱", roman: "nī", note: "【字義：名相之延伸】", file: "audio/na_04.mp3" },
+        { char: "𑖡𑖲", roman: "nu", note: "【字義：名相之譬喻】", file: "audio/na_05.mp3" },
+        { char: "𑖡𑖳", roman: "nū", note: "【字義：名相之損減】", file: "audio/na_06.mp3" },
+        { char: "𑖡𑖸", roman: "ne", note: "【字義：名相之求索】", file: "audio/na_07.mp3" },
+        { char: "𑖡𑖹", roman: "nai", note: "【字義：名相之自在】", file: "audio/na_08.mp3" },
+        { char: "𑖡𑖺", roman: "no", note: "【字義：名相之瀑流】", file: "audio/na_09.mp3" },
+        { char: "𑖡𑖻", roman: "nau", note: "【字義：名相之化生】", file: "audio/na_10.mp3" },
+        { char: "𑖡𑖼", roman: "naṃ", note: "【字義：名相之邊際】", file: "audio/na_11.mp3" },
+        { char: "𑖡𑖾", roman: "naḥ", note: "【字義：超言語名相、究竟遠離】", file: "audio/na_12.mp3" }
+      ],
+      dha: [
+        { char: "𑖠", roman: "dha", note: "【字義：執持】發音：da 加出氣音", file: "audio/dha_01.mp3" },
+        { char: "𑖠𑖯", roman: "dhā", note: "【字義：執持（長音）】", file: "audio/dha_02.mp3" },
+        { char: "𑖠𑖰", roman: "dhi", note: "【字義：執持之根源】", file: "audio/dha_03.mp3" },
+        { char: "𑖠𑖱", roman: "dhī", note: "【字義：執持之智慧延伸】", file: "audio/dha_04.mp3" },
+        { char: "𑖠𑖲", roman: "dhu", note: "【字義：執持之譬喻】", file: "audio/dha_05.mp3" },
+        { char: "𑖠𑖳", roman: "dhū", note: "【字義：執持之損減】", file: "audio/dha_06.mp3" },
+        { char: "𑖠𑖸", roman: "dhe", note: "【字義：執持之求索】", file: "audio/dha_07.mp3" },
+        { char: "𑖠𑖹", roman: "dhai", note: "【字義：執持之自在】", file: "audio/dha_08.mp3" },
+        { char: "𑖠𑖺", roman: "dho", note: "【字義：執持之瀑流】", file: "audio/dha_09.mp3" },
+        { char: "𑖠𑖻", roman: "dhau", note: "【字義：執持之化生】", file: "audio/dha_10.mp3" },
+        { char: "𑖠𑖼", roman: "dhaṃ", note: "【字義：執持之邊際】", file: "audio/dha_11.mp3" },
+        { char: "𑖠𑖾", roman: "dhaḥ", note: "【字義：究竟執持、遠離執著】", file: "audio/dha_12.mp3" }
+      ],
+      tha: [
+        { char: "𑖞", roman: "tha", note: "【字義：住處】發音：ta ㄊㄚ 有出氣音", file: "audio/tha_01.mp3" },
+        { char: "𑖞𑖯", roman: "thā", note: "【字義：住處（長音）】", file: "audio/tha_02.mp3" },
+        { char: "𑖞𑖰", roman: "thi", note: "【字義：住處之根源】", file: "audio/tha_03.mp3" },
+        { char: "𑖞𑖱", roman: "thī", note: "【字義：住處之延伸】", file: "audio/tha_04.mp3" },
+        { char: "𑖞𑖲", roman: "thu", note: "【字義：住處之譬喻】", file: "audio/tha_05.mp3" },
+        { char: "𑖞𑖳", roman: "thū", note: "【字義：住處之損減】", file: "audio/tha_06.mp3" },
+        { char: "𑖞𑖸", roman: "the", note: "【字義：住處之求索】", file: "audio/tha_07.mp3" },
+        { char: "𑖞𑖹", roman: "thai", note: "【字義：住處之自在】", file: "audio/tha_08.mp3" },
+        { char: "𑖞𑖺", roman: "tho", note: "【字義：住處之瀑流】", file: "audio/tha_09.mp3" },
+        { char: "𑖞𑖻", roman: "thau", note: "【字義：住處之化生】", file: "audio/tha_10.mp3" },
+        { char: "𑖞𑖼", roman: "thaṃ", note: "【字義：住處之邊際】", file: "audio/tha_11.mp3" },
+        { char: "𑖞𑖾", roman: "thaḥ", note: "【字義：究竟安住、遠離幻相】", file: "audio/tha_12.mp3" }
+      ],
+      ta: [
+        { char: "𑖝", roman: "ta", note: "【字義：慢（我慢/驕慢）】發音：以英文 da 發音", file: "audio/ta_01.mp3" },
+        { char: "𑖝𑖯", roman: "tā", note: "【字義：慢之長音】", file: "audio/ta_02.mp3" },
+        { char: "𑖝𑖰", roman: "ti", note: "【字義：我慢之根源】", file: "audio/ta_03.mp3" },
+        { char: "𑖝𑖱", roman: "tī", note: "【字義：我慢之延伸】", file: "audio/ta_04.mp3" },
+        { char: "𑖝𑖲", roman: "tu", note: "【字義：我慢之譬喻】", file: "audio/ta_05.mp3" },
+        { char: "𑖝𑖳", roman: "tū", note: "【字義：我慢之損減】", file: "audio/ta_06.mp3" },
+        { char: "𑖝𑖸", roman: "te", note: "【字義：我慢之求索】", file: "audio/ta_07.mp3" },
+        { char: "𑖝𑖹", roman: "tai", note: "【字義：我慢之自在】", file: "audio/ta_08.mp3" },
+        { char: "𑖝𑖺", roman: "to", note: "【字義：我慢之瀑流】", file: "audio/ta_09.mp3" },
+        { char: "𑖝𑖻", roman: "tau", note: "【字義：我慢之化生】", file: "audio/ta_10.mp3" },
+        { char: "𑖝𑖼", roman: "taṃ", note: "【字義：我慢之邊際】", file: "audio/ta_11.mp3" },
+        { char: "𑖝𑖾", roman: "taḥ", note: "【字義：遠離我慢、究竟清淨】", file: "audio/ta_12.mp3" }
+      ],
+      ma: [
+        { char: "𑖦", roman: "ma", note: "【字義：我（我相/人我）】發音：ma ㄇㄚ", file: "audio/ma_01.mp3" },
+        { char: "𑖦𑖯", roman: "mā", note: "【字義：我（長音）】", file: "audio/ma_02.mp3" },
+        { char: "𑖦𑖰", roman: "mi", note: "【字義：我執之根源】", file: "audio/ma_03.mp3" },
+        { char: "𑖦𑖱", roman: "mī", note: "【字義：我執之延伸】", file: "audio/ma_04.mp3" },
+        { char: "𑖦𑖲", roman: "mu", note: "【字義：我執之譬喻】", file: "audio/ma_05.mp3" },
+        { char: "𑖦𑖳", roman: "mū", note: "【字義：我執之損減】", file: "audio/ma_06.mp3" },
+        { char: "𑖦𑖸", roman: "me", note: "【字義：我執之求索】", file: "audio/ma_07.mp3" },
+        { char: "𑖦𑖹", roman: "mai", note: "【字義：我執之自在】", file: "audio/ma_08.mp3" },
+        { char: "𑖦𑖺", roman: "mo", note: "【字義：我執之瀑流】", file: "audio/ma_09.mp3" },
+        { char: "𑖦𑖻", roman: "mau", note: "【字義：我執之化生】", file: "audio/ma_10.mp3" },
+        { char: "𑖦𑖼", roman: "maṃ", note: "【字義：我執之邊際】", file: "audio/ma_11.mp3" },
+        { char: "𑖦𑖾", roman: "maḥ", note: "【字義：破除我執、究竟遠離】", file: "audio/ma_12.mp3" }
+      ],
+      bha: [
+        { char: "𑖥", roman: "bha", note: "【字義：有（存有/諸有）】發音：ba 加出氣音", file: "audio/bha_01.mp3" },
+        { char: "𑖥𑖯", roman: "bhā", note: "【字義：有（長音）】", file: "audio/bha_02.mp3" },
+        { char: "𑖥𑖰", roman: "bhi", note: "【字義：諸有之根源】", file: "audio/bha_03.mp3" },
+        { char: "𑖥𑖱", roman: "bhī", note: "【字義：諸有之延伸】", file: "audio/bha_04.mp3" },
+        { char: "𑖥𑖲", roman: "bhu", note: "【字義：諸有之譬喻】", file: "audio/bha_05.mp3" },
+        { char: "𑖥𑖳", roman: "bhū", note: "【字義：諸有之損減】", file: "audio/bha_06.mp3" },
+        { char: "𑖥𑖸", roman: "bhe", note: "【字義：諸有之求索】", file: "audio/bha_07.mp3" },
+        { char: "𑖥𑖹", roman: "bhai", note: "【字義：諸有之自在】", file: "audio/bha_08.mp3" },
+        { char: "𑖥𑖺", roman: "bho", note: "【字義：諸有之瀑流】", file: "audio/bha_09.mp3" },
+        { char: "𑖥𑖻", roman: "bhau", note: "【字義：諸有之化生】", file: "audio/bha_10.mp3" },
+        { char: "𑖥𑖼", roman: "bhaṃ", note: "【字義：諸有之邊際】", file: "audio/bha_11.mp3" },
+        { char: "𑖥𑖾", roman: "bhaḥ", note: "【字義：超出諸有、究竟遠離】", file: "audio/bha_12.mp3" }
+      ],
+      ba: [
+        { char: "𑖤", roman: "ba", note: "【字義：縛（束縛/生死纏縛）】發音：台語「肉」音，濁音", file: "audio/ba_01.mp3" },
+        { char: "𑖤𑖯", roman: "bā", note: "【字義：束縛（長音）】", file: "audio/ba_02.mp3" },
+        { char: "𑖤𑖰", roman: "bi", note: "【字義：生死纏縛之根源】", file: "audio/ba_03.mp3" },
+        { char: "𑖤𑖱", roman: "bī", note: "【字義：生死纏縛之延伸】", file: "audio/ba_04.mp3" },
+        { char: "𑖤𑖲", roman: "bu", note: "【字義：生死纏縛之譬喻】", file: "audio/ba_05.mp3" },
+        { char: "𑖤𑖳", roman: "bū", note: "【字義：束縛之損減、解脫】", file: "audio/ba_06.mp3" },
+        { char: "𑖤𑖸", roman: "be", note: "【字義：束縛之求索】", file: "audio/ba_07.mp3" },
+        { char: "𑖤𑖹", roman: "bai", note: "【字義：於束縛中見自在】", file: "audio/ba_08.mp3" },
+        { char: "𑖤𑖺", roman: "bo", note: "【字義：深陷生死瀑流】以「某(台語)」發音", file: "audio/ba_09.mp3" },
+        { char: "𑖤𑖻", roman: "bau", note: "【字義：束縛之化生】", file: "audio/ba_10.mp3" },
+        { char: "𑖤𑖼", roman: "baṃ", note: "【字義：束縛之邊際】", file: "audio/ba_11.mp3" },
+        { char: "𑖤𑖾", roman: "baḥ", note: "【字義：解脫纏縛、究竟遠離】", file: "audio/ba_12.mp3" }
+      ],
+      pha: [
+        { char: "𑖣", roman: "pha", note: "【字義：不堅如聚沫（不堅）】發音：pa ㄆㄚ，有出氣音", file: "audio/pha_01.mp3" },
+        { char: "𑖣𑖯", roman: "phā", note: "【字義：不堅（長音）】", file: "audio/pha_02.mp3" },
+        { char: "𑖣𑖰", roman: "phi", note: "【字義：虛幻不堅之根源】", file: "audio/pha_03.mp3" },
+        { char: "𑖣𑖱", roman: "phī", note: "【字義：虛幻不堅之延伸】", file: "audio/pha_04.mp3" },
+        { char: "𑖣𑖲", roman: "phu", note: "【字義：虛幻不堅之譬喻】", file: "audio/pha_05.mp3" },
+        { char: "𑖣𑖳", roman: "phū", note: "【字義：虛幻不堅之損減】", file: "audio/pha_06.mp3" },
+        { char: "𑖣𑖸", roman: "phe", note: "【字義：虛幻不堅之求索】", file: "audio/pha_07.mp3" },
+        { char: "𑖣𑖹", roman: "phai", note: "【字義：虛幻不堅之自在】", file: "audio/pha_08.mp3" },
+        { char: "𑖣𑖺", roman: "pho", note: "【字義：虛幻不堅之瀑流】", file: "audio/pha_09.mp3" },
+        { char: "𑖣𑖻", roman: "phau", note: "【字義：虛幻不堅之化生】", file: "audio/pha_10.mp3" },
+        { char: "𑖣𑖼", roman: "phaṃ", note: "【字義：虛幻不堅之邊際】", file: "audio/pha_11.mp3" },
+        { char: "𑖣𑖾", roman: "phaḥ", note: "【字義：看破虛幻、究竟遠離】", file: "audio/pha_12.mp3" }
+      ],
+      pa: [
+        { char: "𑖢", roman: "pa", note: "【字義：第一義諦（第一義）】發音：以英文 ba 發音", file: "audio/pa_01.mp3" },
+        { char: "𑖢𑖯", roman: "pā", note: "【字義：第一義諦（長音）】", file: "audio/pa_02.mp3" },
+        { char: "𑖢𑖰", roman: "pi", note: "【字義：第一義諦之根源】", file: "audio/pa_03.mp3" },
+        { char: "𑖢𑖱", roman: "pī", note: "【字義：第一義諦之深遠延伸】", file: "audio/pa_04.mp3" },
+        { char: "𑖢𑖲", roman: "pu", note: "【字義：第一義諦之譬喻】", file: "audio/pa_05.mp3" },
+        { char: "𑖢𑖳", roman: "pū", note: "【字義：第一義諦之損減】", file: "audio/pa_06.mp3" },
+        { char: "𑖢𑖸", roman: "pe", note: "【字義：第一義諦之求索】", file: "audio/pa_07.mp3" },
+        { char: "𑖢𑖹", roman: "pai", note: "【字義：第一義諦之自在】", file: "audio/pa_08.mp3" },
+        { char: "𑖢𑖺", roman: "po", note: "【字義：第一義諦之瀑流】", file: "audio/pa_09.mp3" },
+        { char: "𑖢𑖻", roman: "pau", note: "【字義：第一義諦之化生】", file: "audio/pa_10.mp3" },
+        { char: "𑖢𑖼", roman: "paṃ", note: "【字義：第一義諦之邊際】", file: "audio/pa_11.mp3" },
+        { char: "𑖢𑖾", roman: "paḥ", note: "【字義：契入第一義諦、究竟遠離】", file: "audio/pa_12.mp3" }
+      ],
+      nna: [
+        { char: "𑖜", roman: "ṇa", note: "【字義：不可得 / 本性寂】發音：3 號捲舌鼻音", file: "audio/nna_01.mp3" },
+        { char: "𑖜𑖯", roman: "ṇā", note: "【字義：本性寂（長音）】", file: "audio/nna_02.mp3" },
+        { char: "𑖜𑖰", roman: "ṇi", note: "【字義：本性寂之根源】", file: "audio/nna_03.mp3" },
+        { char: "𑖜𑖱", roman: "ṇī", note: "【字義：本性寂之延伸】", file: "audio/nna_04.mp3" },
+        { char: "𑖜𑖲", roman: "ṇu", note: "【字義：本性寂之譬喻】", file: "audio/nna_05.mp3" },
+        { char: "𑖜𑖳", roman: "ṇū", note: "【字義：本性寂之損減】", file: "audio/nna_06.mp3" },
+        { char: "𑖜𑖸", roman: "ṇe", note: "【字義：本性寂之求索】", file: "audio/nna_07.mp3" },
+        { char: "𑖜𑖹", roman: "ṇai", note: "【字義：本性寂之自在】", file: "audio/nna_08.mp3" },
+        { char: "𑖜𑖺", roman: "ṇo", note: "【字義：本性寂之瀑流】", file: "audio/nna_09.mp3" },
+        { char: "𑖜𑖻", roman: "ṇau", note: "【字義：本性寂之化生】", file: "audio/nna_10.mp3" },
+        { char: "𑖜𑖼", roman: "ṇaṃ", note: "【字義：本性寂之邊際】", file: "audio/nna_11.mp3" },
+        { char: "𑖜𑖾", roman: "ṇaḥ", note: "【字義：究竟安住本性寂、遠離】", file: "audio/nna_12.mp3" }
+      ],
+      ddha: [
+        { char: "𑖛", roman: "ḍha", note: "【字義：法界】發音：ḍa 加出氣音", file: "audio/ddha_01.mp3" },
+        { char: "𑖛𑖯", roman: "ḍhā", note: "【字義：法界（長音）】", file: "audio/ddha_02.mp3" },
+        { char: "𑖛𑖰", roman: "ḍhi", note: "【字義：法界之根源】", file: "audio/ddha_03.mp3" },
+        { char: "𑖛𑖱", roman: "ḍhī", note: "【字義：法界之智慧延伸】", file: "audio/ddha_04.mp3" },
+        { char: "𑖛𑖲", roman: "ḍhu", note: "【字義：法界之譬喻】", file: "audio/ddha_05.mp3" },
+        { char: "𑖛𑖳", roman: "ḍhū", note: "【字義：法界之損減】", file: "audio/ddha_06.mp3" },
+        { char: "𑖛𑖸", roman: "ḍhe", note: "【字義：法界之求索】", file: "audio/ddha_07.mp3" },
+        { char: "𑖛𑖹", roman: "ḍhai", note: "【字義：法界之自在】", file: "audio/ddha_08.mp3" },
+        { char: "𑖛𑖺", roman: "ḍho", note: "【字義：法界之瀑流】", file: "audio/ddha_09.mp3" },
+        { char: "𑖛𑖻", roman: "ḍhau", note: "【字義：法界之化生】", file: "audio/ddha_10.mp3" },
+        { char: "𑖛𑖼", roman: "ḍhaṃ", note: "【字義：法界之邊際】", file: "audio/ddha_11.mp3" },
+        { char: "𑖛𑖾", roman: "ḍhaḥ", note: "【字義：究竟契入法界、遠離】", file: "audio/ddha_12.mp3" }
+      ],
+      dda: [
+        { char: "𑖚", roman: "ḍa", note: "【字義：施（施與）】發音：3 號反舌濁音", file: "audio/dda_01.mp3" },
+        { char: "𑖚𑖯", roman: "ḍā", note: "【字義：施（長音）】", file: "audio/dda_02.mp3" },
+        { char: "𑖚𑖰", roman: "ḍi", note: "【字義：施與之根源】", file: "audio/dda_03.mp3" },
+        { char: "𑖚𑖱", roman: "ḍī", note: "【字義：施與之延伸】", file: "audio/dda_04.mp3" },
+        { char: "𑖚𑖲", roman: "ḍu", note: "【字義：施與之譬喻】", file: "audio/dda_05.mp3" },
+        { char: "𑖚𑖳", roman: "ḍū", note: "【字義：施與之損減】", file: "audio/dda_06.mp3" },
+        { char: "𑖚𑖸", roman: "ḍe", note: "【字義：施與之求索】", file: "audio/dda_07.mp3" },
+        { char: "𑖚𑖹", roman: "ḍai", note: "【字義：施與之自在】", file: "audio/dda_08.mp3" },
+        { char: "𑖚𑖺", roman: "ḍo", note: "【字義：施與之瀑流】", file: "audio/dda_09.mp3" },
+        { char: "𑖚𑖻", roman: "ḍau", note: "【字義：施與之化生】", file: "audio/dda_10.mp3" },
+        { char: "𑖚𑖼", roman: "ḍaṃ", note: "【字義：施與之邊際】", file: "audio/dda_11.mp3" },
+        { char: "𑖚𑖾", roman: "ḍaḥ", note: "【字義：無相布施、究竟遠離】", file: "audio/dda_12.mp3" }
+      ],
+      ttha: [
+        { char: "𑖙", roman: "ṭha", note: "【字義：長養】發音：3 號反舌送氣音", file: "audio/ttha_01.mp3" },
+        { char: "𑖙𑖯", roman: "ṭhā", note: "【字義：長養（長音）】", file: "audio/ttha_02.mp3" },
+        { char: "𑖙𑖰", roman: "ṭhi", note: "【字義：長養之根源】", file: "audio/ttha_03.mp3" },
+        { char: "𑖙𑖱", roman: "ṭhī", note: "【字義：長養之延伸】", file: "audio/ttha_04.mp3" },
+        { char: "𑖙𑖲", roman: "ṭhu", note: "【字義：長養之譬喻】", file: "audio/ttha_05.mp3" },
+        { char: "𑖙𑖳", roman: "ṭhū", note: "【字義：長養之損減】", file: "audio/ttha_06.mp3" },
+        { char: "𑖙𑖸", roman: "ṭhe", note: "【字義：長養之求索】", file: "audio/ttha_07.mp3" },
+        { char: "𑖙𑖹", roman: "ṭhai", note: "【字義：長養之自在】", file: "audio/ttha_08.mp3" },
+        { char: "𑖙𑖺", roman: "ṭho", note: "【字義：長養之瀑流】", file: "audio/ttha_09.mp3" },
+        { char: "𑖙𑖻", roman: "ṭhau", note: "【字義：長養之化生】", file: "audio/ttha_10.mp3" },
+        { char: "𑖙𑖼", roman: "ṭhaṃ", note: "【字義：長養之邊際】", file: "audio/ttha_11.mp3" },
+        { char: "𑖙𑖾", roman: "ṭhaḥ", note: "【字義：究竟長養、遠離執著】", file: "audio/ttha_12.mp3" }
+      ],
+      tta: [
+        { char: "𑖘", roman: "ṭa", note: "【字義：慢】發音：3 號捲舌搭音", file: "audio/tta_01.mp3" },
+        { char: "𑖘𑖯", roman: "ṭā", note: "【字義：慢（長音）】", file: "audio/tta_02.mp3" },
+        { char: "𑖘𑖰", roman: "ṭi", note: "【字義：慢之根源】", file: "audio/tta_03.mp3" },
+        { char: "𑖘𑖱", roman: "ṭī", note: "【字義：慢之延伸】", file: "audio/tta_04.mp3" },
+        { char: "𑖘𑖲", roman: "ṭu", note: "【字義：慢之譬喻】", file: "audio/tta_05.mp3" },
+        { char: "𑖘𑖳", roman: "ṭū", note: "【字義：慢之損減】", file: "audio/tta_06.mp3" },
+        { char: "𑖘𑖸", roman: "ṭe", note: "【字義：慢之求索】", file: "audio/tta_07.mp3" },
+        { char: "𑖘𑖹", roman: "ṭai", note: "【字義：慢之自在】", file: "audio/tta_08.mp3" },
+        { char: "𑖘𑖺", roman: "ṭo", note: "【字義：慢之瀑流】", file: "audio/tta_09.mp3" },
+        { char: "𑖘𑖻", roman: "ṭau", note: "【字義：慢之化生】", file: "audio/tta_10.mp3" },
+        { char: "𑖘𑖼", roman: "ṭaṃ", note: "【字義：慢之邊際】", file: "audio/tta_11.mp3" },
+        { char: "𑖘𑖾", roman: "ṭaḥ", note: "【字義：破除我慢、究竟遠離】", file: "audio/tta_12.mp3" }
+      ],
+      nya: [
+        { char: "𑖗", roman: "ña", note: "【字義：智】發音：2 號口蓋鼻音", file: "audio/nya_01.mp3" },
+        { char: "𑖗𑖯", roman: "ñā", note: "【字義：智（長音）】", file: "audio/nya_02.mp3" },
+        { char: "𑖗𑖰", roman: "ñi", note: "【字義：智慧之根源】", file: "audio/nya_03.mp3" },
+        { char: "𑖗𑖱", roman: "ñī", note: "【字義：智慧之深遠延伸】", file: "audio/nya_04.mp3" },
+        { char: "𑖗𑖲", roman: "ñu", note: "【字義：智慧之譬喻】", file: "audio/nya_05.mp3" },
+        { char: "𑖗𑖳", roman: "ñū", note: "【字義：智慧之損減（破除無明）】", file: "audio/nya_06.mp3" },
+        { char: "𑖗𑖸", roman: "ñe", note: "【字義：智慧之求索】", file: "audio/nya_07.mp3" },
+        { char: "𑖗𑖹", roman: "ñai", note: "【字義：智慧之自在】", file: "audio/nya_08.mp3" },
+        { char: "𑖗𑖺", roman: "ño", note: "【字義：智慧之瀑流】", file: "audio/nya_09.mp3" },
+        { char: "𑖗𑖻", roman: "ñau", note: "【字義：智慧之化生】", file: "audio/nya_10.mp3" },
+        { char: "𑖗𑖼", roman: "ñaṃ", note: "【字義：智慧之邊際】", file: "audio/nya_11.mp3" },
+        { char: "𑖗𑖾", roman: "ñaḥ", note: "【字義：究竟圓滿大智、遠離】", file: "audio/nya_12.mp3" }
+      ],
+      ja: [
+        { char: "𑖕", roman: "ja", note: "【字義：生】發音：2 號口蓋濁音，須振聲帶", file: "audio/ja_01.mp3" },
+        { char: "𑖕𑖯", roman: "jā", note: "【字義：生（長音）】", file: "audio/ja_02.mp3" },
+        { char: "𑖕𑖰", roman: "ji", note: "【字義：生之根源】", file: "audio/ja_03.mp3" },
+        { char: "𑖕𑖱", roman: "jī", note: "【字義：生之延伸】", file: "audio/ja_04.mp3" },
+        { char: "𑖕𑖲", roman: "ju", note: "【字義：生之譬喻】", file: "audio/ja_05.mp3" },
+        { char: "𑖕𑖳", roman: "jū", note: "【字義：生滅之損減】", file: "audio/ja_06.mp3" },
+        { char: "𑖕𑖸", roman: "je", note: "【字義：生之求索】", file: "audio/ja_07.mp3" },
+        { char: "𑖕𑖹", roman: "jai", note: "【字義：生之自在】", file: "audio/ja_08.mp3" },
+        { char: "𑖕𑖺", roman: "jo", note: "【字義：生死瀑流】", file: "audio/ja_09.mp3" },
+        { char: "𑖕𑖻", roman: "jau", note: "【字義：生死化生】", file: "audio/ja_10.mp3" },
+        { char: "𑖕𑖼", roman: "jaṃ", note: "【字義：生死邊際】", file: "audio/ja_11.mp3" },
+        { char: "𑖕𑖾", roman: "jaḥ", note: "【字義：超越生死、究竟遠離】", file: "audio/ja_12.mp3" }
+      ],
+      cha: [
+        { char: "𑖔", roman: "cha", note: "【字義：影像】發音：2 號口蓋次清音", file: "audio/cha_01.mp3" },
+        { char: "𑖔𑖯", roman: "chā", note: "【字義：影像（長音）】", file: "audio/cha_02.mp3" },
+        { char: "𑖔𑖰", roman: "chi", note: "【字義：幻影之根源】", file: "audio/cha_03.mp3" },
+        { char: "𑖔𑖱", roman: "chī", note: "【字義：幻影之延伸】", file: "audio/cha_04.mp3" },
+        { char: "𑖔𑖲", roman: "chu", note: "【字義：幻影之譬喻】", file: "audio/cha_05.mp3" },
+        { char: "𑖔𑖳", roman: "chū", note: "【字義：幻影之損減】", file: "audio/cha_06.mp3" },
+        { char: "𑖔𑖸", roman: "che", note: "【字義：幻影之求索】", file: "audio/cha_07.mp3" },
+        { char: "𑖔𑖹", roman: "chai", note: "【字義：幻影之自在】", file: "audio/cha_08.mp3" },
+        { char: "𑖔𑖺", roman: "cho", note: "【字義：幻影之瀑流】", file: "audio/cha_09.mp3" },
+        { char: "𑖔𑖻", roman: "chau", note: "【字義：幻影之化生】", file: "audio/cha_10.mp3" },
+        { char: "𑖔𑖼", roman: "chaṃ", note: "【字義：幻影之邊際】", file: "audio/cha_11.mp3" },
+        { char: "𑖔𑖾", roman: "chaḥ", note: "【字義：看破諸法如影、究竟遠離】", file: "audio/cha_12.mp3" }
+      ],
+      ca: [
+        { char: "𑖓", roman: "ca", note: "【字義：離一切遷變（遷變）】發音：za ㄗㄚ", file: "audio/ca_01.mp3" },
+        { char: "𑖓𑖯", roman: "cā", note: "【字義：遷變（長音）】", file: "audio/ca_02.mp3" },
+        { char: "𑖓𑖰", roman: "ci", note: "【字義：遷變之根源】", file: "audio/ca_03.mp3" },
+        { char: "𑖓𑖱", roman: "cī", note: "【字義：遷變之延伸】", file: "audio/ca_04.mp3" },
+        { char: "𑖓𑖲", roman: "cu", note: "【字義：遷變之譬喻】", file: "audio/ca_05.mp3" },
+        { char: "𑖓𑖳", roman: "cū", note: "【字義：遷變之損減】", file: "audio/ca_06.mp3" },
+        { char: "𑖓𑖸", roman: "ce", note: "【字義：遷變之求索】", file: "audio/ca_07.mp3" },
+        { char: "𑖓𑖹", roman: "cai", note: "【字義：遷變之自在】", file: "audio/ca_08.mp3" },
+        { char: "𑖓𑖺", roman: "co", note: "【字義：遷變之瀑流】", file: "audio/ca_09.mp3" },
+        { char: "𑖓𑖻", roman: "cau", note: "【字義：遷變之化生】", file: "audio/ca_10.mp3" },
+        { char: "𑖓𑖼", roman: "caṃ", note: "【字義：遷變之邊際】", file: "audio/ca_11.mp3" },
+        { char: "𑖓𑖾", roman: "caḥ", note: "【字義：超離一切遷變、究竟遠離】", file: "audio/ca_12.mp3" }
+      ],
+      nga: [
+        { char: "𑖒", roman: "ṅa", note: "【字義：沈没】發音：喉鼻音 ṅa", file: "audio/nga_01.mp3" },
+        { char: "𑖒𑖯", roman: "ṅā", note: "【字義：沈没（長音）】", file: "audio/nga_02.mp3" },
+        { char: "𑖒𑖰", roman: "ṅi", note: "【字義：沈没之根源】", file: "audio/nga_03.mp3" },
+        { char: "𑖒𑖱", roman: "ṅī", note: "【字義：沈没之延伸】", file: "audio/nga_04.mp3" },
+        { char: "𑖒𑖲", roman: "ṅu", note: "【字義：沈没之譬喻】", file: "audio/nga_05.mp3" },
+        { char: "𑖒𑖳", roman: "ṅū", note: "【字義：沈没之損減】", file: "audio/nga_06.mp3" },
+        { char: "𑖒𑖸", roman: "ṅe", note: "【字義：沈没之求索】", file: "audio/nga_07.mp3" },
+        { char: "𑖒𑖹", roman: "ṅai", note: "【字義：沈没之自在】", file: "audio/nga_08.mp3" },
+        { char: "𑖒𑖺", roman: "ṅo", note: "【字義：沈没之瀑流】", file: "audio/nga_09.mp3" },
+        { char: "𑖒𑖻", roman: "ṅau", note: "【字義：沈没之化生】", file: "audio/nga_10.mp3" },
+        { char: "𑖒𑖼", roman: "ṅaṃ", note: "【字義：沈没之邊際】", file: "audio/nga_11.mp3" },
+        { char: "𑖒𑖾", roman: "ṅaḥ", note: "【字義：超離沈没、究竟遠離】", file: "audio/nga_12.mp3" }
+      ],
+      gha: [
+        { char: "𑖑", roman: "gha", note: "【字義：一合（一合相）】發音：台語瓦音加出氣音", file: "audio/gha_01.mp3" },
+        { char: "𑖑𑖯", roman: "ghā", note: "【字義：一合（長音）】", file: "audio/gha_02.mp3" },
+        { char: "𑖑𑖰", roman: "ghi", note: "【字義：一合之根源】", file: "audio/gha_03.mp3" },
+        { char: "𑖑𑖱", roman: "ghī", note: "【字義：一合之延伸】", file: "audio/gha_04.mp3" },
+        { char: "𑖑𑖲", roman: "ghu", note: "【字義：一合之譬喻】", file: "audio/gha_05.mp3" },
+        { char: "𑖑𑖳", roman: "ghū", note: "【字義：一合之損減】", file: "audio/gha_06.mp3" },
+        { char: "𑖑𑖸", roman: "ghe", note: "【字義：一合之求索】", file: "audio/gha_07.mp3" },
+        { char: "𑖑𑖹", roman: "ghai", note: "【字義：一合之自在】", file: "audio/gha_08.mp3" },
+        { char: "𑖑𑖺", roman: "gho", note: "【字義：一合之瀑流】", file: "audio/gha_09.mp3" },
+        { char: "𑖑𑖻", roman: "ghau", note: "【字義：一合之化生】", file: "audio/gha_10.mp3" },
+        { char: "𑖑𑖼", roman: "ghaṃ", note: "【字義：一合之邊際】", file: "audio/gha_11.mp3" },
+        { char: "𑖑𑖾", roman: "ghaḥ", note: "【字義：契入一合相、究竟遠離】", file: "audio/gha_12.mp3" }
+      ],
+      ga: [
+        { char: "𑖐", roman: "ga", note: "【字義：行】發音：瓦斯(台語)發音", file: "audio/ga_01.mp3" },
+        { char: "𑖐𑖯", roman: "gā", note: "【字義：行（長音）】", file: "audio/ga_02.mp3" },
+        { char: "𑖐𑖰", roman: "gi", note: "【字義：行之根源】", file: "audio/ga_03.mp3" },
+        { char: "𑖐𑖱", roman: "gī", note: "【字義：行之延伸】", file: "audio/ga_04.mp3" },
+        { char: "𑖐𑖲", roman: "gu", note: "【字義：行之譬喻】", file: "audio/ga_05.mp3" },
+        { char: "𑖐𑖳", roman: "gū", note: "【字義：行之損減】", file: "audio/ga_06.mp3" },
+        { char: "𑖐𑖸", roman: "ge", note: "【字義：行之求索】", file: "audio/ga_07.mp3" },
+        { char: "𑖐𑖹", roman: "gai", note: "【字義：行之自在】", file: "audio/ga_08.mp3" },
+        { char: "𑖐𑖺", roman: "go", note: "【字義：行之瀑流】", file: "audio/ga_09.mp3" },
+        { char: "𑖐𑖻", roman: "gau", note: "【字義：行之化生】", file: "audio/ga_10.mp3" },
+        { char: "𑖐𑖼", roman: "gaṃ", note: "【字義：行之邊際】", file: "audio/ga_11.mp3" },
+        { char: "𑖐𑖾", roman: "gaḥ", note: "【字義：究竟行願、遠離障礙】", file: "audio/ga_12.mp3" }
+      ],
+      kha: [
+        { char: "𑖏", roman: "kha", note: "【字義：等虚空（等空）】發音：ka ㄎㄚ 有出氣音", file: "audio/kha_01.mp3" },
+        { char: "𑖏𑖯", roman: "khā", note: "【字義：等虛空（長音）】", file: "audio/kha_02.mp3" },
+        { char: "𑖏𑖰", roman: "khi", note: "【字義：等虛空之根源】", file: "audio/kha_03.mp3" },
+        { char: "𑖏𑖱", roman: "khī", note: "【字義：等虛空之延伸】", file: "audio/kha_04.mp3" },
+        { char: "𑖏𑖲", roman: "khu", note: "【字義：等虛空之譬喻】", file: "audio/kha_05.mp3" },
+        { char: "𑖏𑖳", roman: "khū", note: "【字義：等虛空之損減】", file: "audio/kha_06.mp3" },
+        { char: "𑖏𑖸", roman: "khe", note: "【字義：等虛空之求索】", file: "audio/kha_07.mp3" },
+        { char: "𑖏𑖹", roman: "khai", note: "【字義：等虛空之自在】", file: "audio/kha_08.mp3" },
+        { char: "𑖏𑖺", roman: "kho", note: "【字義：等虛空之瀑流】", file: "audio/kha_09.mp3" },
+        { char: "𑖏𑖻", roman: "khau", note: "【字義：等虛空之化生】", file: "audio/kha_10.mp3" },
+        { char: "𑖏𑖼", roman: "khaṃ", note: "【字義：等虛空之邊際】", file: "audio/kha_11.mp3" },
+        { char: "𑖏𑖾", roman: "khaḥ", note: "【字義：心量如虛空、究竟遠離】", file: "audio/kha_12.mp3" }
+      ],
+      ka: [
+        { char: "𑖎", roman: "ka", note: "【字義：離作業（作業）】發音：英文 ga ㄍㄚ 發音", file: "audio/ka_01.mp3" },
+        { char: "𑖎𑖯", roman: "kā", note: "【字義：離作業（長音）】", file: "audio/ka_02.mp3" },
+        { char: "𑖎𑖰", roman: "ki", note: "【字義：離作業之根源】", file: "audio/ka_03.mp3" },
+        { char: "𑖎𑖱", roman: "kī", note: "【字義：離作業之延伸】", file: "audio/ka_04.mp3" },
+        { char: "𑖎𑖲", roman: "ku", note: "【字義：離作業之譬喻】", file: "audio/ka_05.mp3" },
+        { char: "𑖎𑖳", roman: "kū", note: "【字義：離作業之損減】", file: "audio/ka_06.mp3" },
+        { char: "𑖎𑖸", roman: "ke", note: "【字義：離作業之求索】", file: "audio/ka_07.mp3" },
+        { char: "𑖎𑖹", roman: "kai", note: "【字義：離作業之自在】", file: "audio/ka_08.mp3" },
+        { char: "𑖎𑖺", roman: "ko", note: "【字義：離作業之瀑流】", file: "audio/ka_09.mp3" },
+        { char: "𑖎𑖻", roman: "kau", note: "【字義：離作業之化生】", file: "audio/ka_10.mp3" },
+        { char: "𑖎𑖼", roman: "kaṃ", note: "【字義：離作業之邊際】", file: "audio/ka_11.mp3" },
+        { char: "𑖎𑖾", roman: "kaḥ", note: "【字義：究竟無作、遠離造作】", file: "audio/ka_12.mp3" }
+      ],
+      kssa: [
+        { char: "𑖎𑖿𑖬", roman: "kṣa", note: "【字義：盡】發音：國語掐 ㄑㄧㄚ 發音", file: "audio/kssa_01.mp3" },
+        { char: "𑖎𑖿𑖬𑖯", roman: "kṣā", note: "【字義：盡（長音）】", file: "audio/kssa_02.mp3" },
+        { char: "𑖎𑖿𑖬𑖰", roman: "kṣi", note: "【字義：盡之根源】", file: "audio/kssa_03.mp3" },
+        { char: "𑖎𑖿𑖬𑖱", roman: "kṣī", note: "【字義：盡之延伸】", file: "audio/kssa_04.mp3" },
+        { char: "𑖎𑖿𑖬𑖲", roman: "kṣu", note: "【字義：盡之譬喻】", file: "audio/kssa_05.mp3" },
+        { char: "𑖎𑖿𑖬𑖳", roman: "kṣū", note: "【字義：盡之損減】", file: "audio/kssa_06.mp3" },
+        { char: "𑖎𑖿𑖬𑖸", roman: "kṣe", note: "【字義：盡之求索】", file: "audio/kssa_07.mp3" },
+        { char: "𑖎𑖿𑖬𑖹", roman: "kṣai", note: "【字義：盡之自在】", file: "audio/kssa_08.mp3" },
+        { char: "𑖎𑖿𑖬𑖺", roman: "kṣo", note: "【字義：盡之瀑流】", file: "audio/kssa_09.mp3" },
+        { char: "𑖎𑖿𑖬𑖻", roman: "kṣau", note: "【字義：盡之化生】", file: "audio/kssa_10.mp3" },
+        { char: "𑖎𑖿𑖬𑖼", roman: "kṣaṃ", note: "【字義：盡之邊際】", file: "audio/kssa_11.mp3" },
+        { char: "𑖎𑖿𑖬𑖾", roman: "kṣaḥ", note: "【字義：煩惱盡除、究竟寂滅】", file: "audio/kssa_12.mp3" }
+      ],
+      sha: [
+        { char: "𑖫", roman: "śa", note: "【字義：本性寂】發音：口蓋吹氣音，西 / ㄒㄧㄚ", file: "audio/sha_01.mp3" },
+        { char: "𑖫𑖯", roman: "śā", note: "【字義：本性寂（長音）】", file: "audio/sha_02.mp3" },
+        { char: "𑖫𑖰", roman: "śi", note: "【字義：本性寂之根源】", file: "audio/sha_03.mp3" },
+        { char: "𑖫𑖱", roman: "śī", note: "【字義：本性寂之延伸】", file: "audio/sha_04.mp3" },
+        { char: "𑖫𑖲", roman: "śu", note: "【字義：本性寂之譬喻】", file: "audio/sha_05.mp3" },
+        { char: "𑖫𑖳", roman: "śū", note: "【字義：本性寂之損減】", file: "audio/sha_06.mp3" },
+        { char: "𑖫𑖸", roman: "śe", note: "【字義：本性寂之求索】", file: "audio/sha_07.mp3" },
+        { char: "𑖫𑖹", roman: "śai", note: "【字義：本性寂之自在】", file: "audio/sha_08.mp3" },
+        { char: "𑖫𑖺", roman: "śo", note: "【字義：本性寂之瀑流】", file: "audio/sha_09.mp3" },
+        { char: "𑖫𑖻", roman: "śau", note: "【字義：本性寂之化生】", file: "audio/sha_10.mp3" },
+        { char: "𑖫𑖼", roman: "śaṃ", note: "【字義：本性寂之邊際】", file: "audio/sha_11.mp3" },
+        { char: "𑖫𑖾", roman: "śaḥ", note: "【字義：安住本性寂、究竟遠離】", file: "audio/sha_12.mp3" }
+      ],
+      ssa: [
+        { char: "𑖬", roman: "ṣa", note: "【字義：性鈍】發音：反舌吹氣音，沙 ㄕㄚ", file: "audio/ssa_01.mp3" },
+        { char: "𑖬𑖯", roman: "ṣā", note: "【字義：性鈍（長音）】", file: "audio/ssa_02.mp3" },
+        { char: "𑖬𑖰", roman: "ṣi", note: "【字義：性鈍之根源】", file: "audio/ssa_03.mp3" },
+        { char: "𑖬𑖱", roman: "ṣī", note: "【字義：性鈍之延伸】", file: "audio/ssa_04.mp3" },
+        { char: "𑖬𑖲", roman: "ṣu", note: "【字義：性鈍之譬喻】", file: "audio/ssa_05.mp3" },
+        { char: "𑖬𑖳", roman: "ṣū", note: "【字義：性鈍之損減】", file: "audio/ssa_06.mp3" },
+        { char: "𑖬𑖸", roman: "ṣe", note: "【字義：性鈍之求索】", file: "audio/ssa_07.mp3" },
+        { char: "𑖬𑖹", roman: "ṣai", note: "【字義：性鈍之自在】", file: "audio/ssa_08.mp3" },
+        { char: "𑖬𑖺", roman: "ṣo", note: "【字義：性鈍之瀑流】", file: "audio/ssa_09.mp3" },
+        { char: "𑖬𑖻", roman: "ṣau", note: "【字義：性鈍之化生】", file: "audio/ssa_10.mp3" },
+        { char: "𑖬𑖼", roman: "ṣaṃ", note: "【字義：性鈍之邊際】", file: "audio/ssa_11.mp3" },
+        { char: "𑖬𑖾", roman: "ṣaḥ", note: "【字義：轉化鈍障、究竟遠離】", file: "audio/ssa_12.mp3" }
+      ],
+      sa: [
+        { char: "𑖭", roman: "sa", note: "【字義：一切諦（諦）】發音：撒 ㄙㄚ 吹氣音", file: "audio/sa_01.mp3" },
+        { char: "𑖭𑖯", roman: "sā", note: "【字義：一切諦（長音）】", file: "audio/sa_02.mp3" },
+        { char: "𑖭𑖰", roman: "si", note: "【字義：一切諦之根源】", file: "audio/sa_03.mp3" },
+        { char: "𑖭𑖱", roman: "sī", note: "【字義：一切諦之延伸】", file: "audio/sa_04.mp3" },
+        { char: "𑖭𑖲", roman: "su", note: "【字義：一切諦之譬喻】", file: "audio/sa_05.mp3" },
+        { char: "𑖭𑖳", roman: "sū", note: "【字義：一切諦之損減】", file: "audio/sa_06.mp3" },
+        { char: "𑖭𑖸", roman: "se", note: "【字義：一切諦之求索】", file: "audio/sa_07.mp3" },
+        { char: "𑖭𑖹", roman: "sai", note: "【字義：一切諦之自在】", file: "audio/sa_08.mp3" },
+        { char: "𑖭𑖺", roman: "so", note: "【字義：一切諦之瀑流】", file: "audio/sa_09.mp3" },
+        { char: "𑖭𑖻", roman: "sau", note: "【字義：一切諦之化生】", file: "audio/sa_10.mp3" },
+        { char: "𑖭𑖼", roman: "saṃ", note: "【字義：一切諦之邊際】", file: "audio/sa_11.mp3" },
+        { char: "𑖭𑖾", roman: "saḥ", note: "【字義：契入一切諦、究竟遠離】", file: "audio/sa_12.mp3" }
+      ],
+      ha: [
+        { char: "𑖮", roman: "ha", note: "【字義：因（因業）】發音：哈 ㄏㄚ 喉音", file: "audio/ha_01.mp3" },
+        { char: "𑖮𑖯", roman: "hā", note: "【字義：因（長音）】", file: "audio/ha_02.mp3" },
+        { char: "𑖮𑖰", roman: "hi", note: "【字義：因業之根源】", file: "audio/ha_03.mp3" },
+        { char: "𑖮𑖱", roman: "hī", note: "【字義：因業之延伸】", file: "audio/ha_04.mp3" },
+        { char: "𑖮𑖲", roman: "hu", note: "【字義：因業之譬喻】", file: "audio/ha_05.mp3" },
+        { char: "𑖮𑖳", roman: "hū", note: "【字義：因業之損減】", file: "audio/ha_06.mp3" },
+        { char: "𑖮𑖸", roman: "he", note: "【字義：因業之求索】", file: "audio/ha_07.mp3" },
+        { char: "𑖮𑖹", roman: "hai", note: "【字義：因業之自在】", file: "audio/ha_08.mp3" },
+        { char: "𑖮𑖺", roman: "ho", note: "【字義：因業之瀑流】", file: "audio/ha_09.mp3" },
+        { char: "𑖮𑖻", roman: "hau", note: "【字義：因業之化生】", file: "audio/ha_10.mp3" },
+        { char: "𑖮𑖼", roman: "haṃ", note: "【字義：因業之邊際】", file: "audio/ha_11.mp3" },
+        { char: "𑖮𑖾", roman: "haḥ", note: "【字義：明了因果、究竟遠離】", file: "audio/ha_12.mp3" }
+      ],
+      ya: [
+        { char: "𑖧", roman: "ya", note: "【字義：乗】發音：ya ㄧㄚ 口蓋音", file: "audio/ya_01.mp3" },
+        { char: "𑖧𑖯", roman: "yā", note: "【字義：乗（長音）】", file: "audio/ya_02.mp3" },
+        { char: "𑖧𑖰", roman: "yi", note: "【字義：乗之根源】", file: "audio/ya_03.mp3" },
+        { char: "𑖧𑖱", roman: "yī", note: "【字義：乗之延伸】", file: "audio/ya_04.mp3" },
+        { char: "𑖧𑖲", roman: "yu", note: "【字義：乗之譬喻】", file: "audio/ya_05.mp3" },
+        { char: "𑖧𑖳", roman: "yū", note: "【字義：乗之損減】", file: "audio/ya_06.mp3" },
+        { char: "𑖧𑖸", roman: "ye", note: "【字義：乗之求索】", file: "audio/ya_07.mp3" },
+        { char: "𑖧𑖹", roman: "yai", note: "【字義：乗之自在】", file: "audio/ya_08.mp3" },
+        { char: "𑖧𑖺", roman: "yo", note: "【字義：乗之瀑流】", file: "audio/ya_09.mp3" },
+        { char: "𑖧𑖻", roman: "yau", note: "【字義：乗之化生】", file: "audio/ya_10.mp3" },
+        { char: "𑖧𑖼", roman: "yaṃ", note: "【字義：乗之邊際】", file: "audio/ya_11.mp3" },
+        { char: "𑖧𑖾", roman: "yaḥ", note: "【字義：究竟大乘、遠離】", file: "audio/ya_12.mp3" }
+      ],
+      ra: [
+        { char: "𑖨", roman: "ra", note: "【字義：離諸塵染（塵垢）】發音：彈舌音", file: "audio/ra_01.mp3" },
+        { char: "𑖨𑖯", roman: "rā", note: "【字義：離塵染（長音）】", file: "audio/ra_02.mp3" },
+        { char: "𑖨𑖰", roman: "ri", note: "【字義：離塵染之根源】", file: "audio/ra_03.mp3" },
+        { char: "𑖨𑖱", roman: "rī", note: "【字義：離塵染之延伸】", file: "audio/ra_04.mp3" },
+        { char: "𑖨𑖲", roman: "ru", note: "【字義：離塵染之譬喻】", file: "audio/ra_05.mp3" },
+        { char: "𑖨𑖳", roman: "rū", note: "【字義：離塵染之損減】", file: "audio/ra_06.mp3" },
+        { char: "𑖨𑖸", roman: "re", note: "【字義：離塵染之求索】", file: "audio/ra_07.mp3" },
+        { char: "𑖨𑖹", roman: "rai", note: "【字義：離塵染之自在】", file: "audio/ra_08.mp3" },
+        { char: "𑖨𑖺", roman: "ro", note: "【字義：離塵染之瀑流】", file: "audio/ra_09.mp3" },
+        { char: "𑖨𑖻", roman: "rau", note: "【字義：離塵染之化生】", file: "audio/ra_10.mp3" },
+        { char: "𑖨𑖼", roman: "raṃ", note: "【字義：離塵染之邊際】", file: "audio/ra_11.mp3" },
+        { char: "𑖨𑖾", roman: "raḥ", note: "【字義：究竟離垢、遠離塵染】", file: "audio/ra_12.mp3" }
+      ],
+      la: [
+        { char: "𑖩", roman: "la", note: "【字義：相】發音：la ㄌㄚ 齒音", file: "audio/la_01.mp3" },
+        { char: "𑖩𑖯", roman: "lā", note: "【字義：相（長音）】", file: "audio/la_02.mp3" },
+        { char: "𑖩𑖰", roman: "li", note: "【字義：相之根源】", file: "audio/la_03.mp3" },
+        { char: "𑖩𑖱", roman: "lī", note: "【字義：相之延伸】", file: "audio/la_04.mp3" },
+        { char: "𑖩𑖲", roman: "lu", note: "【字義：相之譬喻】", file: "audio/la_05.mp3" },
+        { char: "𑖩𑖳", roman: "lū", note: "【字義：相之損減】", file: "audio/la_06.mp3" },
+        { char: "𑖩𑖸", roman: "le", note: "【字義：相之求索】", file: "audio/la_07.mp3" },
+        { char: "𑖩𑖹", roman: "lai", note: "【字義：相之自在】", file: "audio/la_08.mp3" },
+        { char: "𑖩𑖺", roman: "lo", note: "【字義：相之瀑流】", file: "audio/la_09.mp3" },
+        { char: "𑖩𑖻", roman: "lau", note: "【字義：相之化生】", file: "audio/la_10.mp3" },
+        { char: "𑖩𑖼", roman: "laṃ", note: "【字義：相之邊際】", file: "audio/la_11.mp3" },
+        { char: "𑖩𑖾", roman: "laḥ", note: "【字義：超越諸相、究竟遠離】", file: "audio/la_12.mp3" }
+      ],
+      va: [
+        { char: "𑖪", roman: "va", note: "【字義：語言道斷（言說）】發音：va ㄨㄚ", file: "audio/va_01.mp3" },
+        { char: "𑖪𑖯", roman: "vā", note: "【字義：語言道斷（長音）】", file: "audio/va_02.mp3" },
+        { char: "𑖪𑖰", roman: "vi", note: "【字義：語言道斷之根源】", file: "audio/va_03.mp3" },
+        { char: "𑖪𑖱", roman: "vī", note: "【字義：語言道斷之延伸】", file: "audio/va_04.mp3" },
+        { char: "𑖪𑖲", roman: "vu", note: "【字義：語言道斷之譬喻】", file: "audio/va_05.mp3" },
+        { char: "𑖪𑖳", roman: "vū", note: "【字義：語言道斷之損減】", file: "audio/va_06.mp3" },
+        { char: "𑖪𑖸", roman: "ve", note: "【字義：語言道斷之求索】", file: "audio/va_07.mp3" },
+        { char: "𑖪𑖹", roman: "vai", note: "【字義：語言道斷之自在】", file: "audio/va_08.mp3" },
+        { char: "𑖪𑖺", roman: "vo", note: "【字義：語言道斷之瀑流】", file: "audio/va_09.mp3" },
+        { char: "𑖪𑖻", roman: "vau", note: "【字義：語言道斷之化生】", file: "audio/va_10.mp3" },
+        { char: "𑖪𑖼", roman: "vaṃ", note: "【字義：語言道斷之邊際】", file: "audio/va_11.mp3" },
+        { char: "𑖪𑖾", roman: "vaḥ", note: "【字義：言語道斷、心行處滅】", file: "audio/va_12.mp3" }
+      ]
+    };
+
+    const tabOrder = ['da', 'na', 'dha', 'tha', 'ta', 'ma', 'bha', 'ba', 'pha', 'pa', 'nna', 'ddha', 'dda', 'ttha', 'tta', 'nya', 'ja', 'cha', 'ca', 'nga', 'gha', 'ga', 'kha', 'ka', 'kssa', 'sha', 'ssa', 'sa', 'ha', 'ya', 'ra', 'la', 'va'];
+
+    let currentAudio = null;
+    let activeCard = null;
+
+    const tabBar = document.getElementById("tabBar");
+    const containerWrapper = document.getElementById("containerWrapper");
+
+    tabOrder.forEach((key, index) => {
+      const btn = document.createElement("button");
+      btn.className = `tab-btn ${index === 0 ? 'active' : ''}`;
+      btn.innerText = `${key} 行`;
+      btn.onclick = (e) => switchTab(`${key}-tab`, e.currentTarget);
+      tabBar.appendChild(btn);
+
+      const contentDiv = document.createElement("div");
+      contentDiv.id = `${key}-tab`;
+      contentDiv.className = `tab-content ${index === 0 ? 'active' : ''}`;
+      
+      const rowList = document.createElement("div");
+      rowList.className = "row-list";
+      rowList.id = `${key}Container`;
+      contentDiv.appendChild(rowList);
+      containerWrapper.appendChild(contentDiv);
+
+      if (dataMap[key]) {
+        dataMap[key].forEach((item) => {
+          const card = document.createElement("div");
+          card.className = "item-card";
+          card.innerHTML = `
+            <div class="item-siddham">${item.char}</div>
+            <div class="item-roman">${item.roman}</div>
+            <div class="item-note">${item.note}</div>
+          `;
+          card.onclick = () => playAudio(item.file, card);
+          rowList.appendChild(card);
+        });
+      }
+    });
+
+    // 補回「三十五子音」與「十六母音」分頁按鈕與內容
+    const extraTabs = [
+      { id: 'consonants-tab', name: '三十五子音' },
+      { id: 'vowels-tab', name: '十六母音' }
+    ];
+    
+    extraTabs.forEach(t => {
+      const btn = document.createElement("button");
+      btn.className = `tab-btn`;
+      btn.innerText = t.name;
+      btn.onclick = (e) => switchTab(t.id, e.currentTarget);
+      tabBar.appendChild(btn);
+    });
+
+    const vContainer = document.getElementById("vowelsContainer");
+    const vowelsData = [
+      { char: "𑖀", roman: "a", note: "短音 / 喉 (本不生)", file: "audio/a.mp3" },
+      { char: "𑖁", roman: "ā", note: "長音 / 喉 (寂静/虛空)", file: "audio/aa.mp3" },
+      { char: "𑖂", roman: "i", note: "短音 / 口蓋 (根)", file: "audio/i.mp3" },
+      { char: "𑖃", roman: "ī", note: "長音 / 口蓋 (災禍)", file: "audio/ii.mp3" },
+      { char: "𑖄", roman: "u", note: "短音 / 唇 (譬喩)", file: "audio/u.mp3" },
+      { char: "𑖅", roman: "ū", note: "長音 / 唇 (損減)", file: "audio/uu.mp3" },
+      { char: "𑖆", roman: "ṛ", note: "短音 / 反舌 (神通)", file: "audio/r_vowel.mp3" },
+      { char: "𑖇", roman: "ṝ", note: "長音 / 反舌 (類例)", file: "audio/rr_vowel.mp3" },
+      { char: "𑖈", roman: "ḷ", note: "短音 / 齒 (染)", file: "audio/l_vowel.mp3" },
+      { char: "𑖉", roman: "ḹ", note: "長音 / 齒 (沈没)", file: "audio/ll_vowel.mp3" },
+      { char: "𑖊", roman: "e", note: "長音 / 喉口蓋 (求)", file: "audio/e.mp3" },
+      { char: "𑖋", roman: "ai", note: "雙母音 (自在/自相)", file: "audio/ai.mp3" },
+      { char: "𑖌", roman: "o", note: "長音 / 喉唇 (瀑流)", file: "audio/o.mp3" },
+      { char: "𑖍", roman: "au", note: "雙母音 (化生/変化)", file: "audio/au.mp3" },
+      { char: "𑖀𑖼", roman: "aṃ", note: "仰月點 / 鼻 (辺際)", file: "audio/am.mp3" },
+      { char: "𑖀𑖾", roman: "aḥ", note: "涅槃點 / 氣 (遠離)", file: "audio/ah.mp3" }
+    ];
+    vowelsData.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "char-card";
+      card.innerHTML = `
+        <div class="siddham-char">${item.char}</div>
+        <div class="roman-text">${item.roman}</div>
+        <div class="meta-text">${item.note}</div>
+      `;
+      card.onclick = () => playAudio(item.file, card);
+      vContainer.appendChild(card);
+    });
+
+    function playAudio(src, cardEl) {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+      if (activeCard) activeCard.classList.remove("playing");
+      activeCard = cardEl;
+      activeCard.classList.add("playing");
+      currentAudio = new Audio(src);
+      currentAudio.play().catch(e => console.warn("播放失敗:", e));
+      currentAudio.onended = () => {
+        if (activeCard) {
+          activeCard.classList.remove("playing");
+          activeCard = null;
+        }
+      };
+    }
+
+    function playRange(src, startTime, endTime, cardEl) {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+      if (activeCard) activeCard.classList.remove("playing");
+      activeCard = cardEl;
+      activeCard.classList.add("playing");
+
+      currentAudio = new Audio(src);
+      currentAudio.currentTime = startTime;
+      currentAudio.play().catch(e => console.warn("播放失敗:", e));
+
+      // 設定當播放到達該子音結束時間點時自動暫停
+      const checkTime = () => {
+        if (currentAudio && currentAudio.currentTime >= endTime) {
+          currentAudio.pause();
+          currentAudio.removeEventListener('timeupdate', checkTime);
+          if (activeCard) {
+            activeCard.classList.remove("playing");
+            activeCard = null;
+          }
+        }
+      };
+      currentAudio.addEventListener('timeupdate', checkTime);
+
+      currentAudio.onended = () => {
+        if (activeCard) {
+          activeCard.classList.remove("playing");
+          activeCard = null;
+        }
+      };
+    }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById(tabId).classList.add("active");
+      if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+      if (activeCard) { activeCard.classList.remove("playing"); activeCard = null; }
+    }
+  </script>
+</body>
+</html>
