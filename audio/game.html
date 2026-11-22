@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>悉曇梵字互動記憶闖關營（含60天進度表與真言實戰）</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Siddham&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "Noto Sans Siddham";
+      src: url("./fonts/NotoSansSiddham-Regular.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    :root {
+      --bg: #f5f3ff;
+      --card: #ffffff;
+      --primary: #4f46e5;
+      --primary-light: #e0e7ff;
+      --success: #16a34a;
+      --success-bg: #dcfce7;
+      --danger: #dc2626;
+      --danger-bg: #fee2e2;
+      --text: #1e293b;
+      --subtext: #64748b;
+      --border: #cbd5e1;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 1.5rem 1rem 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header { text-align: center; max-width: 780px; margin-bottom: 1rem; }
+    h1 { font-size: 1.5rem; margin: 0 0 0.4rem; color: #312e81; }
+    .subtitle { font-size: 0.9rem; color: var(--subtext); margin: 0; }
+
+    /* 頂部主導覽 */
+    .top-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1.2rem;
+      width: 100%;
+      max-width: 780px;
+    }
+    .nav-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--subtext);
+      transition: all 0.2s;
+    }
+    .nav-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.25);
+    }
+
+    .stage-bar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 820px; margin-bottom: 1.2rem; }
+    .stage-btn {
+      background: #fff; border: 1.5px solid var(--border); border-radius: 999px;
+      padding: 7px 14px; font-size: 0.86rem; font-weight: 600; color: var(--subtext);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .stage-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .stage-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 3px 8px rgba(79, 70, 229, 0.25); }
+    .stage-btn.done::after { content: " ✓"; color: #86efac; font-weight: bold; }
+
+    .panel {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 1.5rem; width: 100%; max-width: 780px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); box-sizing: border-box;
+    }
+
+    /* 進度表樣式 */
+    .progress-summary {
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 1.2rem;
+    }
+    .progress-bar-bg {
+      width: 100%;
+      height: 12px;
+      background: #cbd5e1;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--success);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .week-card {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+    .week-title {
+      font-weight: 800;
+      color: #312e81;
+      font-size: 1.02rem;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 6px;
+      border-bottom: 1px dashed #e2e8f0;
+      cursor: pointer;
+    }
+    .task-item:last-child { border-bottom: none; }
+    .task-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--success);
+      cursor: pointer;
+    }
+    .task-text { flex: 1; font-size: 0.94rem; line-height: 1.45; }
+    .task-item.checked .task-text { text-decoration: line-through; color: #94a3b8; }
+    .go-stage-tag {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    /* 學習與測驗模式 */
+    .mode-switch { display: flex; gap: 10px; margin-bottom: 1.2rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; }
+    .mode-tab {
+      flex: 1; padding: 10px; border-radius: 10px; border: 1.5px solid var(--border);
+      background: #f8fafc; font-size: 0.95rem; font-weight: 700; cursor: pointer; text-align: center; color: var(--subtext);
+    }
+    .mode-tab.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+    .mnemonic-banner {
+      background: #fefce8; border: 1px solid #fde047; border-radius: 10px;
+      padding: 12px 16px; margin-bottom: 1.2rem; font-size: 0.95rem; color: #854d0e; line-height: 1.5;
+    }
+    .learn-list { display: flex; flex-direction: column; gap: 12px; }
+    .learn-card {
+      display: flex; align-items: center; gap: 16px; border: 1.5px solid #e2e8f0;
+      border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.15s; background: #fff;
+    }
+    .learn-card:hover { border-color: var(--primary); background: #f8fafc; transform: translateY(-1px); }
+    .learn-card.playing { background: var(--primary-light); border-color: var(--primary); }
+    .char-box { min-width: 84px; text-align: center; background: #f1f5f9; border-radius: 10px; padding: 8px 6px; }
+    .siddham { font-family: "Noto Sans Siddham", serif; font-size: 2.3rem; line-height: 1.2; color: #0f172a; }
+    .siddham-mantra { font-family: "Noto Sans Siddham", serif; font-size: 1.75rem; line-height: 1.3; color: #0f172a; }
+    .roman { font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-top: 4px; }
+    .info-box { flex: 1; }
+    .meaning-tag {
+      display: inline-block; background: #eef2ff; color: #3730a3; font-weight: 700;
+      font-size: 0.94rem; padding: 3px 10px; border-radius: 6px; margin-bottom: 6px;
+    }
+    .hint-text { font-size: 0.92rem; color: #334155; line-height: 1.45; }
+    .sound-icon { font-size: 1.3rem; color: var(--primary); padding: 8px; }
+    .primary-btn {
+      width: 100%; margin-top: 1.5rem; padding: 14px; background: var(--primary); color: #fff;
+      border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: background 0.2s;
+    }
+    .primary-btn:hover { background: #4338ca; }
+    .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-size: 0.9rem; color: var(--subtext); font-weight: 600; }
+    .q-type-badge { background: #f3e8ff; color: #6b21a8; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; }
+    .question-box { text-align: center; padding: 1.5rem 1rem; background: #f8fafc; border-radius: 12px; margin-bottom: 1.2rem; border: 1px solid #e2e8f0; }
+    .q-prompt { font-size: 1.08rem; font-weight: 700; color: #1e293b; margin-bottom: 0.8rem; }
+    .q-display-char { font-family: "Noto Sans Siddham", serif; font-size: 3.2rem; line-height: 1.25; color: #0f172a; margin: 0.4rem 0; word-break: break-all; }
+    .audio-replay-btn {
+      background: var(--primary); color: #fff; border: none; border-radius: 999px;
+      padding: 10px 22px; font-size: 1rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; margin-top: 0.5rem;
+    }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .opt-btn {
+      background: #fff; border: 2px solid var(--border); border-radius: 12px; padding: 14px 12px;
+      cursor: pointer; font-size: 1rem; font-weight: 600; color: var(--text); transition: all 0.15s;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 68px; text-align: center;
+    }
+    .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: #f5f3ff; }
+    .opt-btn .siddham { font-size: 2.2rem; }
+    .opt-btn.correct { background: var(--success-bg); border-color: var(--success); color: #14532d; }
+    .opt-btn.wrong { background: var(--danger-bg); border-color: var(--danger); color: #7f1d1d; }
+    .feedback-box { margin-top: 1.2rem; padding: 14px 16px; border-radius: 10px; font-size: 0.95rem; line-height: 1.5; display: none; }
+    .feedback-box.ok { background: var(--success-bg); color: #14532d; border: 1px solid #86efac; }
+    .feedback-box.err { background: var(--danger-bg); color: #7f1d1d; border: 1px solid #fca5a5; }
+    @media (max-width: 560px) {
+      .options-grid { grid-template-columns: 1fr; }
+      .learn-card { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>悉曇梵字互動記憶闖關營</h1>
+    <p class="subtitle">60天考前無痛計畫 ＋ 51字母與摩多變化 ＋ 中階儀軌真言實戰拼讀</p>
+  </header>
+
+  <div class="top-nav">
+    <button class="nav-btn active" id="navGame" onclick="switchTopTab('game')">🎮 闖關學習與測驗（共9關）</button>
+    <button class="nav-btn" id="navPlan" onclick="switchTopTab('plan')">📅 60天每日學習進度表</button>
+  </div>
+
+  <!-- 闖關區 -->
+  <div id="gameSection" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+    <div class="stage-bar" id="stageBar"></div>
+    <div class="panel">
+      <div class="mode-switch">
+        <button class="mode-tab active" id="tabLearn" onclick="setMode('learn')">📖 第一步：先學這組字（點卡片聽發音）</button>
+        <button class="mode-tab" id="tabQuiz" onclick="setMode('quiz')">🎯 第二步：四合一隨堂測驗</button>
+      </div>
+      <div id="learnView">
+        <div class="mnemonic-banner" id="stageStory"></div>
+        <div class="learn-list" id="learnList"></div>
+        <button class="primary-btn" onclick="setMode('quiz')">我記差不多了！開始隨堂測驗 ➔</button>
+      </div>
+      <div id="quizView" style="display:none;">
+        <div class="quiz-header">
+          <span class="q-type-badge" id="qTypeBadge">題型</span>
+          <span id="qProgress">剩餘題數：10</span>
+        </div>
+        <div class="question-box">
+          <div class="q-prompt" id="qPrompt"></div>
+          <div class="q-display-char" id="qChar" style="display:none;"></div>
+          <button class="audio-replay-btn" id="qAudioBtn" style="display:none;" onclick="replayCurrentQuestionAudio()">🔊 再聽一次發音</button>
+        </div>
+        <div class="options-grid" id="optionsGrid"></div>
+        <div class="feedback-box" id="feedbackBox"></div>
+        <button class="primary-btn" id="nextBtn" style="display:none;" onclick="nextQuestion()">下一題 ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 60天進度表區 -->
+  <div id="planSection" class="panel" style="display:none;">
+    <div class="progress-summary">
+      <div style="display:flex; justify-content:space-between; font-weight:800; color:#312e81;">
+        <span>🏆 60天考前總進度（每天只要 15～20 分鐘）</span>
+        <span id="progressText">0 / 24 項任務 (0%)</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
+      </div>
+      <p style="font-size:0.85rem; color:#475569; margin:8px 0 0;">💡 勾選後會自動儲存在你的手機/電腦裡，隨時打開都能接著複習！</p>
+    </div>
+    <div id="planContainer"></div>
+  </div>
+
+  <script>
+    const stages = [
+      {
+        id: "ka-row",
+        title: "第1關：喉音 (ka行)",
+        story: "💡 <b>串聯故事口訣：</b>我彎腰做事（<b>ka</b>），心量打開如虛空（<b>kha</b>），邁開腳步去修行（<b>ga</b>），雙手合十歸於一合相（<b>gha</b>），不再像鉤子沉沒水底（<b>ṅa</b>）。",
+        items: [
+          { char: "𑖎", roman: "ka", meaning: "離作業（作業）", hint: "像人彎腰工作；發音接近英文 ga（ㄍㄚ）", audio: { type: "file", file: "audio/ka_01.mp3" }, modakaBase: "ka" },
+          { char: "𑖏", roman: "kha", meaning: "等虛空（等空）", hint: "像張開大口、裡面空空的；發音 ka（ㄎㄚ）出氣", audio: { type: "file", file: "audio/kha_01.mp3" }, modakaBase: "kha" },
+          { char: "𑖐", roman: "ga", meaning: "行", hint: "像走路邁開雙腿；發音像台語「瓦斯」的瓦", audio: { type: "file", file: "audio/ga_01.mp3" }, modakaBase: "ga" },
+          { char: "𑖑", roman: "gha", meaning: "一合（一合相）", hint: "左邊兩道彎像雙手抱拳合十；台語「瓦」加出氣", audio: { type: "file", file: "audio/gha_01.mp3" }, modakaBase: "gha" },
+          { char: "𑖒", roman: "ṅa", meaning: "沉沒", hint: "像魚鉤往下沉到水底；喉嚨鼻音 ṅa", audio: { type: "file", file: "audio/nga_01.mp3" }, modakaBase: "nga" }
+        ]
+      },
+      {
+        id: "ca-row",
+        title: "第2關：口蓋音 (ca行)",
+        story: "💡 <b>串聯故事口訣：</b>世間一切都在遷變（<b>ca</b>），如同水中幻影（<b>cha</b>），隨因緣生滅（<b>ja</b>），唯有開啟大智慧（<b>ña</b>），才能看破虛幻。（註：jha 戰敵也在此行）",
+        items: [
+          { char: "𑖓", roman: "ca", meaning: "離一切遷變（遷變）", hint: "發音 za（ㄗㄚ），2號口蓋音", audio: { type: "file", file: "audio/ca_01.mp3" }, modakaBase: "ca" },
+          { char: "𑖔", roman: "cha", meaning: "影像", hint: "像影子倒映；2號口蓋次清出氣音", audio: { type: "file", file: "audio/cha_01.mp3" }, modakaBase: "cha" },
+          { char: "𑖕", roman: "ja", meaning: "生", hint: "像草木發芽生長；2號口蓋濁音，須振聲帶", audio: { type: "file", file: "audio/ja_01.mp3" }, modakaBase: "ja" },
+          { char: "𑖖", roman: "jha", meaning: "戰敵（煩惱賊）", hint: "ja 加出氣音，象徵奮力對治煩惱", audio: { type: "range", file: "audio/35consonants_clean.mp3", start: 10.385, end: 11.247 } },
+          { char: "𑖗", roman: "ña", meaning: "智", hint: "結構繁複莊嚴，象徵大智慧；口蓋鼻音", audio: { type: "file", file: "audio/nya_01.mp3" }, modakaBase: "nya" }
+        ]
+      },
+      {
+        id: "tta-row",
+        title: "第3關：反舌音 (ṭa行)",
+        story: "💡 <b>串聯故事口訣：</b>舌尖往上捲！放下我慢（<b>ṭa</b>），長養慈悲（<b>ṭha</b>），無相布施（<b>ḍa</b>），契入廣大法界（<b>ḍha</b>），體悟萬法本性寂（<b>ṇa</b>）。",
+        items: [
+          { char: "𑖘", roman: "ṭa", meaning: "慢", hint: "像半圓鉤子往上翹；3號捲舌音", audio: { type: "file", file: "audio/tta_01.mp3" }, modakaBase: "tta" },
+          { char: "𑖙", roman: "ṭha", meaning: "長養", hint: "像飽滿的圓圈，象徵滋養長大；捲舌送氣", audio: { type: "file", file: "audio/ttha_01.mp3" }, modakaBase: "ttha" },
+          { char: "𑖚", roman: "ḍa", meaning: "施（施與）", hint: "像伸手布施的弧線；反舌濁音", audio: { type: "file", file: "audio/dda_01.mp3" }, modakaBase: "dda" },
+          { char: "𑖛", roman: "ḍha", meaning: "法界", hint: "下面多一個圓圈包羅萬象；ḍa 加出氣", audio: { type: "file", file: "audio/ddha_01.mp3" }, modakaBase: "ddha" },
+          { char: "𑖜", roman: "ṇa", meaning: "不可得 / 本性寂", hint: "像三座山峰安靜矗立；捲舌鼻音", audio: { type: "file", file: "audio/nna_01.mp3" }, modakaBase: "nna" }
+        ]
+      },
+      {
+        id: "ta-row",
+        title: "第4關：齒音 (ta行)",
+        story: "💡 <b>串聯故事口訣：</b>舌尖頂住上牙齒！破除驕慢（<b>ta</b>），找到安身住處（<b>tha</b>），化解怨敵煩惱（<b>da</b>），堅定執持正法（<b>dha</b>），超越一切假名（<b>na</b>）。",
+        items: [
+          { char: "𑖝", roman: "ta", meaning: "慢（我慢/驕慢）", hint: "像人昂首挺胸；發音接近英文 da", audio: { type: "file", file: "audio/ta_01.mp3" }, modakaBase: "ta" },
+          { char: "𑖞", roman: "tha", meaning: "住處", hint: "像一間有屋頂的小房子；發音 ta（ㄊㄚ）出氣", audio: { type: "file", file: "audio/tha_01.mp3" }, modakaBase: "tha" },
+          { char: "𑖟", roman: "da", meaning: "怨敵（怨對）", hint: "發音濁，須振動聲帶", audio: { type: "file", file: "audio/da_01.mp3" }, modakaBase: "da" },
+          { char: "𑖠", roman: "dha", meaning: "執持", hint: "像手緊握柱子；發音 da 加出氣音", audio: { type: "file", file: "audio/dha_01.mp3" }, modakaBase: "dha" },
+          { char: "𑖡", roman: "na", meaning: "名", hint: "長得很像 ta 但左邊多一圈；發音 na（ㄋㄚ）", audio: { type: "file", file: "audio/na_01.mp3" }, modakaBase: "na" }
+        ]
+      },
+      {
+        id: "pa-row",
+        title: "第5關：唇音 (pa行)",
+        story: "💡 <b>串聯故事口訣：</b>雙唇閉合再打開！契入第一義諦（<b>pa</b>），看破世間不堅如聚沫（<b>pha</b>），解開生死束縛（<b>ba</b>），超越三界諸有（<b>bha</b>），破除我執（<b>ma</b>）。",
+        items: [
+          { char: "𑖢", roman: "pa", meaning: "第一義諦（第一義）", hint: "像敞開的大門；發音接近英文 ba", audio: { type: "file", file: "audio/pa_01.mp3" }, modakaBase: "pa" },
+          { char: "𑖣", roman: "pha", meaning: "不堅如聚沫（不堅）", hint: "右邊多一個泡泡，一戳就破；pa（ㄆㄚ）出氣", audio: { type: "file", file: "audio/pha_01.mp3" }, modakaBase: "pha" },
+          { char: "𑖤", roman: "ba", meaning: "縛（束縛）", hint: "像繩子打結；發音似台語「肉」音（濁音）", audio: { type: "file", file: "audio/ba_01.mp3" }, modakaBase: "ba" },
+          { char: "𑖥", roman: "bha", meaning: "有（存有/諸有）", hint: "發音 ba 加出氣音", audio: { type: "file", file: "audio/bha_01.mp3" }, modakaBase: "bha" },
+          { char: "𑖦", roman: "ma", meaning: "我（我相/人我）", hint: "像一個人叉腰站著；發音 ma（ㄇㄚ）", audio: { type: "file", file: "audio/ma_01.mp3" }, modakaBase: "ma" }
+        ]
+      },
+      {
+        id: "ya-row",
+        title: "第6關：遍口音 (ya~va)",
+        story: "💡 <b>串聯故事口訣：</b>搭乘大乘法船（<b>ya</b>），遠離一切塵垢（<b>ra</b>），超越外在諸相（<b>la</b>），達到言語道斷之境（<b>va</b>）。",
+        items: [
+          { char: "𑖧", roman: "ya", meaning: "乘", hint: "像一艘小船載人；發音 ya（ㄧㄚ）", audio: { type: "file", file: "audio/ya_01.mp3" }, modakaBase: "ya" },
+          { char: "𑖨", roman: "ra", meaning: "離諸塵染（塵垢）", hint: "像一根直立的掃把掃塵埃；彈舌音", audio: { type: "file", file: "audio/ra_01.mp3" }, modakaBase: "ra" },
+          { char: "𑖩", roman: "la", meaning: "相", hint: "像波浪形狀的外相；發音 la（ㄌㄚ）", audio: { type: "file", file: "audio/la_01.mp3" }, modakaBase: "la" },
+          { char: "𑖪", roman: "va", meaning: "語言道斷（言說）", hint: "像三角形嘴巴閉起來；發音 va（ㄨㄚ）", audio: { type: "file", file: "audio/va_01.mp3" }, modakaBase: "va" }
+        ]
+      },
+      {
+        id: "sha-row",
+        title: "第7關：吹氣與合體 (śa~kṣa)",
+        story: "💡 <b>串聯故事口訣：</b>體證本性寂靜（<b>śa</b>），轉化愚鈍無明（<b>ṣa</b>），契入一切真諦（<b>sa</b>），明了因果業力（<b>ha</b>），煩惱盡除寂滅（<b>kṣa</b>）。",
+        items: [
+          { char: "𑖫", roman: "śa", meaning: "本性寂", hint: "發音：口蓋吹氣音，西 / ㄒㄧㄚ", audio: { type: "file", file: "audio/sha_01.mp3" }, modakaBase: "sha" },
+          { char: "𑖬", roman: "ṣa", meaning: "性鈍", hint: "發音：反舌吹氣音，沙（ㄕㄚ）", audio: { type: "file", file: "audio/ssa_01.mp3" }, modakaBase: "ssa" },
+          { char: "𑖭", roman: "sa", meaning: "一切諦（諦）", hint: "發音：齒音吹氣，撒（ㄙㄚ）", audio: { type: "file", file: "audio/sa_01.mp3" }, modakaBase: "sa" },
+          { char: "𑖮", roman: "ha", meaning: "因（因業）", hint: "發音：喉音哈（ㄏㄚ）", audio: { type: "file", file: "audio/ha_01.mp3" }, modakaBase: "ha" },
+          { char: "𑖎𑖿𑖬", roman: "kṣa", meaning: "盡", hint: "ka + ṣa 的合體字；發音國語「掐（ㄑㄧㄚ）」", audio: { type: "file", file: "audio/kssa_01.mp3" }, modakaBase: "kssa" }
+        ]
+      },
+      {
+        id: "vowels-core",
+        title: "第8關：核心母音與摩多公式",
+        story: "💡 <b>摩多變身萬用公式（必考！）：</b><br>加 <b>i (𑖰)</b> ＝「之根源」｜加 <b>u (𑖲)</b> ＝「之譬喻」｜加 <b>e (𑖸)</b> ＝「之求索」｜加 <b>o (𑖺)</b> ＝「之瀑流」｜加 <b>aṃ (𑖼)</b> ＝「之邊際」｜加 <b>aḥ (𑖾)</b> ＝「究竟遠離」",
+        items: [
+          { char: "𑖀", roman: "a", meaning: "本不生（短音）", hint: "一切悉曇字母之母，無點畫即含 a 音", audio: { type: "file", file: "audio/a.mp3" } },
+          { char: "𑖁", roman: "ā", meaning: "寂靜 / 虛空（長音）", hint: "右邊多一豎畫，表示聲音拉長", audio: { type: "file", file: "audio/aa.mp3" } },
+          { char: "𑖂", roman: "i", meaning: "根（短音）", hint: "變身符號「𑖰」加在字頭左上，字義皆為「……之根源」", audio: { type: "file", file: "audio/i.mp3" } },
+          { char: "𑖄", roman: "u", meaning: "譬喻（短音）", hint: "變身符號「𑖲」加在字腳下方，字義皆為「……之譬喻」", audio: { type: "file", file: "audio/u.mp3" } },
+          { char: "𑖊", roman: "e", meaning: "求（長音）", hint: "變身符號「𑖸」斜撇在左上，字義皆為「……之求索」", audio: { type: "file", file: "audio/e.mp3" } },
+          { char: "𑖌", roman: "o", meaning: "瀑流（長音）", hint: "變身符號「𑖺」左右包夾，字義皆為「……之瀑流」", audio: { type: "file", file: "audio/o.mp3" } },
+          { char: "𑖀𑖼", roman: "aṃ", meaning: "邊際（仰月點）", hint: "頭頂一點「𑖼」帶鼻音，字義皆為「……之邊際」", audio: { type: "file", file: "audio/am.mp3" } },
+          { char: "𑖀𑖾", roman: "aḥ", meaning: "遠離（涅槃點）", hint: "右邊上下兩點「𑖾」吐氣，字義皆為「究竟遠離……」", audio: { type: "file", file: "audio/ah.mp3" } }
+        ]
+      },
+      {
+        id: "mantra-practice",
+        title: "第9關：儀軌真言實戰拼讀",
+        isMantra: true,
+        story: "💡 <b>中階儀軌《本尊念誦次第》實戰拆解：</b>看到一長串梵字別慌！只要認出開頭第一個字 <b>𑖌𑖼 (oṃ 唵)</b> 和結尾的 <b>𑖭𑖿𑖪𑖯𑖮𑖯 (svāhā 成就)</b>，中間抓關鍵詞就能秒認整句真言！",
+        items: [
+          {
+            char: "𑖌𑖼 𑖭𑖨𑖿𑖪 𑖝𑖞𑖯𑖐𑖝 𑖮𑖡𑖦𑖡 𑖡𑖺𑖎𑖨𑖺𑖦𑖰",
+            roman: "oṃ sarva tathāgata hanamana nokaromi",
+            meaning: "壇前普禮真言",
+            hint: "口訣：看到 sarva（一切）+ tathāgata（如來），就是「普禮一切如來」的壇前普禮真言！"
+          },
+          {
+            char: "𑖌𑖼 𑖭𑖿𑖪𑖥𑖯𑖪 𑖫𑖲𑖟𑖿𑖠 𑖭𑖨𑖿𑖪 𑖠𑖨𑖿𑖦 𑖭𑖿𑖪𑖥𑖯𑖪 𑖫𑖲𑖟𑖿𑖠𑖺𑖮𑖼",
+            roman: "oṃ svabhāva śuddha sarva dharma svabhāva śuddho'haṃ",
+            meaning: "淨三業真言（一切法清淨，我亦自清淨）",
+            hint: "口訣：認出「śuddha（清淨）」和「dharma（法）」重複出現兩次，就是淨三業真言！"
+          },
+          {
+            char: "𑖌𑖼 𑖝𑖞𑖯𑖐𑖝𑖺𑖟𑖿𑖥𑖪𑖯𑖧 𑖭𑖿𑖪𑖯𑖮𑖯",
+            roman: "oṃ tathāgatodbhavāya svāhā",
+            meaning: "佛部三昧耶真言（如來發生成就）",
+            hint: "口訣：開頭是 tathāgato（如來），中間 udbhavāya（發生），結尾 svāhā（成就），印五處求身業清淨。"
+          },
+          {
+            char: "𑖌𑖼 𑖢𑖟𑖿𑖦𑖺𑖟𑖿𑖥𑖪𑖯𑖧 𑖭𑖿𑖪𑖯𑖮𑖯",
+            roman: "oṃ padmodbhavāya svāhā",
+            meaning: "蓮花部三昧耶真言（蓮花發生成就）",
+            hint: "口訣：把佛部的如來換成 padmo（蓮花），結蓮花合掌印，求語業清淨。"
+          },
+          {
+            char: "𑖌𑖼 𑖪𑖕𑖿𑖨𑖺𑖟𑖿𑖥𑖪𑖯𑖧 𑖭𑖿𑖪𑖯𑖮𑖯",
+            roman: "oṃ vajrodbhavāya svāhā",
+            meaning: "金剛部三昧耶真言（金剛發生成就）",
+            hint: "口訣：開頭變成 vajro（金剛），結金剛拳印，求意業清淨、證菩提心。"
+          },
+          {
+            char: "𑖌𑖼 𑖪𑖕𑖿𑖨𑖯𑖐𑖿𑖡𑖰 𑖢𑖿𑖨𑖟𑖱𑖢𑖿𑖝𑖯𑖧 𑖭𑖿𑖪𑖯𑖮𑖯",
+            roman: "oṃ vajrāgni pradīptāya svāhā",
+            meaning: "被甲護身真言（金剛火熾盛）",
+            hint: "口訣：vajrāgni（金剛火）+ pradīptāya（熾盛），觀想被如來大慈大悲甲冑保護自己。"
+          },
+          {
+            char: "𑖌𑖼 𑖤𑖺𑖠𑖰𑖓𑖰𑖝𑖿𑖝 𑖦𑖲𑖝𑖿𑖢𑖯𑖟𑖧𑖯𑖦𑖰",
+            roman: "oṃ bodhicitta mutpādayāmi",
+            meaning: "發菩提心真言",
+            hint: "口訣：看到 bodhicitta（菩提心）就是發菩提心真言，金剛合掌誦念。"
+          },
+          {
+            char: "𑖌𑖼 𑖭𑖦𑖧 𑖭𑖝𑖿𑖪𑖼",
+            roman: "oṃ samaya satvaṃ",
+            meaning: "三昧耶戒真言",
+            hint: "口訣：只有短短三個詞！samaya（三昧耶）+ satvaṃ（薩埵/有情），最容易一眼認出！"
+          }
+        ]
+      }
+    ];
+
+    const studyPlan = [
+      {
+        week: "第 1 週（Day 1 ~ Day 7）：認識基本五音家族（每天 1 關）",
+        tasks: [
+          { id: "w1d1", text: "Day 1：聽熟並記住【第1關：喉音 ka 行】5 字與字義，測驗過關", stageIdx: 0 },
+          { id: "w1d2", text: "Day 2：聽熟並記住【第2關：口蓋音 ca 行】5 字與字義，測驗過關", stageIdx: 1 },
+          { id: "w1d3", text: "Day 3：聽熟並記住【第3關：反舌音 ṭa 行】5 字與字義，測驗過關", stageIdx: 2 },
+          { id: "w1d4", text: "Day 4：聽熟並記住【第4關：齒音 ta 行】5 字與字義（注意區分 ta 與 na）", stageIdx: 3 },
+          { id: "w1d5", text: "Day 5：聽熟並記住【第5關：唇音 pa 行】5 字與字義（注意區分 pa 與 pha）", stageIdx: 4 },
+          { id: "w1d6", text: "Day 6～7：把第 1～5 關（25 個基本子音）各做一次隨堂測驗總複習", stageIdx: 0 }
+        ]
+      },
+      {
+        week: "第 2 週（Day 8 ~ Day 14）：遍口音、吹氣音與摩多變身公式",
+        tasks: [
+          { id: "w2d1", text: "Day 8～9：攻克【第6關：遍口音 ya~va】4 字與【第7關：吹氣音 śa~kṣa】5 字", stageIdx: 5 },
+          { id: "w2d2", text: "Day 10～11：背熟【第8關：核心母音與摩多變身萬用公式】（i 根源、e 求索、o 瀑流、aḥ 遠離）", stageIdx: 7 },
+          { id: "w2d3", text: "Day 12～14：任選 3 關刷題，專門練習題型 4「摩多拼寫變化」與聽音辨字", stageIdx: 7 }
+        ]
+      },
+      {
+        week: "第 3～4 週（Day 15 ~ Day 28）：中階儀軌《本尊念誦次第》真言實戰",
+        tasks: [
+          { id: "w3d1", text: "第3週前半：熟讀【第9關】前 4 句真言（壇前普禮、淨三業、佛部、蓮花部）並測驗", stageIdx: 8 },
+          { id: "w3d2", text: "第3週後半：熟讀【第9關】後 4 句真言（金剛部、被甲護身、發菩提心、三昧耶戒）並測驗", stageIdx: 8 },
+          { id: "w4d1", text: "第4週：對照手邊紙本筆記本（第1～15頁），遮住羅馬拼音練習直接念出梵字", stageIdx: 8 }
+        ]
+      },
+      {
+        week: "第 5～6 週（Day 29 ~ Day 42）：易混淆字形大掃除（強化長期記憶）",
+        tasks: [
+          { id: "w5d1", text: "第5週：每天刷 2 關隨堂測驗，故意挑戰「錯題自動復活」，把不熟的字逼出來", stageIdx: 3 },
+          { id: "w6d1", text: "第6週：拿一張白紙，看著羅馬拼音（ka~ha）練習手寫出對應的悉曇梵字", stageIdx: 0 }
+        ]
+      },
+      {
+        week: "第 7～8 週（Day 43 ~ Day 60）：考前模擬衝刺（每天 15 分鐘維持手感）",
+        tasks: [
+          { id: "w7d1", text: "第7週：把第 1～9 關全部重新打勾過關一次（每天 2 關，輕鬆無壓力）", stageIdx: 0 },
+          { id: "w8d1", text: "第8週：考前最後一週，專攻【第8關摩多公式】與【第9關真言拼讀】，安心上考場！", stageIdx: 8 }
+        ]
+      }
+    ];
+
+    const modakaRules = [
+      { suffixChar: "𑖰", suffixRoman: "i", idx: "03", meaningTpl: (baseMeaning) => `${baseMeaning}之根源` },
+      { suffixChar: "𑖲", suffixRoman: "u", idx: "05", meaningTpl: (baseMeaning) => `${baseMeaning}之譬喻` },
+      { suffixChar: "𑖸", suffixRoman: "e", idx: "07", meaningTpl: (baseMeaning) => `${baseMeaning}之求索` },
+      { suffixChar: "𑖺", suffixRoman: "o", idx: "09", meaningTpl: (baseMeaning) => `${baseMeaning}之瀑流` },
+      { suffixChar: "𑖼", suffixRoman: "aṃ", idx: "11", meaningTpl: (baseMeaning) => `${baseMeaning}之邊際` },
+      { suffixChar: "𑖾", suffixRoman: "aḥ", idx: "12", meaningTpl: (baseMeaning) => `究竟遠離（${baseMeaning}）` }
+    ];
+
+    let currentStageIdx = 0;
+    let completedStages = new Set();
+    let checkedTasks = new Set(JSON.parse(localStorage.getItem("siddham_plan_v1") || "[]"));
+    let currentAudio = null;
+    let quizQueue = [];
+    let currentQ = null;
+    let answered = false;
+
+    function init() {
+      renderStageBar();
+      loadStage(0);
+      renderStudyPlan();
+    }
+
+    function switchTopTab(tab) {
+      stopAudio();
+      document.getElementById("navGame").classList.toggle("active", tab === "game");
+      document.getElementById("navPlan").classList.toggle("active", tab === "plan");
+      document.getElementById("gameSection").style.display = tab === "game" ? "flex" : "none";
+      document.getElementById("planSection").style.display = tab === "plan" ? "block" : "none";
+    }
+
+    function renderStudyPlan() {
+      const container = document.getElementById("planContainer");
+      container.innerHTML = "";
+      let totalTasks = 0;
+      let doneCount = 0;
+
+      studyPlan.forEach((weekObj) => {
+        const card = document.createElement("div");
+        card.className = "week-card";
+        card.innerHTML = `<div class="week-title"><span>${weekObj.week}</span></div>`;
+
+        weekObj.tasks.forEach((t) => {
+          totalTasks++;
+          const isChecked = checkedTasks.has(t.id);
+          if (isChecked) doneCount++;
+
+          const row = document.createElement("div");
+          row.className = `task-item ${isChecked ? "checked" : ""}`;
+          row.innerHTML = `
+            <input type="checkbox" ${isChecked ? "checked" : ""}>
+            <div class="task-text">${t.text}</div>
+            <button class="go-stage-tag" onclick="event.stopPropagation(); jumpToStage(${t.stageIdx})">去練習 ➔</button>
+          `;
+          row.onclick = () => toggleTask(t.id);
+          card.appendChild(row);
+        });
+        container.appendChild(card);
+      });
+
+      const pct = totalTasks === 0 ? 0 : Math.round((doneCount / totalTasks) * 100);
+      document.getElementById("progressText").innerText = `${doneCount} / ${totalTasks} 項任務 (${pct}%)`;
+      document.getElementById("progressBarFill").style.width = `${pct}%`;
+    }
+
+    function toggleTask(taskId) {
+      if (checkedTasks.has(taskId)) checkedTasks.delete(taskId);
+      else checkedTasks.add(taskId);
+      localStorage.setItem("siddham_plan_v1", JSON.stringify([...checkedTasks]));
+      renderStudyPlan();
+    }
+
+    function jumpToStage(idx) {
+      switchTopTab("game");
+      loadStage(idx);
+    }
+
+    function renderStageBar() {
+      const bar = document.getElementById("stageBar");
+      bar.innerHTML = "";
+      stages.forEach((st, idx) => {
+        const btn = document.createElement("button");
+        btn.className = `stage-btn ${idx === currentStageIdx ? "active" : ""} ${completedStages.has(st.id) ? "done" : ""}`;
+        btn.innerText = st.title;
+        btn.onclick = () => loadStage(idx);
+        bar.appendChild(btn);
+      });
+    }
+
+    function loadStage(idx) {
+      currentStageIdx = idx;
+      renderStageBar();
+      setMode("learn");
+      const stage = stages[idx];
+      document.getElementById("stageStory").innerHTML = stage.story;
+      const list = document.getElementById("learnList");
+      list.innerHTML = "";
+      stage.items.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "learn-card";
+        const charClass = stage.isMantra ? "siddham-mantra" : "siddham";
+        const soundBadge = item.audio ? `<div class="sound-icon">🔊</div>` : `<div class="sound-icon" style="font-size:0.85rem; color:#94a3b8;">拼讀</div>`;
+        card.innerHTML = `
+          <div class="char-box" style="${stage.isMantra ? 'min-width:180px;' : ''}">
+            <div class="${charClass}">${item.char}</div>
+            <div class="roman">${item.roman}</div>
+          </div>
+          <div class="info-box">
+            <div class="meaning-tag">${stage.isMantra ? '真言名稱' : '字義'}：${item.meaning}</div>
+            <div class="hint-text">${item.hint}</div>
+          </div>
+          ${soundBadge}
+        `;
+        if (item.audio) card.onclick = () => playItemAudio(item.audio, card);
+        list.appendChild(card);
+      });
+    }
+
+    function setMode(mode) {
+      stopAudio();
+      document.getElementById("tabLearn").classList.toggle("active", mode === "learn");
+      document.getElementById("tabQuiz").classList.toggle("active", mode === "quiz");
+      document.getElementById("learnView").style.display = mode === "learn" ? "block" : "none";
+      document.getElementById("quizView").style.display = mode === "quiz" ? "block" : "none";
+      if (mode === "quiz") { buildQuizQueue(); nextQuestion(); }
+    }
+
+    function buildQuizQueue() {
+      const stage = stages[currentStageIdx];
+      const items = stage.items;
+      let questions = [];
+
+      items.forEach((item) => {
+        // 題型 1：看悉曇字選羅馬拼音
+        questions.push({
+          type: stage.isMantra ? "1. 真言拼讀辨識" : "1. 看字寫拼音",
+          prompt: stage.isMantra ? "請問這句悉曇真言的羅馬拼音是什麼？" : "請問這個悉曇梵字的羅馬拼音是什麼？",
+          displayChar: item.char,
+          isMantraChar: !!stage.isMantra,
+          audio: null,
+          correctAnswer: item.roman,
+          isCharOption: false,
+          options: shuffle(pickDistractors(items, item, "roman")),
+          explain: `這句讀作 <b>${item.roman}</b>（${item.hint}）`
+        });
+
+        // 題型 2：聽音辨字（有音檔才出）
+        if (item.audio) {
+          questions.push({
+            type: "2. 聽音辨字",
+            prompt: "請仔細聽發音，選出正確的悉曇梵字：",
+            displayChar: null,
+            audio: item.audio,
+            correctAnswer: item.char,
+            isCharOption: true,
+            options: shuffle(pickDistractors(items, item, "char")),
+            explain: `剛才播放的是 <b>${item.roman} (${item.char})</b>，字義為「${item.meaning}」。`
+          });
+        }
+
+        // 題型 3：考佛教字義 / 真言名稱
+        questions.push({
+          type: stage.isMantra ? "2. 辨識真言名稱" : "3. 考佛教字義",
+          prompt: stage.isMantra ? "請問這句悉曇梵字屬於哪一首真言？" : `悉曇字「${item.roman}」的佛教字義是什麼？`,
+          displayChar: item.char,
+          isMantraChar: !!stage.isMantra,
+          audio: null,
+          correctAnswer: item.meaning,
+          isCharOption: false,
+          options: shuffle(pickDistractors(items, item, "meaning")),
+          explain: `這是「<b>${item.meaning}</b>」，讀作 <b>${item.roman}</b>。`
+        });
+      });
+
+      const modakaCandidates = items.filter((it) => it.modakaBase);
+      if (modakaCandidates.length > 0) {
+        for (let i = 0; i < 2; i++) {
+          const baseItem = modakaCandidates[i % modakaCandidates.length];
+          const rule = modakaRules[Math.floor(Math.random() * modakaRules.length)];
+          const combinedChar = baseItem.char + rule.suffixChar;
+          const combinedRoman = baseItem.roman.slice(0, -1) + rule.suffixRoman;
+          const combinedMeaning = rule.meaningTpl(baseItem.meaning.split("（")[0]);
+          const mp3Path = `audio/${baseItem.modakaBase}_${rule.idx}.mp3`;
+          const otherRules = shuffle(modakaRules.filter((r) => r.suffixRoman !== rule.suffixRoman)).slice(0, 3);
+          const optList = shuffle([
+            `${combinedRoman}（${combinedMeaning}）`,
+            ...otherRules.map((r) => {
+              const rRom = baseItem.roman.slice(0, -1) + r.suffixRoman;
+              const rMean = r.meaningTpl(baseItem.meaning.split("（")[0]);
+              return `${rRom}（${rMean}）`;
+            })
+          ]);
+          questions.push({
+            type: "4. 摩多拼寫變化",
+            prompt: `基本字「${baseItem.char} (${baseItem.roman})」加上摩多符號後變成下圖，它的讀音與字義為何？`,
+            displayChar: combinedChar,
+            audio: { type: "file", file: mp3Path },
+            correctAnswer: `${combinedRoman}（${combinedMeaning}）`,
+            isCharOption: false,
+            options: optList,
+            explain: `加上「<b>${rule.suffixChar}</b>」後讀作 <b>${combinedRoman}</b>，字義變為「<b>${combinedMeaning}</b>」。`
+          });
+        }
+      }
+      quizQueue = shuffle(questions).slice(0, 10);
+    }
+
+    function pickDistractors(pool, targetItem, key) {
+      let others = pool.filter((x) => x[key] !== targetItem[key]).map((x) => x[key]);
+      if (others.length < 3) {
+        stages.forEach((st) => {
+          if (st.isMantra === stages[currentStageIdx].isMantra) {
+            st.items.forEach((x) => {
+              if (x[key] !== targetItem[key] && !others.includes(x[key])) others.push(x[key]);
+            });
+          }
+        });
+      }
+      return [targetItem[key], ...shuffle(others).slice(0, 3)];
+    }
+
+    function nextQuestion() {
+      stopAudio();
+      answered = false;
+      document.getElementById("feedbackBox").style.display = "none";
+      document.getElementById("nextBtn").style.display = "none";
+      if (quizQueue.length === 0) {
+        completedStages.add(stages[currentStageIdx].id);
+        renderStageBar();
+        document.getElementById("qTypeBadge").innerText = "🎉 過關完成！";
+        document.getElementById("qProgress").innerText = "剩餘題數：0";
+        document.getElementById("qPrompt").innerHTML = `太棒了！你已經完成「<b>${stages[currentStageIdx].title}</b>」的所有題型練習！`;
+        document.getElementById("qChar").style.display = "none";
+        document.getElementById("qAudioBtn").style.display = "none";
+        document.getElementById("optionsGrid").innerHTML = "";
+        const nextStageIdx = (currentStageIdx + 1) % stages.length;
+        const btn = document.getElementById("nextBtn");
+        btn.style.display = "block";
+        btn.innerText = `前往下一關：${stages[nextStageIdx].title} ➔`;
+        btn.onclick = () => { btn.onclick = nextQuestion; btn.innerText = "下一題 ➔"; loadStage(nextStageIdx); };
+        return;
+      }
+      currentQ = quizQueue.shift();
+      document.getElementById("qTypeBadge").innerText = currentQ.type;
+      document.getElementById("qProgress").innerText = `本輪還剩 ${quizQueue.length + 1} 題`;
+      document.getElementById("qPrompt").innerText = currentQ.prompt;
+      const qCharEl = document.getElementById("qChar");
+      if (currentQ.displayChar) {
+        qCharEl.style.display = "block";
+        qCharEl.style.fontSize = currentQ.isMantraChar ? "2rem" : "3.4rem";
+        qCharEl.innerText = currentQ.displayChar;
+      } else {
+        qCharEl.style.display = "none";
+      }
+      const qAudioBtn = document.getElementById("qAudioBtn");
+      if (currentQ.audio) { qAudioBtn.style.display = "inline-flex"; setTimeout(() => playItemAudio(currentQ.audio, null), 250); }
+      else { qAudioBtn.style.display = "none"; }
+      const grid = document.getElementById("optionsGrid");
+      grid.innerHTML = "";
+      currentQ.options.forEach((optText) => {
+        const btn = document.createElement("button");
+        btn.className = "opt-btn";
+        if (currentQ.isCharOption) btn.innerHTML = `<span class="siddham">${optText}</span>`;
+        else btn.innerText = optText;
+        btn.onclick = () => checkAnswer(btn, optText);
+        grid.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selectedBtn, chosenValue) {
+      if (answered) return;
+      answered = true;
+      const isCorrect = chosenValue === currentQ.correctAnswer;
+      document.querySelectorAll(".opt-btn").forEach((b) => {
+        b.disabled = true;
+        if (b.innerText.trim() === currentQ.correctAnswer) b.classList.add("correct");
+      });
+      const fb = document.getElementById("feedbackBox");
+      fb.style.display = "block";
+      if (isCorrect) {
+        selectedBtn.classList.add("correct");
+        fb.className = "feedback-box ok";
+        fb.innerHTML = `✅ <b>答對了！</b> ${currentQ.explain}`;
+        if (currentQ.audio) playItemAudio(currentQ.audio, null);
+      } else {
+        selectedBtn.classList.add("wrong");
+        fb.className = "feedback-box err";
+        fb.innerHTML = `❌ <b>差一點！</b> ${currentQ.explain}<br><small>（這題已加入復活區，等一下會再考你一次喔！）</small>`;
+        if (currentQ.audio) playItemAudio(currentQ.audio, null);
+        quizQueue.splice(Math.min(2, quizQueue.length), 0, currentQ);
+      }
+      document.getElementById("nextBtn").style.display = "block";
+    }
+
+    function replayCurrentQuestionAudio() { if (currentQ && currentQ.audio) playItemAudio(currentQ.audio, null); }
+
+    function playItemAudio(audioSpec, cardEl) {
+      stopAudio();
+      if (!audioSpec) return;
+      if (cardEl) cardEl.classList.add("playing");
+      currentAudio = new Audio(audioSpec.file);
+      if (audioSpec.type === "range") {
+        currentAudio.currentTime = audioSpec.start;
+        currentAudio.play().catch((e) => console.warn("音檔播放失敗:", e));
+        currentAudio.addEventListener("timeupdate", () => { if (currentAudio && currentAudio.currentTime >= audioSpec.end) stopAudio(); });
+      } else {
+        currentAudio.play().catch((e) => console.warn("音檔播放失敗:", e));
+      }
+      currentAudio.onended = () => stopAudio();
+    }
+
+    function stopAudio() {
+      if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+      document.querySelectorAll(".learn-card.playing").forEach((c) => c.classList.remove("playing"));
+    }
+
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    init();
+  </script>
+</body>
+</html>
