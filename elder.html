@@ -1,1 +1,1311 @@
-pbpaste > ~/Desktop/Siddham_Board/elder.html
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>悉曇心性書法靜修營｜依《梵字必携》正統筆順</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Siddham&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "Noto Sans Siddham";
+      src: url("./fonts/NotoSansSiddham-Regular.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    :root {
+      --bg: #f6f1e7;
+      --card: #fffdf9;
+      --ink: #2c241e;
+      --subink: #5c5046;
+      --cinnabar: #9e2a2b;
+      --cinnabar-bg: #fdf2f2;
+      --gold: #8c6239;
+      --gold-bg: #f7efe2;
+      --jade: #2d6a4f;
+      --jade-bg: #e8f3ee;
+      --border: #d8ccb8;
+    }
+    body {
+      font-family: "Noto Serif TC", -apple-system, BlinkMacSystemFont, serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      margin: 0;
+      padding: 1.8rem 1rem 4.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.7;
+    }
+    header { text-align: center; max-width: 820px; margin-bottom: 1.2rem; }
+    .seal-badge {
+      display: inline-block;
+      border: 2px solid var(--cinnabar);
+      color: var(--cinnabar);
+      font-weight: 900;
+      font-size: 0.95rem;
+      padding: 2px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      letter-spacing: 2px;
+    }
+    h1 { font-size: 1.85rem; margin: 0 0 0.5rem; color: var(--ink); letter-spacing: 1px; }
+    .subtitle { font-size: 1.08rem; color: var(--subink); margin: 0; }
+
+    .top-nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 1.4rem;
+      width: 100%;
+      max-width: 820px;
+    }
+    .nav-btn {
+      flex: 1;
+      padding: 14px 12px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: var(--card);
+      font-family: "Noto Serif TC", serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--subink);
+      transition: all 0.2s;
+    }
+    .nav-btn.active {
+      background: var(--cinnabar);
+      color: #fff;
+      border-color: var(--cinnabar);
+      box-shadow: 0 4px 12px rgba(158, 42, 43, 0.2);
+    }
+
+    .stage-bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 840px; margin-bottom: 1.4rem; }
+    .stage-btn {
+      background: var(--card); border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 10px 16px; font-family: "Noto Serif TC", serif; font-size: 1.05rem; font-weight: 700; color: var(--subink);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .stage-btn:hover { border-color: var(--cinnabar); color: var(--cinnabar); }
+    .stage-btn.active { background: var(--gold); color: #fff; border-color: var(--gold); }
+    .stage-btn.done::after { content: " 🪷"; }
+
+    .panel {
+      background: var(--card); border: 1.5px solid var(--border); border-radius: 18px;
+      padding: 1.8rem; width: 100%; max-width: 820px; box-shadow: 0 6px 18px rgba(44, 36, 30, 0.06); box-sizing: border-box;
+    }
+
+    .mode-switch { display: flex; gap: 12px; margin-bottom: 1.4rem; border-bottom: 1.5px solid var(--border); padding-bottom: 1.2rem; }
+    .mode-tab {
+      flex: 1; padding: 14px 10px; border-radius: 12px; border: 1.5px solid var(--border);
+      background: #f3ede2; font-family: "Noto Serif TC", serif; font-size: 1.12rem; font-weight: 700; cursor: pointer; text-align: center; color: var(--subink);
+    }
+    .mode-tab.active { background: var(--gold-bg); border-color: var(--gold); color: var(--ink); }
+
+    .wisdom-banner {
+      background: var(--gold-bg); border-left: 5px solid var(--gold); border-radius: 10px;
+      padding: 14px 18px; margin-bottom: 1.3rem; font-size: 1.08rem; color: var(--ink); line-height: 1.75;
+    }
+
+    .learn-list { display: flex; flex-direction: column; gap: 16px; }
+    .learn-card {
+      display: flex; align-items: center; gap: 20px; border: 1.5px solid var(--border);
+      border-radius: 14px; padding: 18px 20px; cursor: pointer; transition: all 0.2s; background: #fff;
+    }
+    .learn-card:hover { border-color: var(--cinnabar); background: #fffaf5; }
+    .learn-card.playing { background: var(--cinnabar-bg); border-color: var(--cinnabar); }
+    .char-box {
+      min-width: 115px; text-align: center; background: #f6f1e7; border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 10px;
+    }
+    .siddham-large { font-family: "Noto Sans Siddham", serif; font-size: 3.6rem; line-height: 1.25; color: var(--ink); }
+    .siddham-mantra { font-family: "Noto Sans Siddham", serif; font-size: 2.1rem; line-height: 1.35; color: var(--ink); }
+    .roman-large { font-size: 1.3rem; font-weight: 800; color: var(--cinnabar); margin-top: 6px; font-family: sans-serif; }
+    .info-box { flex: 1; }
+    .dharma-title { font-size: 1.25rem; font-weight: 900; color: var(--cinnabar); margin-bottom: 4px; }
+    .brush-text { font-size: 1.05rem; color: var(--ink); line-height: 1.6; }
+    .stroke-order-tag {
+      margin-top: 8px;
+      background: #f3ede2;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.98rem;
+      color: #4a3b2c;
+      font-weight: 700;
+      line-height: 1.55;
+    }
+    .card-actions { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+    .mini-btn {
+      background: var(--gold-bg); border: 1px solid var(--gold); color: var(--ink);
+      border-radius: 8px; padding: 8px 14px; font-family: "Noto Serif TC", serif; font-size: 0.98rem; font-weight: 700; cursor: pointer; white-space: nowrap;
+    }
+    .mini-btn:hover { background: var(--gold); color: #fff; }
+    .mini-btn.cinnabar { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; }
+    .mini-btn.cinnabar:hover { background: #7f1d1d; }
+
+    /* 靜心書法描紅區 */
+    .calligraphy-box {
+      margin-top: 1.8rem;
+      background: #f9f5ed;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .stroke-guide-panel {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin: 10px auto;
+      max-width: 580px;
+      font-size: 1.05rem;
+      color: var(--ink);
+    }
+    .canvas-wrap {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      margin: 14px auto;
+      background: #fffdf9;
+      border: 2px solid var(--cinnabar);
+      border-radius: 12px;
+      box-shadow: inset 0 0 15px rgba(158, 42, 43, 0.08);
+      touch-action: none;
+    }
+    .grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(158,42,43,0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(158,42,43,0.12) 1px, transparent 1px);
+      background-size: 140px 140px;
+      pointer-events: none;
+    }
+    .watermark-char {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Noto Sans Siddham", serif;
+      font-size: 11rem;
+      color: rgba(158, 42, 43, 0.13);
+      pointer-events: none;
+      user-select: none;
+    }
+    canvas#demoCanvas, canvas#traceCanvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-radius: 10px;
+    }
+    canvas#demoCanvas { z-index: 2; pointer-events: none; }
+    canvas#traceCanvas { z-index: 3; cursor: crosshair; }
+
+    .primary-btn {
+      width: 100%; margin-top: 1.5rem; padding: 16px; background: var(--cinnabar); color: #fff;
+      border: none; border-radius: 12px; font-family: "Noto Serif TC", serif; font-size: 1.2rem; font-weight: 700; cursor: pointer;
+    }
+    .primary-btn:hover { background: #7f1d1d; }
+
+    /* 品茗印心練習區 */
+    .step-ladder {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 1.3rem;
+    }
+    .step-pill {
+      padding: 12px 8px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: #f6f1e7;
+      font-family: "Noto Serif TC", serif;
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--subink);
+      cursor: pointer;
+      text-align: center;
+    }
+    .step-pill.active { background: var(--gold-bg); border-color: var(--gold); color: var(--ink); }
+    .step-pill.cleared { background: var(--jade-bg); border-color: var(--jade); color: var(--jade); }
+
+    .question-box { text-align: center; padding: 1.6rem 1.2rem; background: #f9f5ed; border-radius: 14px; margin-bottom: 1.3rem; border: 1px solid var(--border); }
+    .q-prompt { font-size: 1.25rem; font-weight: 700; color: var(--ink); margin-bottom: 0.8rem; }
+    .q-display-char { font-family: "Noto Sans Siddham", serif; font-size: 4.5rem; line-height: 1.25; color: var(--ink); margin: 0.4rem 0; word-break: break-all; }
+    .audio-replay-btn {
+      background: var(--gold); color: #fff; border: none; border-radius: 999px;
+      padding: 12px 26px; font-family: "Noto Serif TC", serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 0.5rem;
+    }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .opt-btn {
+      background: #fff; border: 2px solid var(--border); border-radius: 12px; padding: 16px 14px;
+      cursor: pointer; font-family: "Noto Serif TC", serif; font-size: 1.15rem; font-weight: 700; color: var(--ink);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 78px; text-align: center; line-height: 1.45;
+    }
+    .opt-btn:hover:not(:disabled) { border-color: var(--cinnabar); background: #fffaf5; }
+    .opt-btn .siddham-opt { font-family: "Noto Sans Siddham", serif; font-size: 2.8rem; }
+    .opt-btn.correct { background: var(--jade-bg); border-color: var(--jade); color: #1b4332; }
+    .opt-btn.wrong { background: var(--cinnabar-bg); border-color: var(--cinnabar); color: var(--cinnabar); }
+    .feedback-box { margin-top: 1.3rem; padding: 16px 18px; border-radius: 12px; font-size: 1.08rem; line-height: 1.65; display: none; }
+    .feedback-box.ok { background: var(--jade-bg); color: #1b4332; border: 1px solid #95d5b2; }
+    .feedback-box.err { background: var(--cinnabar-bg); color: #7f1d1d; border: 1px solid #f5c2c7; }
+
+    .week-card { border: 1.5px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; background: #fff; }
+    .week-title { font-weight: 900; color: var(--cinnabar); font-size: 1.15rem; margin-bottom: 10px; }
+    .task-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 6px; border-bottom: 1px dashed var(--border); cursor: pointer; }
+    .task-item:last-child { border-bottom: none; }
+    .task-item input[type="checkbox"] { width: 22px; height: 22px; margin-top: 4px; accent-color: var(--jade); cursor: pointer; }
+    .task-text { flex: 1; font-size: 1.08rem; }
+    .task-item.checked .task-text { text-decoration: line-through; color: #9c8f80; }
+
+    @media (max-width: 600px) {
+      .options-grid { grid-template-columns: 1fr; }
+      .step-ladder { grid-template-columns: 1fr; }
+      .learn-card { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="seal-badge">依《梵字必携》智滿流正統筆順</div>
+    <h1>悉曇心性書法靜修營</h1>
+    <p class="subtitle">起筆先打「阿字命點」・以義帶音・以音顯形・全43字母動態筆順臨摹</p>
+  </header>
+
+  <div class="top-nav">
+    <button class="nav-btn active" id="navGame" onclick="switchTopTab('game')">🪷 靜心賞字與正統筆順</button>
+    <button class="nav-btn" id="navPlan" onclick="switchTopTab('plan')">🍵 每日靜修日課表</button>
+  </div>
+
+  <!-- 賞字與印心區 -->
+  <div id="gameSection" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+    <div class="stage-bar" id="stageBar"></div>
+    <div class="panel">
+      <div class="mode-switch">
+        <button class="mode-tab active" id="tabLearn" onclick="setMode('learn')">🖌️ 第一步：以義帶音・智滿流筆順臨摹</button>
+        <button class="mode-tab" id="tabQuiz" onclick="setMode('quiz')">🍵 第二步：品茗印心・隨堂溫習</button>
+      </div>
+
+      <div id="learnView">
+        <div class="wisdom-banner" id="stageStory"></div>
+        <div class="learn-list" id="learnList"></div>
+
+        <!-- 靜心描紅硯台（依《梵字必携》正統筆順） -->
+        <div class="calligraphy-box">
+          <div style="font-size:1.2rem; font-weight:900; color:var(--cinnabar);">🖌️ 靜心描紅硯台（兒玉義隆《梵字必携》智滿流毛筆筆順）</div>
+          <div class="stroke-guide-panel">
+            <div style="font-size:1.08rem;" id="traceLabel">目前臨摹字帖：<b>𑖎 (ka)</b> — 離作業</div>
+            <div style="font-size:1rem; color:var(--cinnabar); font-weight:700; margin-top:6px;" id="traceOrderText"></div>
+          </div>
+          <div class="canvas-wrap">
+            <div class="grid-lines"></div>
+            <div class="watermark-char" id="watermarkChar">𑖎</div>
+            <canvas id="demoCanvas" width="280" height="280"></canvas>
+            <canvas id="traceCanvas" width="280" height="280"></canvas>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:10px;">
+            <button class="mini-btn cinnabar" id="demoBtn" onclick="playStrokeDemo()">▶️ 示範正統筆順</button>
+            <button class="mini-btn" onclick="clearCanvas()">💧 清硯重寫</button>
+            <button class="mini-btn" onclick="replayTraceAudio()">🔊 聆聽梵音</button>
+          </div>
+          <div style="font-size:0.94rem; color:var(--subink); margin-top:10px;">
+            💡 <b>《梵字必携》筆法心要：</b>凡起筆處皆先頓筆打<b>「阿字命點（發心點）」</b>，順勢右推拉出橫畫，再依序運筆，最後以「鶯點」或「雲形點」收鋒。
+          </div>
+        </div>
+
+        <button class="primary-btn" onclick="startQuizStep(1)">心領神會了，進入「🍵 品茗印心溫習」 ➔</button>
+      </div>
+
+      <div id="quizView" style="display:none;">
+        <div class="step-ladder" id="stepLadder"></div>
+        <div class="question-box">
+          <div class="q-prompt" id="qPrompt"></div>
+          <div class="q-display-char" id="qChar" style="display:none;"></div>
+          <button class="audio-replay-btn" id="qAudioBtn" style="display:none;" onclick="replayCurrentQuestionAudio()">🔊 再次聆聽梵音</button>
+        </div>
+        <div class="options-grid" id="optionsGrid"></div>
+        <div class="feedback-box" id="feedbackBox"></div>
+        <button class="primary-btn" id="nextBtn" style="display:none;" onclick="nextQuestion()">繼續品讀下一題 ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 靜修日課表 -->
+  <div id="planSection" class="panel" style="display:none;">
+    <div class="wisdom-banner">
+      <b>🪷 長輩靜修心法：</b>依兒玉義隆《梵字必携》傳承，每字起筆先打「發心命點」。每天氣定神閒花半小時，泡一壺好茶，先看一次正統筆順動畫，再慢寫三五個種子字，字義與筆勢自然會印在心田裡。
+    </div>
+    <div id="planContainer"></div>
+  </div>
+
+  <script>
+    // 嚴格依據兒玉義隆《梵字必携 書写と解読》(P.76-178) 智滿流毛筆筆順座標庫
+    const strokeAnimations = {
+      // === 第一品：ka 行 (P.110-119) ===
+      "𑖎": [
+        // P.110 ka: ①命點→橫畫→回中心垂直下拉微挑 ②左半弧起筆向右上拱過中豎再向右下垂尾
+        [[102, 86], [110, 92], [174, 82], [138, 88], [138, 178], [148, 172]],
+        [[92, 168], [94, 134], [138, 118], [182, 136], [186, 176], [198, 188]]
+      ],
+      "𑖏": [
+        // P.112 kha: ①左側上挑弧 ②左下垂筆 ③命點→橫畫→左折半月弧 ④右側長豎向右彎出
+        [[106, 108], [92, 134], [74, 146]],
+        [[96, 140], [104, 166], [102, 184]],
+        [[106, 96], [114, 102], [186, 92], [144, 126], [136, 158], [164, 180]],
+        [[172, 98], [172, 166], [194, 190]]
+      ],
+      "𑖐": [
+        // P.114 ga: ①左側上挑弧 ②左下垂筆 ③命點→橫畫→垂直下拉向右弧收筆
+        [[106, 108], [92, 134], [74, 146]],
+        [[96, 140], [104, 166], [102, 184]],
+        [[106, 96], [114, 102], [186, 92], [166, 96], [166, 164], [194, 190]]
+      ],
+      "𑖑": [
+        // P.116 gha: ①命點→短橫→左垂折右 ②中豎下垂折右 ③右長豎向右弧收筆
+        [[82, 118], [90, 124], [114, 118], [94, 122], [94, 152], [124, 152]],
+        [[134, 98], [134, 168], [168, 168]],
+        [[176, 88], [176, 166], [202, 190]]
+      ],
+      "𑖒": [
+        // P.118 ṅa: ①命點→橫畫→左斜下再向右下斜折 ②右肩長阿點半月弧
+        [[96, 96], [104, 102], [168, 90], [102, 134], [144, 182]],
+        [[174, 92], [164, 124], [186, 158], [202, 166]]
+      ],
+
+      // === 第二品：ca 行 (P.120-129) ===
+      "𑖓": [
+        // P.120 ca: ①命點→橫畫→左下斜出再向右下弧收尾 ②橫畫中心垂直下拉接底弧
+        [[104, 88], [112, 94], [172, 84], [96, 126], [144, 168], [186, 190]],
+        [[142, 92], [142, 164]]
+      ],
+      "𑖔": [
+        // P.122 cha: 一筆連貫！命點→橫畫→中心下拉→左繞圓→右繞圓→下垂收筆
+        [[108, 86], [116, 92], [168, 82], [140, 88], [140, 124], [94, 126], [88, 154], [136, 146], [188, 122], [192, 154], [142, 156], [146, 182], [172, 194]]
+      ],
+      "𑖕": [
+        // P.124 ja: ①命點→橫畫→左折斜下 ②中段斜下枝 ③右肩半月弧
+        [[96, 96], [104, 102], [168, 90], [96, 126], [138, 178]],
+        [[124, 112], [162, 160]],
+        [[174, 92], [164, 124], [186, 158], [202, 166]]
+      ],
+      "𑖖": [
+        // P.126 jha: ①命點→橫畫→中心垂直下拉 ②底部鶯點 ③中段右折雙弧鉤
+        [[104, 86], [112, 92], [166, 82], [132, 88], [132, 166]],
+        [[106, 158], [144, 172], [174, 190]],
+        [[134, 122], [156, 142], [172, 114], [192, 128], [184, 148]]
+      ],
+      "𑖗": [
+        // P.128 ña: ①命點向上曲畫接橫畫→中心垂直下拉 ②底部鶯點 ③中段右折雙弧鉤
+        [[106, 114], [96, 92], [168, 82], [132, 88], [132, 166]],
+        [[106, 158], [144, 172], [174, 190]],
+        [[134, 122], [156, 142], [172, 114], [192, 128], [184, 148]]
+      ],
+
+      // === 第三品：ṭa 行 (P.130-139) ===
+      "𑖘": [
+        // P.130 ṭa: ①命點起筆向左下畫半月弧至底 ②右上長阿點弧
+        [[154, 94], [102, 134], [106, 174], [164, 178]],
+        [[162, 92], [156, 124], [176, 154], [194, 162]]
+      ],
+      "𑖙": [
+        // P.132 ṭha: ①命點起筆順勢畫大圓圈回起點 ②補筆密合頂端
+        [[140, 88], [94, 136], [112, 184], [176, 178], [184, 124], [140, 88]],
+        [[134, 92], [146, 92]]
+      ],
+      "𑖚": [
+        // P.134 ḍa: ①命點→橫畫→左斜下彎鉤 ②垂直下拉 ③底部鶯點
+        [[104, 86], [112, 92], [168, 82], [108, 124], [126, 136]],
+        [[138, 108], [138, 166]],
+        [[112, 160], [148, 174], [178, 190]]
+      ],
+      "𑖛": [
+        // P.136 ḍha: ①命點→橫畫→左斜下彎弧向右上挑 ②中心左下垂接右大弧內捲
+        [[104, 86], [112, 92], [168, 82], [116, 124], [84, 136]],
+        [[136, 118], [122, 156], [136, 174], [152, 126], [188, 142], [174, 174]]
+      ],
+      "𑖜": [
+        // P.138 ṇa: ①命點向上起筆畫左拱垂直下拉 ②再上提畫右大拱垂直下拉向右下舒展
+        [[98, 172], [98, 122], [124, 112], [138, 134], [138, 172]],
+        [[138, 124], [156, 96], [182, 116], [184, 166], [204, 190]]
+      ],
+
+      // === 第四品：ta 行 (P.140-149) ===
+      "𑖝": [
+        // P.140 ta: ①命點→橫畫→左下斜畫 ②橫畫中心垂直下拉微弧
+        [[104, 86], [112, 92], [168, 82], [104, 134]],
+        [[136, 104], [142, 144], [142, 184]]
+      ],
+      "𑖞": [
+        // P.142 tha: ①左筆下引左繞大圓回右接橫 ②右側長豎向右弧收筆
+        [[138, 104], [112, 102], [92, 132], [114, 164], [164, 164]],
+        [[164, 92], [164, 166], [192, 190]]
+      ],
+      "𑖟": [
+        // P.144 da: ①命點→橫畫→左斜下再向右下反曲 ②右肩弧筆向下交會後右挑
+        [[104, 86], [112, 92], [168, 82], [96, 122], [138, 152]],
+        [[172, 118], [142, 136], [144, 174], [168, 190]]
+      ],
+      "𑖠": [
+        // P.146 dha: ①命點起筆畫左側半月弧 ②右側長豎向下右弧收筆
+        [[154, 96], [102, 116], [102, 156], [154, 172]],
+        [[156, 88], [156, 166], [186, 190]]
+      ],
+      "𑖡": [
+        // P.148 na: ①命點→橫畫→左下斜出回捲小圓環 ②橫畫中心垂直下拉向右弧收筆
+        [[104, 86], [112, 92], [168, 82], [104, 132], [88, 118], [102, 112]],
+        [[138, 106], [138, 154], [168, 188]]
+      ],
+
+      // === 第五品：pa 行 (P.150-159) ===
+      "𑖢": [
+        // P.150 pa: ①命點→短橫→下垂轉右橫弧 ②右側長豎向下右弧收筆
+        [[96, 96], [104, 102], [134, 96], [106, 102], [108, 154], [164, 154]],
+        [[164, 88], [164, 164], [194, 190]]
+      ],
+      "𑖣": [
+        // P.152 pha: ①命點→橫畫→左斜下轉圓弧向下垂 ②右側圓拱內捲
+        [[104, 86], [112, 92], [168, 82], [96, 124], [126, 162], [136, 182]],
+        [[136, 148], [164, 124], [192, 148], [176, 174]]
+      ],
+      "𑖤": [
+        // P.154 ba: ①命點→橫畫→左半月弧回挑封蓮實 ②橫畫中心長豎向下右弧收筆
+        [[108, 86], [116, 92], [168, 82], [104, 136], [122, 164], [148, 156]],
+        [[148, 92], [148, 164], [182, 190]]
+      ],
+      "𑖥": [
+        // P.156 bha: ①命點→橫畫→左斜下彎弧向左挑 ②中心左下垂轉右大弧下垂
+        [[104, 86], [112, 92], [168, 82], [114, 124], [84, 134]],
+        [[134, 118], [126, 154], [156, 124], [168, 164], [194, 190]]
+      ],
+      "𑖦": [
+        // P.158 ma: ①命點→短橫→下垂繞左小圓轉右橫 ②右側長豎向下右弧收筆
+        [[98, 96], [106, 102], [134, 96], [112, 102], [112, 128], [88, 142], [106, 166], [164, 162]],
+        [[164, 88], [164, 164], [194, 190]]
+      ],
+
+      // === 第六品：ya ~ va (P.160-167) ===
+      "𑖧": [
+        // P.160 ya: ①命點→短橫→垂直下垂轉左繞半圓轉右橫 ②右側長豎向下右弧收筆
+        [[98, 96], [106, 102], [134, 96], [114, 102], [114, 128], [88, 146], [108, 168], [164, 162]],
+        [[164, 88], [164, 164], [194, 190]]
+      ],
+      "𑖨": [
+        // P.162 ra: ①命點→橫畫→中心垂直下拉 ②底部鶯點
+        [[106, 86], [114, 92], [168, 82], [138, 88], [138, 166]],
+        [[112, 158], [148, 174], [182, 190]]
+      ],
+      "𑖩": [
+        // P.164 la: ①命點→橫畫→垂直下拉微挑 ②底部起筆向上繞左大圓環橫掃向右
+        [[112, 86], [120, 92], [168, 82], [140, 88], [140, 156]],
+        [[138, 154], [114, 122], [86, 142], [108, 178], [194, 186]]
+      ],
+      "𑖪": [
+        // P.166 va: ①命點→橫畫→左斜尖角半月弧 ②橫畫中心長豎向下右弧收筆
+        [[108, 86], [116, 92], [168, 82], [96, 124], [118, 162], [148, 166]],
+        [[148, 92], [148, 164], [182, 190]]
+      ],
+
+      // === 第七品：śa ~ kṣa (P.168-178) ===
+      "𑖫": [
+        // P.168 śa: ①左上挑弧 ②左下垂筆 ③左起上拱大弧轉右上挑接長豎
+        [[106, 114], [92, 138], [74, 148]],
+        [[96, 142], [104, 168], [102, 184]],
+        [[106, 106], [128, 84], [154, 108], [136, 136], [186, 106], [166, 122], [168, 168], [194, 190]]
+      ],
+      "𑖬": [
+        // P.170 ṣa: ①命點→短橫→下垂轉右弧 ②腹中左上向右下斜筆 ③右側長豎向下右弧
+        [[96, 96], [104, 102], [134, 96], [106, 102], [112, 156], [164, 156]],
+        [[124, 118], [158, 152]],
+        [[164, 88], [164, 164], [194, 190]]
+      ],
+      "𑖭": [
+        // P.172 sa: ①命點→橫畫→左斜挑出 ②左下垂弧轉右上提 ③右側長豎向下右弧
+        [[102, 88], [110, 94], [156, 84], [96, 124], [82, 128]],
+        [[112, 124], [116, 158], [164, 136]],
+        [[164, 86], [164, 164], [194, 190]]
+      ],
+      "𑖮": [
+        // P.174 ha: ①命點→橫畫→左斜彎弧向右 ②中心左下垂接右拱弧開展
+        [[104, 86], [112, 92], [168, 82], [102, 124], [126, 156]],
+        [[134, 146], [136, 174], [142, 126], [172, 136], [182, 174], [198, 190]]
+      ],
+      "𑖎𑖿𑖬": [
+        // P.178 kṣa: ①命點→橫畫→長斜撇 ②中腹左折回環接右拱弧下垂
+        [[104, 84], [112, 90], [168, 80], [88, 128]],
+        [[126, 104], [108, 136], [128, 156], [134, 136], [166, 124], [144, 156], [164, 184], [184, 194]]
+      ],
+
+      // === 第八品：核心母音與二點 (P.76-101) ===
+      "𑖀": [
+        // P.76 a: ①命點→橫畫→左斜折再右下斜 ②中腹左彎鉤 ③右側長豎 ④底部鶯點
+        [[98, 86], [106, 92], [156, 82], [92, 122], [156, 142]],
+        [[124, 114], [106, 158], [86, 168]],
+        [[164, 84], [164, 168]],
+        [[136, 160], [174, 176], [198, 192]]
+      ],
+      "𑖁": [
+        // P.80 ā: ①~④同阿字 ⑤右肩長阿點半月弧
+        [[92, 86], [100, 92], [150, 82], [86, 122], [150, 142]],
+        [[118, 114], [100, 158], [80, 168]],
+        [[156, 84], [156, 168]],
+        [[130, 160], [166, 176], [188, 192]],
+        [[176, 88], [168, 118], [188, 146], [202, 154]]
+      ],
+      "𑖂": [
+        // P.82 i: ①左上寶珠圓點 ②右上寶珠圓點 ③下方雲形點大弧上挑
+        [[112, 92], [94, 112], [112, 128], [128, 112], [112, 92]],
+        [[168, 92], [150, 112], [168, 128], [184, 112], [168, 92]],
+        [[144, 152], [156, 138], [174, 158], [142, 184], [94, 148]]
+      ],
+      "𑖄": [
+        // P.86 u: ①命點→橫畫→左斜下接雲形點大弧上挑
+        [[104, 86], [112, 92], [168, 82], [122, 136], [156, 126], [174, 156], [138, 184], [86, 146]]
+      ],
+      "𑖊": [
+        // P.90 e: ①命點→橫畫→左下斜畫 ②左上斜下折向右下封三角
+        [[108, 94], [116, 100], [188, 92], [144, 168]],
+        [[86, 128], [148, 176]]
+      ],
+      "𑖌": [
+        // P.94 o: ①命點→波浪橫畫→左斜下接雲形點大弧上挑
+        [[98, 102], [112, 88], [146, 94], [182, 84], [124, 136], [158, 128], [176, 158], [138, 186], [84, 146]]
+      ],
+      "𑖀𑖼": [
+        // P.98 aṃ: ①~④同阿字 ⑤正頭頂空點寶珠
+        [[98, 98], [106, 104], [156, 94], [92, 132], [156, 150]],
+        [[124, 124], [106, 164], [86, 174]],
+        [[164, 96], [164, 174]],
+        [[136, 166], [174, 182], [198, 196]],
+        [[140, 62], [130, 72], [140, 82], [150, 72], [140, 62]]
+      ],
+      "𑖀𑖾": [
+        // P.100 aḥ: ①~④同阿字 ⑤先點下方圓點 ⑥再點上方圓點（書法口傳由下往上點！）
+        [[88, 86], [96, 92], [144, 82], [84, 122], [144, 142]],
+        [[114, 114], [96, 158], [78, 168]],
+        [[152, 84], [152, 168]],
+        [[126, 160], [162, 176], [184, 192]],
+        [[194, 158], [184, 168], [194, 178], [204, 168], [194, 158]],
+        [[194, 106], [184, 116], [194, 126], [204, 116], [194, 106]]
+      ]
+    };
+
+    const stages = [
+      {
+        id: "ka-row",
+        title: "第一品：喉音五門 (ka行)",
+        story: "<b>【字門心法】</b>依《梵字必携》智滿流筆法：起筆先頓筆打「阿字命點」拉出橫畫，再運筆寫出字身。揮動智慧寶劍斬斷作業（<b>ka</b>），心量等若虛空（<b>kha</b>），步入山門修行（<b>ga</b>），看破雙重雲山（<b>gha</b>），妄念沉沒寂靜（<b>ṅa</b>）。",
+        items: [
+          { char: "𑖎", roman: "ka", dharma: "離作業（斬斷無明牽掛）", brush: "【書法筆勢】命點橫畫居中，垂直下拉主幹如「智慧寶劍」，第二筆左弧拱過中豎向右下舒展。", order: "《梵字必携》P.110：①命點→橫畫→回中心垂直下拉微挑 ➔ ②左側半弧向右上拱過中豎再向右下垂尾（共2筆）", audio: { type: "file", file: "audio/ka_01.mp3" }, modakaBase: "ka" },
+          { char: "𑖏", roman: "kha", dharma: "等虛空（心量包容萬物）", brush: "【書法筆勢】先立左側雙弧支柱，再打命點拉出橫畫與半月腹腔，右側長豎開闊包容。", order: "《梵字必携》P.112：①左上挑弧 ➔ ②左下垂筆 ➔ ③命點→橫畫→左折半月弧 ➔ ④右側長豎右弧收筆（共4筆）", audio: { type: "file", file: "audio/kha_01.mp3" }, modakaBase: "kha" },
+          { char: "𑖐", roman: "ga", dharma: "行（穩健修行之路）", brush: "【書法筆勢】左側雙弧與右側長豎撐起「古剎山門」，左右端正圓融、虛懷若谷。", order: "《梵字必携》P.114：①左上挑弧 ➔ ②左下垂筆 ➔ ③命點→橫畫→垂直下拉向右弧收筆（共3筆）", audio: { type: "file", file: "audio/ga_01.mp3" }, modakaBase: "ga" },
+          { char: "𑖑", roman: "gha", dharma: "一合相（煩惱與菩提不二）", brush: "【書法筆勢】三道立筆由左至右依序展開，如「雙重雲山」連綿起伏，終歸一合。", order: "《梵字必携》P.116：①命點→短橫→左垂折右 ➔ ②中豎下垂折右 ➔ ③右側長豎向右弧收筆（共3筆）", audio: { type: "file", file: "audio/gha_01.mp3" }, modakaBase: "gha" },
+          { char: "𑖒", roman: "ṅa", dharma: "沉沒（妄想止息歸於寂靜）", brush: "【書法筆勢】命點橫畫下接折鉤，右肩懸掛半月「長阿點」，意念收攝深沉。", order: "《梵字必携》P.118：①命點→橫畫→左斜下再向右下斜折 ➔ ②右肩長阿點半月弧（共2筆）", audio: { type: "file", file: "audio/nga_01.mp3" }, modakaBase: "nga" }
+        ]
+      },
+      {
+        id: "ca-row",
+        title: "第二品：口蓋五門 (ca行)",
+        story: "<b>【字門心法】</b>觀照世事無常遷變（<b>ca</b>），萬法皆如水中影像（<b>cha</b>），隨緣而生（<b>ja</b>），調伏內心煩惱怨敵（<b>jha</b>），最終圓滿清淨智慧（<b>ña</b>）。",
+        items: [
+          { char: "𑖓", roman: "ca", dharma: "離一切遷變（無常觀照）", brush: "【書法筆勢】三角蓮葉腹腔配中豎，如「一葉扁舟」隨波流轉而心不動。", order: "《梵字必携》P.120：①命點→橫畫→左下斜出再向右下弧收尾 ➔ ②橫畫中心垂直下拉接底弧（共2筆）", audio: { type: "file", file: "audio/ca_01.mp3" }, modakaBase: "ca" },
+          { char: "𑖔", roman: "cha", dharma: "影像（諸法如鏡花水月）", brush: "【書法筆勢】一筆連貫繞出左右雙圓，如「明鏡映照雙影」，看清世間虛幻影像。", order: "《梵字必携》P.122：①起筆命點→橫畫→中心下拉→左繞圓→右繞圓→下垂收筆（一筆完成！）", audio: { type: "file", file: "audio/cha_01.mp3" }, modakaBase: "cha" },
+          { char: "𑖕", roman: "ja", dharma: "生（萬物生生不息）", brush: "【書法筆勢】左出雙斜枝如「春木發芽」，右懸半月弧，象徵清淨善根生長。", order: "《梵字必携》P.124：①命點→橫畫→左折斜下 ➔ ②中段斜下枝 ➔ ③右肩半月弧（共3筆）", audio: { type: "file", file: "audio/ja_01.mp3" }, modakaBase: "ja" },
+          { char: "𑖖", roman: "jha", dharma: "戰敵（降伏心魔煩惱）", brush: "【書法筆勢】中豎挺立配底部「鶯點」，右出剛毅鉤弧，破除內心無明賊。", order: "《梵字必携》P.126：①命點→橫畫→中心垂直下拉 ➔ ②底部鶯點 ➔ ③中段右折雙弧鉤（共3筆）", audio: { type: "range", file: "audio/35consonants_clean.mp3", start: 10.385, end: 11.247 } },
+          { char: "𑖗", roman: "ña", dharma: "智（般若大智慧）", brush: "【書法筆勢】起筆左肩曲畫上揚接橫畫，結構莊嚴穩重，蘊含無上智慧。", order: "《梵字必携》P.128：①左肩曲畫上揚接橫畫→中心垂直下拉 ➔ ②底部鶯點 ➔ ③中段右折雙弧鉤（共3筆）", audio: { type: "file", file: "audio/nya_01.mp3" }, modakaBase: "nya" }
+        ]
+      },
+      {
+        id: "tta-row",
+        title: "第三品：反舌五門 (ṭa行)",
+        story: "<b>【字門心法】</b>收攝浮躁、放下我慢（<b>ṭa</b>），以慈悲長養善根（<b>ṭha</b>），歡喜無相布施（<b>ḍa</b>），心量廣大契入法界（<b>ḍha</b>），體悟萬法本性寂靜（<b>ṇa</b>）。",
+        items: [
+          { char: "𑖘", roman: "ṭa", dharma: "慢（放下我慢心）", brush: "【書法筆勢】半月弧線內斂謙卑，右肩配長阿點弧，收起稜角。", order: "《梵字必携》P.130：①命點起筆向左下畫半月弧至底 ➔ ②右上長阿點弧（共2筆）", audio: { type: "file", file: "audio/tta_01.mp3" }, modakaBase: "tta" },
+          { char: "𑖙", roman: "ṭha", dharma: "長養（滋養慈悲福德）", brush: "【書法筆勢】寶珠圓形一筆回繞至頂，第二筆補合頂尖，如「圓融無缺的滿月」。", order: "《梵字必携》P.132：①命點起筆順勢畫大圓圈回起點 ➔ ②補筆密合頂端（共2筆）", audio: { type: "file", file: "audio/ttha_01.mp3" }, modakaBase: "ttha" },
+          { char: "𑖚", roman: "ḍa", dharma: "施（無相歡喜布施）", brush: "【書法筆勢】命點橫畫下接中豎與「鶯點」，線條流暢婉轉，潤澤眾生。", order: "《梵字必携》P.134：①命點→橫畫→左斜下彎鉤 ➔ ②垂直下拉 ➔ ③底部鶯點（共3筆）", audio: { type: "file", file: "audio/dda_01.mp3" }, modakaBase: "dda" },
+          { char: "𑖛", roman: "ḍha", dharma: "法界（心包太虛量周沙界）", brush: "【書法筆勢】左挑雲弧、下結圓珠，象徵「一滴水融入無盡法界」。", order: "《梵字必携》P.136：①命點→橫畫→左斜下彎弧向右上挑 ➔ ②中心左下垂接右大弧內捲（共2筆）", audio: { type: "file", file: "audio/ddha_01.mp3" }, modakaBase: "ddha" },
+          { char: "𑖜", roman: "ṇa", dharma: "本性寂（萬緣放下歸於安寧）", brush: "【書法筆勢】雙拱連綿而起、右筆舒展下垂，象徵「心如止水、本性寂靜」。", order: "《梵字必携》P.138：①命點向上起筆畫左拱垂直下拉 ➔ ②再上提畫右大拱垂直下拉向右下舒展（共2筆）", audio: { type: "file", file: "audio/nna_01.mp3" }, modakaBase: "nna" }
+        ]
+      },
+      {
+        id: "ta-row",
+        title: "第四品：齒音五門 (ta行)",
+        story: "<b>【字門心法】</b>人生修持：破除驕慢（<b>ta</b>），尋得心靈安身住處（<b>tha</b>），化解宿世怨敵（<b>da</b>），堅定執持正念（<b>dha</b>），看破世間一切假名（<b>na</b>）。",
+        items: [
+          { char: "𑖝", roman: "ta", dharma: "慢（調伏驕慢）", brush: "【書法筆勢】命點橫畫接左斜撇，中豎微弧挺立，如「松柏挺立」不卑不亢。", order: "《梵字必携》P.140：①命點→橫畫→左下斜畫 ➔ ②橫畫中心垂直下拉微弧（共2筆）", audio: { type: "file", file: "audio/ta_01.mp3" }, modakaBase: "ta" },
+          { char: "𑖞", roman: "tha", dharma: "住處（心靈安住之所）", brush: "【書法筆勢】左筆圓轉接右立長豎，宛如「清淨蘭若精舍」，身心有所安住。", order: "《梵字必携》P.142：①左筆下引左繞大圓回右接橫 ➔ ②右側長豎向右弧收筆（共2筆）", audio: { type: "file", file: "audio/tha_01.mp3" }, modakaBase: "tha" },
+          { char: "𑖟", roman: "da", dharma: "怨敵（化敵為友調伏貪瞋）", brush: "【書法筆勢】反曲斜筆與右肩交會弧線交織，如「護法盾牌」抵禦三毒怨敵。", order: "《梵字必携》P.144：①命點→橫畫→左斜下再向右下反曲 ➔ ②右肩弧筆向下交會後右挑（共2筆）", audio: { type: "file", file: "audio/da_01.mp3" }, modakaBase: "da" },
+          { char: "𑖠", roman: "dha", dharma: "執持（堅守善法正念）", brush: "【書法筆勢】半月圓缽配右側長豎，如「雙手恭敬捧缽」，執持正法不失。", order: "《梵字必携》P.146：①命點起筆畫左側半月弧 ➔ ②右側長豎向下右弧收筆（共2筆）", audio: { type: "file", file: "audio/dha_01.mp3" }, modakaBase: "dha" },
+          { char: "𑖡", roman: "na", dharma: "名（不執著世間名相）", brush: "【書法筆勢】左斜回捲小圓環，右筆開展，提醒我們「名利皆如浮雲過眼」。", order: "《梵字必携》P.148：①命點→橫畫→左下斜出回捲小圓環 ➔ ②橫畫中心垂直下拉向右弧收筆（共2筆）", audio: { type: "file", file: "audio/na_01.mp3" }, modakaBase: "na" }
+        ]
+      },
+      {
+        id: "pa-row",
+        title: "第五品：唇音五門 (pa行)",
+        story: "<b>【字門心法】</b>契入究竟第一義諦（<b>pa</b>），看破世間榮華不堅如聚沫（<b>pha</b>），解開生死煩惱束縛（<b>ba</b>），超越三界諸有（<b>bha</b>），放下小我執著（<b>ma</b>）。",
+        items: [
+          { char: "𑖢", roman: "pa", dharma: "第一義諦（究竟真理）", brush: "【書法筆勢】上方敞開如「承接甘露的法器」，心無遮攔、直契第一義。", order: "《梵字必携》P.150：①命點→短橫→下垂轉右橫弧 ➔ ②右側長豎向下右弧收筆（共2筆）", audio: { type: "file", file: "audio/pa_01.mp3" }, modakaBase: "pa" },
+          { char: "𑖣", roman: "pha", dharma: "不堅如聚沫（看淡世事無常）", brush: "【書法筆勢】法器右旁生出一顆「水上泡沫」，提醒世間財富名位皆如泡影不堅。", order: "《梵字必携》P.152：①命點→橫畫→左斜下轉圓弧向下垂 ➔ ②右側圓拱內捲（共2筆）", audio: { type: "file", file: "audio/pha_01.mp3" }, modakaBase: "pha" },
+          { char: "𑖤", roman: "ba", dharma: "縛（解開煩惱繩結）", brush: "【書法筆勢】左半月「蓮實形」配右側長豎，轉念即解開煩惱束縛。", order: "《梵字必携》P.154：①命點→橫畫→左半月弧回挑封蓮實 ➔ ②橫畫中心長豎向下右弧收筆（共2筆）", audio: { type: "file", file: "audio/ba_01.mp3" }, modakaBase: "ba" },
+          { char: "𑖥", roman: "bha", dharma: "有（超越三界諸有）", brush: "【書法筆勢】左起回鉤、右筆挺拔舒展，雖處世間萬有之中而心不染著。", order: "《梵字必携》P.156：①命點→橫畫→左斜下彎弧向左挑 ➔ ②中心左下垂轉右大弧下垂（共2筆）", audio: { type: "file", file: "audio/bha_01.mp3" }, modakaBase: "bha" },
+          { char: "𑖦", roman: "ma", dharma: "我（破除我執得大自在）", brush: "【書法筆勢】左繞圓珠轉右橫接長豎，象徵「轉小我為大我」，圓融無礙。", order: "《梵字必携》P.158：①命點→短橫→下垂繞左小圓轉右橫 ➔ ②右側長豎向下右弧收筆（共2筆）", audio: { type: "file", file: "audio/ma_01.mp3" }, modakaBase: "ma" }
+        ]
+      },
+      {
+        id: "ya-row",
+        title: "第六品：遍口四門 (ya~va)",
+        story: "<b>【字門心法】</b>搭乘大乘慈悲法船（<b>ya</b>），遠離一切塵勞染著（<b>ra</b>），超越外在形相執著（<b>la</b>），契入言語道斷的清淨境界（<b>va</b>）。",
+        items: [
+          { char: "𑖧", roman: "ya", dharma: "乘（運載眾生離苦之法船）", brush: "【書法筆勢】左弧右折如「慈航寶筏」，運載我們渡過人生風浪。", order: "《梵字必携》P.160：①命點→短橫→垂直下垂轉左繞半圓轉右橫 ➔ ②右側長豎向下右弧收筆（共2筆）", audio: { type: "file", file: "audio/ya_01.mp3" }, modakaBase: "ya" },
+          { char: "𑖨", roman: "ra", dharma: "離諸塵染（清淨無垢）", brush: "【書法筆勢】命點橫畫配一柱擎天與「鶯點」，如「清淨法幢」不染一絲塵埃。", order: "《梵字必携》P.162：①命點→橫畫→中心垂直下拉 ➔ ②底部鶯點（共2筆）", audio: { type: "file", file: "audio/ra_01.mp3" }, modakaBase: "ra" },
+          { char: "𑖩", roman: "la", dharma: "相（凡所有相皆是虛妄）", brush: "【書法筆勢】中豎底端向上繞出大圓環橫掃向右，如「水波漣漪」起伏。", order: "《梵字必携》P.164：①命點→橫畫→垂直下拉微挑 ➔ ②底部起筆向上繞左大圓環橫掃向右（共2筆）", audio: { type: "file", file: "audio/la_01.mp3" }, modakaBase: "la" },
+          { char: "𑖪", roman: "va", dharma: "語言道斷（默照清淨）", brush: "【書法筆勢】左結半月寶印、右立一柱，象徵「不可說之妙諦」，止語靜心。", order: "《梵字必携》P.166：①命點→橫畫→左斜尖角半月弧 ➔ ②橫畫中心長豎向下右弧收筆（共2筆）", audio: { type: "file", file: "audio/va_01.mp3" }, modakaBase: "va" }
+        ]
+      },
+      {
+        id: "sha-row",
+        title: "第七品：吹氣與總持 (śa~kṣa)",
+        story: "<b>【字門心法】</b>回歸本性寂靜（<b>śa</b>），轉化愚鈍無明（<b>ṣa</b>），了達一切真諦（<b>sa</b>），洞明因果業力（<b>ha</b>），煩惱盡除歸於大圓滿（<b>kṣa</b>）。",
+        items: [
+          { char: "𑖫", roman: "śa", dharma: "本性寂（清淨安詳）", brush: "【書法筆勢】雙柱拱頂如「靜謐禪堂」，萬籟俱寂、心安理得。", order: "《梵字必携》P.168：①左上挑弧 ➔ ②左下垂筆 ➔ ③左起上拱大弧轉右上挑接長豎（共3筆）", audio: { type: "file", file: "audio/sha_01.mp3" }, modakaBase: "sha" },
+          { char: "𑖬", roman: "ṣa", dharma: "性鈍（轉愚成智）", brush: "【書法筆勢】器宇之中斜筆劃開，如「撥雲見日」破除愚鈍無明。", order: "《梵字必携》P.170：①命點→短橫→下垂轉右弧 ➔ ②腹中左上向右下斜筆 ➔ ③右側長豎向下右弧（共3筆）", audio: { type: "file", file: "audio/ssa_01.mp3" }, modakaBase: "ssa" },
+          { char: "𑖭", roman: "sa", dharma: "一切諦（圓融真理）", brush: "【書法筆勢】左筆柔順蜿蜒、右筆端直，象徵「隨順世間而契入真諦」。", order: "《梵字必携》P.172：①命點→橫畫→左斜挑出 ➔ ②左下垂弧轉右上提 ➔ ③右側長豎向下右弧（共3筆）", audio: { type: "file", file: "audio/sa_01.mp3" }, modakaBase: "sa" },
+          { char: "𑖮", roman: "ha", dharma: "因（洞明因果自在隨緣）", brush: "【書法筆勢】橫蓋之下筆勢迴旋，如「因果循環」絲毫不爽。", order: "《梵字必携》P.174：①命點→橫畫→左斜彎弧向右 ➔ ②中心左下垂接右拱弧開展（共2筆）", audio: { type: "file", file: "audio/ha_01.mp3" }, modakaBase: "ha" },
+          { char: "𑖎𑖿𑖬", roman: "kṣa", dharma: "盡（煩惱盡除・功德圓滿）", brush: "【書法筆勢】上為 ka 斜撇、下為 ṣa 迴環合體（異體重字），象徵「無明盡除」。", order: "《梵字必携》P.178：①命點→橫畫→長斜撇 ➔ ②中腹左折回環接右拱弧下垂（共2筆）", audio: { type: "file", file: "audio/kssa_01.mp3" }, modakaBase: "kssa" }
+        ]
+      },
+      {
+        id: "vowels-core",
+        title: "第八品：種子母音與添衣加冕",
+        story: "<b>【添衣加冕觀想】</b>依《梵字必携》第 76～101 頁：阿字為一切文字之母。加上不同母音符號就像為本尊莊嚴加持：<br>右加長阿點（<b>ā</b>）長養雨露｜頭頂彎弧（<b>i</b>）萬法根源｜足下雲形點（<b>u</b>）善巧譬喻｜左上斜筆（<b>e</b>）求索菩提｜左右護持（<b>o</b>）法水瀑流｜頂戴空點（<b>aṃ</b>）大圓鏡智｜右點涅槃雙露（<b>aḥ</b>）究竟遠離。",
+        items: [
+          { char: "𑖀", roman: "a", dharma: "阿字本不生（萬法之母）", brush: "【書法筆勢】起筆必打命點，左出雙弧、右立主幹與底部「鶯點」，象徵萬物本來不生不滅。", order: "《梵字必携》P.76：①命點→橫畫→左斜折再右下斜 ➔ ②中腹左彎鉤 ➔ ③右側長豎 ➔ ④底部鶯點（共4筆）", audio: { type: "file", file: "audio/a.mp3" } },
+          { char: "𑖁", roman: "ā", dharma: "寂靜虛空（長養雨露）", brush: "【書法筆勢】阿字右肩多加一道半月形「長阿點（修行點）」，聲韻悠長，施以長養雨露。", order: "《梵字必携》P.80：①～④同阿字 ➔ ⑤右肩長阿點半月弧（共5筆）", audio: { type: "file", file: "audio/aa.mp3" } },
+          { char: "𑖂", roman: "i", dharma: "諸根清淨（萬法根源）", brush: "【書法筆勢】上方兩顆「寶珠圓點（伊字三點）」如雙目圓明，下方配「雲形點」大弧上挑。", order: "《梵字必携》P.82：①左上寶珠圓點 ➔ ②右上寶珠圓點 ➔ ③下方雲形點大弧上挑（共3筆）", audio: { type: "file", file: "audio/i.mp3" } },
+          { char: "𑖄", roman: "u", dharma: "善巧譬喻（隨順眾生）", brush: "【書法筆勢】命點橫畫一氣呵成接下方「雲形點」大弧上挑，承托足下。", order: "《梵字必携》P.86：①命點→橫畫→左斜下接雲形點大弧上挑（一筆連貫！）", audio: { type: "file", file: "audio/u.mp3" } },
+          { char: "𑖊", roman: "e", dharma: "求索菩提（精進向道）", brush: "【書法筆勢】兩筆構成三角法印，化作符號「𑖸」斜插左上，意為「……之求索」。", order: "《梵字必携》P.90：①命點→橫畫→左下斜畫 ➔ ②左上斜下折向右下封三角（共2筆）", audio: { type: "file", file: "audio/e.mp3" } },
+          { char: "𑖌", roman: "o", dharma: "法水瀑流（洗滌心垢）", brush: "【書法筆勢】頂戴波浪橫畫接雲形點，化作符號「𑖺」左右護持，意為「……之瀑流」。", order: "《梵字必携》P.94：①命點→波浪橫畫→左斜下接雲形點大弧上挑（一筆連貫！）", audio: { type: "file", file: "audio/o.mp3" } },
+          { char: "𑖀𑖼", roman: "aṃ", dharma: "頂戴摩尼寶珠（大圓鏡智）", brush: "【書法筆勢】阿字寫完後，最後於正頭頂安住一顆「空點（菩提點）寶珠」，智慧光明圓滿。", order: "《梵字必携》P.98：①～④先寫完整「阿 𑖀」字 ➔ ⑤最後於正頭頂點上空點寶珠「𑖼」（共5筆）", audio: { type: "file", file: "audio/am.mp3" } },
+          { char: "𑖀𑖾", roman: "aḥ", dharma: "究竟遠離（涅槃寂靜）", brush: "【書法筆勢】書法口傳：右側「涅槃點」必須先打下方圓點、再打上方圓點，氣息吐盡遠離煩惱。", order: "《梵字必携》P.100：①～④先寫「阿 𑖀」 ➔ ⑤先點右側下方圓點 ➔ ⑥再點右側上方圓點（共6筆）", audio: { type: "file", file: "audio/ah.mp3" } }
+        ]
+      },
+      {
+        id: "mantra-practice",
+        title: "第九品：日課真言相應持誦",
+        isMantra: true,
+        story: "<b>【日課相應心法】</b>您平時念誦的真言，每一個悉曇字都是諸佛菩薩的「心印」。先認出開頭頂戴寶珠的 <b>𑖌𑖼 (oṃ 唵)</b> 與結尾的 <b>𑖭𑖿𑖪𑖯𑖮𑖯 (svāhā 圓滿成就)</b>，便能字字連心。",
+        items: [
+          {
+            char: "𑖌𑖼 𑖭𑖨𑖿𑖪 𑖝𑖞𑖯𑖐𑖝 𑖮𑖡𑖦𑖡 𑖡𑖺𑖎𑖨𑖺𑖦𑖰",
+            roman: "oṃ sarva tathāgata hanamana nokaromi",
+            dharma: "壇前普禮真言（恭敬禮拜十方如來）",
+            brush: "心中觀想禮拜一切如來（tathāgata，字中可見古剎山門 𑖐 ga），身心柔軟謙卑。"
+          },
+          {
+            char: "𑖌𑖼 𑖭𑖿𑖪𑖥𑖯𑖪 𑖫𑖲𑖟𑖿𑖠 𑖭𑖨𑖿𑖪 𑖠𑖨𑖿𑖦 𑖭𑖿𑖪𑖥𑖯𑖪 𑖫𑖲𑖟𑖿𑖠𑖺𑖮𑖼",
+            roman: "oṃ svabhāva śuddha sarva dharma svabhāva śuddho'haṃ",
+            dharma: "淨三業真言（一切法本自清淨，我亦如是）",
+            brush: "誦念時觀想身、口、意三業如琉璃般清淨無染（śuddha 清淨出現兩次）。"
+          },
+          {
+            char: "𑖌𑖼 𑖝𑖞𑖯𑖐𑖝𑖺𑖟𑖿𑖥𑖪𑖯𑖧 𑖭𑖿𑖪𑖯𑖮𑖯",
+            roman: "oṃ tathāgatodbhavāya svāhā",
+            dharma: "佛部三昧耶真言（祈願身業清淨）",
+            brush: "tathāgato 意為「如來」，結印加持五處，祈願身體安康、遠離病苦。"
+          },
+          {
+            char: "𑖌𑖼 𑖢𑖟𑖿𑖦𑖺𑖟𑖿𑖥𑖪𑖯𑖧 𑖭𑖿𑖪𑖯𑖮𑖯",
+            roman: "oṃ padmodbhavāya svāhā",
+            dharma: "蓮花部三昧耶真言（祈願語業清淨）",
+            brush: "padmo 意為「蓮花」，願出口皆是柔和愛語，如蓮花出淤泥而不染。"
+          },
+          {
+            char: "𑖌𑖼 𑖪𑖕𑖿𑖨𑖺𑖟𑖿𑖥𑖪𑖯𑖧 𑖭𑖿𑖪𑖯𑖮𑖯",
+            roman: "oṃ vajrodbhavāya svāhā",
+            dharma: "金剛部三昧耶真言（祈願意業清淨）",
+            brush: "vajro 意為「金剛」，願內心堅定不移、煩惱不侵，證得清淨菩提心。"
+          },
+          {
+            char: "𑖌𑖼 𑖪𑖕𑖿𑖨𑖯𑖐𑖿𑖡𑖰 𑖢𑖿𑖨𑖟𑖱𑖢𑖿𑖝𑖯𑖧 𑖭𑖿𑖪𑖯𑖮𑖯",
+            roman: "oṃ vajrāgni pradīptāya svāhā",
+            dharma: "被甲護身真言（如來慈悲光明護體）",
+            brush: "vajrāgni（金剛智慧之火）熾盛光明，觀想佛菩薩慈悲鎧甲守護身心平安。"
+          },
+          {
+            char: "𑖌𑖼 𑖤𑖺𑖠𑖰𑖓𑖰𑖝𑖿𑖝 𑖦𑖲𑖝𑖿𑖢𑖯𑖟𑖧𑖯𑖦𑖰",
+            roman: "oṃ bodhicitta mutpādayāmi",
+            dharma: "發菩提心真言（願利益一切有情眾生）",
+            brush: "bodhicitta 即「菩提心」，提醒自己每天起善念、發大願。"
+          },
+          {
+            char: "𑖌𑖼 𑖭𑖦𑖧 𑖭𑖝𑖿𑖪𑖼",
+            roman: "oṃ samaya satvaṃ",
+            dharma: "三昧耶戒真言（與佛心印平等無二）",
+            brush: "簡短莊嚴的三個詞，代表我與諸佛菩薩本性平等、心心相印。"
+          }
+        ]
+      }
+    ];
+
+    const studyPlan = [
+      {
+        week: "第一階段（第 1～2 週）：每日三五字，依循智滿流筆順慢寫養靜心",
+        tasks: [
+          { id: "e1", text: "品讀【第一品：喉音五門】字門智慧，觀看《梵字必携》筆順動畫後慢寫 3 遍", stageIdx: 0 },
+          { id: "e2", text: "品讀【第二品：口蓋五門】與【第三品：反舌五門】，體會命點起筆與連筆韻律", stageIdx: 1 },
+          { id: "e3", text: "品讀【第四品：齒音五門】與【第五品：唇音五門】，體會書法筆勢", stageIdx: 3 }
+        ]
+      },
+      {
+        week: "第二階段（第 3～4 週）：遍口吹氣與「添衣加冕」觀想",
+        tasks: [
+          { id: "e4", text: "品讀【第六品：遍口四門】與【第七品：吹氣總持】，感受字義深意", stageIdx: 5 },
+          { id: "e5", text: "修習【第八品：種子母音與添衣加冕】，體驗本尊法身莊嚴變化", stageIdx: 7 }
+        ]
+      },
+      {
+        week: "第三階段（第 5～8 週）：融入日常早晚課持誦相應",
+        tasks: [
+          { id: "e6", text: "結合【第九品：日課真言相應持誦】，對照平日早晚課本，字字連心", stageIdx: 8 },
+          { id: "e7", text: "每週選一個安靜的午後，泡一壺茶，用描紅硯台臨摹最喜歡的種子字", stageIdx: 0 }
+        ]
+      }
+    ];
+
+    const modakaRules = [
+      { suffixChar: "𑖰", suffixRoman: "i", idx: "03", crownName: "覆頂契入「之根源」", meaningTpl: (base) => `${base.split("（")[0]}之根源` },
+      { suffixChar: "𑖲", suffixRoman: "u", idx: "05", crownName: "足下垂鉤「之譬喻」", meaningTpl: (base) => `${base.split("（")[0]}之譬喻` },
+      { suffixChar: "𑖸", suffixRoman: "e", idx: "07", crownName: "左上斜筆「之求索」", meaningTpl: (base) => `${base.split("（")[0]}之求索` },
+      { suffixChar: "𑖺", suffixRoman: "o", idx: "09", crownName: "左右護持「之瀑流」", meaningTpl: (base) => `${base.split("（")[0]}之瀑流` },
+      { suffixChar: "𑖼", suffixRoman: "aṃ", idx: "11", crownName: "頂戴摩尼寶珠「之邊際」", meaningTpl: (base) => `${base.split("（")[0]}之邊際` },
+      { suffixChar: "𑖾", suffixRoman: "aḥ", idx: "12", crownName: "右點涅槃雙露「究竟遠離」", meaningTpl: (base) => `究竟遠離（${base.split("（")[0]}）` }
+    ];
+
+    let currentStageIdx = 0;
+    let currentQuizStep = 1;
+    let clearedStepsMap = JSON.parse(localStorage.getItem("siddham_elder_cleared_v1") || "{}");
+    let checkedTasks = new Set(JSON.parse(localStorage.getItem("siddham_elder_plan_v1") || "[]"));
+    let currentAudio = null;
+    let currentTraceItem = null;
+    let quizQueue = [];
+    let currentQ = null;
+    let answered = false;
+
+    let canvas, ctx, demoCanvas, demoCtx, isDrawing = false, demoAnimId = null;
+
+    function initCanvas() {
+      canvas = document.getElementById("traceCanvas");
+      ctx = canvas.getContext("2d");
+      ctx.lineWidth = 8;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = "#2c241e";
+
+      demoCanvas = document.getElementById("demoCanvas");
+      demoCtx = demoCanvas.getContext("2d");
+
+      const getPos = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - rect.left, y: clientY - rect.top };
+      };
+
+      const startDraw = (e) => { stopDemo(); isDrawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
+      const draw = (e) => { if (!isDrawing) return; e.preventDefault(); const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); };
+      const endDraw = () => { isDrawing = false; };
+
+      canvas.addEventListener("mousedown", startDraw);
+      canvas.addEventListener("mousemove", draw);
+      window.addEventListener("mouseup", endDraw);
+      canvas.addEventListener("touchstart", startDraw, { passive: false });
+      canvas.addEventListener("touchmove", draw, { passive: false });
+      canvas.addEventListener("touchend", endDraw);
+    }
+
+    function stopDemo() {
+      if (demoAnimId) { cancelAnimationFrame(demoAnimId); demoAnimId = null; }
+      if (demoCtx) demoCtx.clearRect(0, 0, 280, 280);
+    }
+
+    function clearCanvas() {
+      stopDemo();
+      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function setTraceItem(item) {
+      currentTraceItem = item;
+      clearCanvas();
+      document.getElementById("watermarkChar").innerText = item.char;
+      document.getElementById("traceLabel").innerHTML = `目前臨摹字帖：<b>${item.char} (${item.roman})</b> — ${item.dharma}`;
+      document.getElementById("traceOrderText").innerText = item.order || "";
+      const demoBtn = document.getElementById("demoBtn");
+      if (strokeAnimations[item.char]) {
+        demoBtn.style.display = "inline-block";
+        drawStartDot(strokeAnimations[item.char][0][0]);
+      } else {
+        demoBtn.style.display = "none";
+      }
+    }
+
+    function drawStartDot(pt) {
+      if (!demoCtx || !pt) return;
+      demoCtx.clearRect(0, 0, 280, 280);
+      demoCtx.fillStyle = "#9e2a2b";
+      demoCtx.beginPath();
+      demoCtx.arc(pt[0], pt[1], 8, 0, Math.PI * 2);
+      demoCtx.fill();
+      demoCtx.fillStyle = "#fff";
+      demoCtx.font = "bold 11px sans-serif";
+      demoCtx.textAlign = "center";
+      demoCtx.textBaseline = "middle";
+      demoCtx.fillText("1", pt[0], pt[1]);
+    }
+
+    function playStrokeDemo() {
+      if (!currentTraceItem || !strokeAnimations[currentTraceItem.char]) return;
+      clearCanvas();
+      const strokes = strokeAnimations[currentTraceItem.char];
+      let strokeIdx = 0;
+      let segIdx = 0;
+      let progress = 0;
+
+      demoCtx.lineWidth = 8;
+      demoCtx.lineCap = "round";
+      demoCtx.lineJoin = "round";
+      demoCtx.strokeStyle = "#9e2a2b";
+
+      function step() {
+        if (strokeIdx >= strokes.length) {
+          demoAnimId = null;
+          return;
+        }
+        const pts = strokes[strokeIdx];
+        if (segIdx >= pts.length - 1) {
+          demoCtx.fillStyle = "#2d6a4f";
+          demoCtx.beginPath();
+          demoCtx.arc(pts[0][0], pts[0][1], 9, 0, Math.PI * 2);
+          demoCtx.fill();
+          demoCtx.fillStyle = "#fff";
+          demoCtx.font = "bold 11px sans-serif";
+          demoCtx.textAlign = "center";
+          demoCtx.textBaseline = "middle";
+          demoCtx.fillText(String(strokeIdx + 1), pts[0][0], pts[0][1]);
+
+          strokeIdx++;
+          segIdx = 0;
+          progress = 0;
+          setTimeout(() => { demoAnimId = requestAnimationFrame(step); }, 350);
+          return;
+        }
+
+        const p1 = pts[segIdx];
+        const p2 = pts[segIdx + 1];
+        const nextProg = Math.min(1, progress + 0.09);
+
+        demoCtx.beginPath();
+        demoCtx.moveTo(p1[0] + (p2[0] - p1[0]) * progress, p1[1] + (p2[1] - p1[1]) * progress);
+        demoCtx.lineTo(p1[0] + (p2[0] - p1[0]) * nextProg, p1[1] + (p2[1] - p1[1]) * nextProg);
+        demoCtx.stroke();
+
+        progress = nextProg;
+        if (progress >= 1) {
+          segIdx++;
+          progress = 0;
+        }
+        demoAnimId = requestAnimationFrame(step);
+      }
+
+      demoAnimId = requestAnimationFrame(step);
+    }
+
+    function replayTraceAudio() {
+      if (currentTraceItem && currentTraceItem.audio) playItemAudio(currentTraceItem.audio, null);
+    }
+
+    function init() {
+      initCanvas();
+      renderStageBar();
+      loadStage(0);
+      renderStudyPlan();
+    }
+
+    function switchTopTab(tab) {
+      stopAudio();
+      document.getElementById("navGame").classList.toggle("active", tab === "game");
+      document.getElementById("navPlan").classList.toggle("active", tab === "plan");
+      document.getElementById("gameSection").style.display = tab === "game" ? "flex" : "none";
+      document.getElementById("planSection").style.display = tab === "plan" ? "block" : "none";
+    }
+
+    function renderStudyPlan() {
+      const container = document.getElementById("planContainer");
+      container.innerHTML = "";
+      studyPlan.forEach((weekObj) => {
+        const card = document.createElement("div");
+        card.className = "week-card";
+        card.innerHTML = `<div class="week-title">${weekObj.week}</div>`;
+        weekObj.tasks.forEach((t) => {
+          const isChecked = checkedTasks.has(t.id);
+          const row = document.createElement("div");
+          row.className = `task-item ${isChecked ? "checked" : ""}`;
+          row.innerHTML = `
+            <input type="checkbox" ${isChecked ? "checked" : ""}>
+            <div class="task-text">${t.text}</div>
+            <button class="mini-btn" onclick="event.stopPropagation(); jumpToStage(${t.stageIdx})">前往賞字 ➔</button>
+          `;
+          row.onclick = () => {
+            if (checkedTasks.has(t.id)) checkedTasks.delete(t.id);
+            else checkedTasks.add(t.id);
+            localStorage.setItem("siddham_elder_plan_v1", JSON.stringify([...checkedTasks]));
+            renderStudyPlan();
+          };
+          card.appendChild(row);
+        });
+        container.appendChild(card);
+      });
+    }
+
+    function jumpToStage(idx) {
+      switchTopTab("game");
+      loadStage(idx);
+    }
+
+    function renderStageBar() {
+      const bar = document.getElementById("stageBar");
+      bar.innerHTML = "";
+      stages.forEach((st, idx) => {
+        const arr = clearedStepsMap[st.id] || [];
+        const btn = document.createElement("button");
+        btn.className = `stage-btn ${idx === currentStageIdx ? "active" : ""} ${arr.includes(3) ? "done" : ""}`;
+        btn.innerText = st.title;
+        btn.onclick = () => loadStage(idx);
+        bar.appendChild(btn);
+      });
+    }
+
+    function loadStage(idx) {
+      currentStageIdx = idx;
+      renderStageBar();
+      setMode("learn");
+      const stage = stages[idx];
+      document.getElementById("stageStory").innerHTML = stage.story;
+      const list = document.getElementById("learnList");
+      list.innerHTML = "";
+
+      if (!stage.isMantra && stage.items.length > 0) {
+        document.querySelector(".calligraphy-box").style.display = "block";
+        setTraceItem(stage.items[0]);
+      } else {
+        document.querySelector(".calligraphy-box").style.display = "none";
+      }
+
+      stage.items.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "learn-card";
+        const charClass = stage.isMantra ? "siddham-mantra" : "siddham-large";
+        const hasAnim = !!strokeAnimations[item.char];
+        card.innerHTML = `
+          <div class="char-box" style="${stage.isMantra ? 'min-width:200px;' : ''}">
+            <div class="${charClass}">${item.char}</div>
+            <div class="roman-large">${item.roman}</div>
+          </div>
+          <div class="info-box">
+            <div class="dharma-title">🪷 ${item.dharma}</div>
+            <div class="brush-text">${item.brush}</div>
+            ${item.order ? `<div class="stroke-order-tag">✍️ ${item.order}</div>` : ""}
+          </div>
+          <div class="card-actions">
+            ${item.audio ? `<button class="mini-btn" onclick="event.stopPropagation(); playItemAudio(${JSON.stringify(item.audio).replace(/"/g, '&quot;')}, this.closest('.learn-card'))">🔊 聆聽梵音</button>` : ""}
+            ${!stage.isMantra ? `<button class="mini-btn ${hasAnim ? 'cinnabar' : ''}" onclick="event.stopPropagation(); setTraceItem(${JSON.stringify(item).replace(/"/g, '&quot;')}); document.querySelector('.calligraphy-box').scrollIntoView({behavior:'smooth'}); if(${hasAnim}) setTimeout(playStrokeDemo, 400);">${hasAnim ? '▶️ 看正統筆順' : '🖌️ 硯台臨摹'}</button>` : ""}
+          </div>
+        `;
+        card.onclick = () => {
+          if (item.audio) playItemAudio(item.audio, card);
+          if (!stage.isMantra) setTraceItem(item);
+        };
+        list.appendChild(card);
+      });
+    }
+
+    function setMode(mode) {
+      stopAudio();
+      document.getElementById("tabLearn").classList.toggle("active", mode === "learn");
+      document.getElementById("tabQuiz").classList.toggle("active", mode === "quiz");
+      document.getElementById("learnView").style.display = mode === "learn" ? "block" : "none";
+      document.getElementById("quizView").style.display = mode === "quiz" ? "block" : "none";
+      if (mode === "quiz") startQuizStep(currentQuizStep);
+    }
+
+    function startQuizStep(stepNum) {
+      currentQuizStep = stepNum;
+      document.getElementById("tabLearn").classList.remove("active");
+      document.getElementById("tabQuiz").classList.add("active");
+      document.getElementById("learnView").style.display = "none";
+      document.getElementById("quizView").style.display = "block";
+      renderStepLadder();
+      buildQuizQueueForStep(stepNum);
+      nextQuestion();
+    }
+
+    function renderStepLadder() {
+      const ladder = document.getElementById("stepLadder");
+      const stage = stages[currentStageIdx];
+      const cleared = clearedStepsMap[stage.id] || [];
+      const stepsInfo = [
+        { num: 1, label: "🪷 第一重：字門智慧印心" },
+        { num: 2, label: "🔊 第二重：聆聽梵音相應" },
+        { num: 3, label: "👑 第三重：添衣加冕觀想" }
+      ];
+      ladder.innerHTML = "";
+      stepsInfo.forEach((s) => {
+        const btn = document.createElement("button");
+        const isCleared = cleared.includes(s.num);
+        btn.className = `step-pill ${currentQuizStep === s.num ? "active" : ""} ${isCleared ? "cleared" : ""}`;
+        btn.innerText = isCleared ? `${s.label} ✓` : s.label;
+        btn.onclick = () => startQuizStep(s.num);
+        ladder.appendChild(btn);
+      });
+    }
+
+    function buildQuizQueueForStep(stepNum) {
+      const stage = stages[currentStageIdx];
+      const items = stage.items;
+      let questions = [];
+
+      if (stepNum === 1) {
+        items.forEach((item) => {
+          questions.push({
+            prompt: stage.isMantra ? "請靜心觀想，這句真言的護持功德為何？" : "請觀想此種子字的書法筆勢，它代表哪一門智慧？",
+            displayChar: item.char,
+            isMantraChar: !!stage.isMantra,
+            audio: item.audio || null,
+            correctAnswer: item.dharma,
+            isCharOption: false,
+            options: shuffle(pickDistractors(items, item, (x) => x.dharma)),
+            explain: `<b>${item.char} (${item.roman})</b> 代表「<b>${item.dharma}</b>」。${item.brush}`
+          });
+        });
+      } else if (stepNum === 2) {
+        items.forEach((item) => {
+          if (item.audio) {
+            questions.push({
+              prompt: "請靜心聆聽梵音，選出與此音聲相應的種子字：",
+              displayChar: null,
+              audio: item.audio,
+              correctAnswer: item.char,
+              isCharOption: true,
+              options: shuffle(pickDistractors(items, item, (x) => x.char)),
+              explain: `此梵音為 <b>${item.roman}（${item.char}）</b>，象徵「${item.dharma}」。`
+            });
+          } else {
+            questions.push({
+              prompt: `哪一句真言代表「${item.dharma}」？`,
+              displayChar: null,
+              audio: null,
+              correctAnswer: item.char,
+              isCharOption: true,
+              options: shuffle(pickDistractors(items, item, (x) => x.char)),
+              explain: `此句即為「<b>${item.dharma}</b>」（${item.roman}）。`
+            });
+          }
+        });
+      } else {
+        items.forEach((item) => {
+          questions.push({
+            prompt: stage.isMantra ? "這句真言的梵音讀誦為何？" : "此種子字的梵音讀誦為何？",
+            displayChar: item.char,
+            isMantraChar: !!stage.isMantra,
+            audio: item.audio || null,
+            correctAnswer: item.roman,
+            isCharOption: false,
+            options: shuffle(pickDistractors(items, item, (x) => x.roman)),
+            explain: `<b>${item.char}</b> 讀作 <b>${item.roman}</b>（${item.dharma}）。`
+          });
+        });
+
+        const modakaCandidates = items.filter((it) => it.modakaBase);
+        if (modakaCandidates.length > 0) {
+          const baseItem = modakaCandidates[Math.floor(Math.random() * modakaCandidates.length)];
+          const rule = modakaRules[Math.floor(Math.random() * modakaRules.length)];
+          const combinedChar = baseItem.char + rule.suffixChar;
+          const combinedRoman = baseItem.roman.slice(0, -1) + rule.suffixRoman;
+          const combinedMeaning = rule.meaningTpl(baseItem.dharma);
+          const mp3Path = `audio/${baseItem.modakaBase}_${rule.idx}.mp3`;
+          const otherRules = shuffle(modakaRules.filter((r) => r.suffixRoman !== rule.suffixRoman)).slice(0, 3);
+          const optList = shuffle([
+            `${combinedRoman}（${rule.crownName}）`,
+            ...otherRules.map((r) => `${baseItem.roman.slice(0, -1) + r.suffixRoman}（${r.crownName}）`)
+          ]);
+          questions.push({
+            prompt: `本尊法身「${baseItem.char} (${baseItem.roman})」添衣加冕後如下圖，其梵音與觀想義理為何？`,
+            displayChar: combinedChar,
+            audio: { type: "file", file: mp3Path },
+            correctAnswer: `${combinedRoman}（${rule.crownName}）`,
+            isCharOption: false,
+            options: optList,
+            explain: `「${baseItem.char}」加上「<b>${rule.suffixChar}</b>」後，讀作 <b>${combinedRoman}</b>，意為「<b>${combinedMeaning}</b>」。`
+          });
+        }
+      }
+
+      quizQueue = shuffle(questions).slice(0, 5);
+    }
+
+    function pickDistractors(pool, targetItem, mapperFn) {
+      const targetVal = mapperFn(targetItem);
+      let others = pool.filter((x) => mapperFn(x) !== targetVal).map(mapperFn);
+      if (others.length < 3) {
+        stages.forEach((st) => {
+          if (st.isMantra === stages[currentStageIdx].isMantra) {
+            st.items.forEach((x) => {
+              const val = mapperFn(x);
+              if (val !== targetVal && !others.includes(val)) others.push(val);
+            });
+          }
+        });
+      }
+      return [targetVal, ...shuffle(others).slice(0, 3)];
+    }
+
+    function nextQuestion() {
+      stopAudio();
+      answered = false;
+      document.getElementById("feedbackBox").style.display = "none";
+      document.getElementById("nextBtn").style.display = "none";
+
+      if (quizQueue.length === 0) {
+        const stage = stages[currentStageIdx];
+        if (!clearedStepsMap[stage.id]) clearedStepsMap[stage.id] = [];
+        if (!clearedStepsMap[stage.id].includes(currentQuizStep)) {
+          clearedStepsMap[stage.id].push(currentQuizStep);
+          localStorage.setItem("siddham_elder_cleared_v1", JSON.stringify(clearedStepsMap));
+        }
+        renderStageBar();
+        renderStepLadder();
+
+        document.getElementById("qChar").style.display = "none";
+        document.getElementById("qAudioBtn").style.display = "none";
+        document.getElementById("optionsGrid").innerHTML = "";
+
+        const btn = document.getElementById("nextBtn");
+        btn.style.display = "block";
+
+        if (currentQuizStep < 3) {
+          const nextStep = currentQuizStep + 1;
+          document.getElementById("qPrompt").innerHTML = `🪷 隨喜讚歎！本重溫習已圓滿心領神會，可繼續品讀下一重：`;
+          btn.innerText = `進入下一重溫習 ➔`;
+          btn.onclick = () => {
+            btn.onclick = nextQuestion;
+            btn.innerText = "繼續品讀下一題 ➔";
+            startQuizStep(nextStep);
+          };
+        } else {
+          const nextStageIdx = (currentStageIdx + 1) % stages.length;
+          document.getElementById("qPrompt").innerHTML = `🪷 功德圓滿！「<b>${stage.title}</b>」三重靜心溫習已全部圓滿！`;
+          btn.innerText = `品讀下一品：${stages[nextStageIdx].title} ➔`;
+          btn.onclick = () => {
+            btn.onclick = nextQuestion;
+            btn.innerText = "繼續品讀下一題 ➔";
+            currentQuizStep = 1;
+            loadStage(nextStageIdx);
+          };
+        }
+        return;
+      }
+
+      currentQ = quizQueue.shift();
+      document.getElementById("qPrompt").innerText = currentQ.prompt;
+
+      const qCharEl = document.getElementById("qChar");
+      if (currentQ.displayChar) {
+        qCharEl.style.display = "block";
+        qCharEl.style.fontSize = currentQ.isMantraChar ? "2.1rem" : "4.5rem";
+        qCharEl.innerText = currentQ.displayChar;
+      } else {
+        qCharEl.style.display = "none";
+      }
+
+      const qAudioBtn = document.getElementById("qAudioBtn");
+      if (currentQ.audio) {
+        qAudioBtn.style.display = "inline-block";
+        if (currentQuizStep === 2) setTimeout(() => playItemAudio(currentQ.audio, null), 250);
+      } else {
+        qAudioBtn.style.display = "none";
+      }
+
+      const grid = document.getElementById("optionsGrid");
+      grid.innerHTML = "";
+      currentQ.options.forEach((optText) => {
+        const btn = document.createElement("button");
+        btn.className = "opt-btn";
+        if (currentQ.isCharOption) btn.innerHTML = `<span class="siddham-opt" style="${stages[currentStageIdx].isMantra ? 'font-size:1.45rem;' : ''}">${optText}</span>`;
+        else btn.innerText = optText;
+        btn.onclick = () => checkAnswer(btn, optText);
+        grid.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selectedBtn, chosenValue) {
+      if (answered) return;
+      answered = true;
+      const isCorrect = chosenValue === currentQ.correctAnswer;
+      document.querySelectorAll(".opt-btn").forEach((b) => {
+        b.disabled = true;
+        if (b.innerText.trim() === currentQ.correctAnswer) b.classList.add("correct");
+      });
+      const fb = document.getElementById("feedbackBox");
+      fb.style.display = "block";
+      if (isCorrect) {
+        selectedBtn.classList.add("correct");
+        fb.className = "feedback-box ok";
+        fb.innerHTML = `🪷 <b>心領神會！</b> ${currentQ.explain}`;
+        if (currentQ.audio) playItemAudio(currentQ.audio, null);
+      } else {
+        selectedBtn.classList.add("wrong");
+        fb.className = "feedback-box err";
+        fb.innerHTML = `🍵 <b>無妨，且再細品一次：</b> ${currentQ.explain}`;
+        if (currentQ.audio) playItemAudio(currentQ.audio, null);
+        quizQueue.splice(Math.min(2, quizQueue.length), 0, currentQ);
+      }
+      document.getElementById("nextBtn").style.display = "block";
+    }
+
+    function replayCurrentQuestionAudio() { if (currentQ && currentQ.audio) playItemAudio(currentQ.audio, null); }
+
+    function playItemAudio(audioSpec, cardEl) {
+      stopAudio();
+      if (!audioSpec) return;
+      if (cardEl) cardEl.classList.add("playing");
+      currentAudio = new Audio(audioSpec.file);
+      if (audioSpec.type === "range") {
+        currentAudio.currentTime = audioSpec.start;
+        currentAudio.play().catch((e) => console.warn("音檔播放失敗:", e));
+        currentAudio.addEventListener("timeupdate", () => { if (currentAudio && currentAudio.currentTime >= audioSpec.end) stopAudio(); });
+      } else {
+        currentAudio.play().catch((e) => console.warn("音檔播放失敗:", e));
+      }
+      currentAudio.onended = () => stopAudio();
+    }
+
+    function stopAudio() {
+      if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+      document.querySelectorAll(".learn-card.playing").forEach((c) => c.classList.remove("playing"));
+    }
+
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    init();
+  </script>
+</body>
+</html>
