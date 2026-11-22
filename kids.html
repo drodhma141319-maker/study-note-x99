@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>悉曇積木王國｜互動記憶闖關營</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Siddham&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "Noto Sans Siddham";
+      src: url("./fonts/NotoSansSiddham-Regular.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    :root {
+      --bg: #f5f3ff;
+      --card: #ffffff;
+      --primary: #4f46e5;
+      --primary-light: #e0e7ff;
+      --success: #16a34a;
+      --success-bg: #dcfce7;
+      --danger: #dc2626;
+      --danger-bg: #fee2e2;
+      --text: #1e293b;
+      --subtext: #64748b;
+      --border: #cbd5e1;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 1.5rem 1rem 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header { text-align: center; max-width: 780px; margin-bottom: 1rem; }
+    h1 { font-size: 1.5rem; margin: 0 0 0.4rem; color: #312e81; }
+    .subtitle { font-size: 0.92rem; color: var(--subtext); margin: 0; }
+
+    .top-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1.2rem;
+      width: 100%;
+      max-width: 780px;
+    }
+    .nav-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--subtext);
+      transition: all 0.2s;
+    }
+    .nav-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.25);
+    }
+
+    .stage-bar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 820px; margin-bottom: 1.2rem; }
+    .stage-btn {
+      background: #fff; border: 1.5px solid var(--border); border-radius: 999px;
+      padding: 7px 14px; font-size: 0.86rem; font-weight: 600; color: var(--subtext);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .stage-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .stage-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 3px 8px rgba(79, 70, 229, 0.25); }
+    .stage-btn.done::after { content: " ⭐"; }
+
+    .panel {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 1.5rem; width: 100%; max-width: 780px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); box-sizing: border-box;
+    }
+
+    .progress-summary {
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 1.2rem;
+    }
+    .progress-bar-bg {
+      width: 100%;
+      height: 12px;
+      background: #cbd5e1;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--success);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .week-card {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+    .week-title {
+      font-weight: 800;
+      color: #312e81;
+      font-size: 1.02rem;
+      margin-bottom: 8px;
+    }
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 6px;
+      border-bottom: 1px dashed #e2e8f0;
+      cursor: pointer;
+    }
+    .task-item:last-child { border-bottom: none; }
+    .task-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--success);
+      cursor: pointer;
+    }
+    .task-text { flex: 1; font-size: 0.94rem; line-height: 1.45; }
+    .task-item.checked .task-text { text-decoration: line-through; color: #94a3b8; }
+    .go-stage-tag {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .mode-switch { display: flex; gap: 10px; margin-bottom: 1.2rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; }
+    .mode-tab {
+      flex: 1; padding: 10px; border-radius: 10px; border: 1.5px solid var(--border);
+      background: #f8fafc; font-size: 0.95rem; font-weight: 700; cursor: pointer; text-align: center; color: var(--subtext);
+    }
+    .mode-tab.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+    .mnemonic-banner {
+      background: #fefce8; border: 1px solid #fde047; border-radius: 10px;
+      padding: 12px 16px; margin-bottom: 1rem; font-size: 0.95rem; color: #854d0e; line-height: 1.6;
+    }
+    .finger-tip {
+      background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 10px;
+      padding: 10px 14px; margin-bottom: 1.2rem; font-size: 0.9rem; color: #065f46; font-weight: 600;
+    }
+    .learn-list { display: flex; flex-direction: column; gap: 12px; }
+    .learn-card {
+      display: flex; align-items: center; gap: 16px; border: 1.5px solid #e2e8f0;
+      border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.15s; background: #fff;
+    }
+    .learn-card:hover { border-color: var(--primary); background: #f8fafc; transform: translateY(-1px); }
+    .learn-card.playing { background: var(--primary-light); border-color: var(--primary); }
+    .char-box { min-width: 84px; text-align: center; background: #f1f5f9; border-radius: 10px; padding: 8px 6px; }
+    .siddham { font-family: "Noto Sans Siddham", serif; font-size: 2.5rem; line-height: 1.2; color: #0f172a; }
+    .siddham-mantra { font-family: "Noto Sans Siddham", serif; font-size: 1.75rem; line-height: 1.3; color: #0f172a; }
+    .roman { font-size: 1.1rem; font-weight: 800; color: var(--primary); margin-top: 4px; }
+    .info-box { flex: 1; }
+    .toy-tag {
+      display: inline-block; background: #fef3c7; color: #92400e; font-weight: 800;
+      font-size: 0.95rem; padding: 3px 10px; border-radius: 6px; margin-bottom: 4px; margin-right: 6px;
+    }
+    .meaning-tag {
+      display: inline-block; background: #eef2ff; color: #3730a3; font-weight: 700;
+      font-size: 0.88rem; padding: 3px 9px; border-radius: 6px; margin-bottom: 4px;
+    }
+    .hint-text { font-size: 0.94rem; color: #334155; line-height: 1.55; margin-top: 2px; }
+    .sound-icon { font-size: 1.4rem; color: var(--primary); padding: 8px; }
+    .primary-btn {
+      width: 100%; margin-top: 1.5rem; padding: 14px; background: var(--primary); color: #fff;
+      border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: background 0.2s;
+    }
+    .primary-btn:hover { background: #4338ca; }
+
+    .step-ladder {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 1.2rem;
+    }
+    .step-pill {
+      padding: 10px 6px;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      background: #f8fafc;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--subtext);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .step-pill.active {
+      background: #fef3c7;
+      border-color: #f59e0b;
+      color: #92400e;
+    }
+    .step-pill.cleared {
+      background: var(--success-bg);
+      border-color: var(--success);
+      color: #14532d;
+    }
+
+    .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-size: 0.92rem; color: var(--subtext); font-weight: 700; }
+    .q-type-badge { background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 999px; font-size: 0.88rem; }
+    .question-box { text-align: center; padding: 1.5rem 1rem; background: #f8fafc; border-radius: 12px; margin-bottom: 1.2rem; border: 1px solid #e2e8f0; }
+    .q-prompt { font-size: 1.12rem; font-weight: 700; color: #1e293b; margin-bottom: 0.8rem; }
+    .q-display-char { font-family: "Noto Sans Siddham", serif; font-size: 3.6rem; line-height: 1.25; color: #0f172a; margin: 0.4rem 0; word-break: break-all; }
+    .audio-replay-btn {
+      background: var(--primary); color: #fff; border: none; border-radius: 999px;
+      padding: 10px 22px; font-size: 1rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; margin-top: 0.5rem;
+    }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .opt-btn {
+      background: #fff; border: 2px solid var(--border); border-radius: 12px; padding: 14px 12px;
+      cursor: pointer; font-size: 1.05rem; font-weight: 700; color: var(--text); transition: all 0.15s;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70px; text-align: center;
+    }
+    .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: #f5f3ff; }
+    .opt-btn .siddham { font-size: 2.3rem; }
+    .opt-btn.correct { background: var(--success-bg); border-color: var(--success); color: #14532d; }
+    .opt-btn.wrong { background: var(--danger-bg); border-color: var(--danger); color: #7f1d1d; }
+    .feedback-box { margin-top: 1.2rem; padding: 14px 16px; border-radius: 10px; font-size: 0.96rem; line-height: 1.55; display: none; }
+    .feedback-box.ok { background: var(--success-bg); color: #14532d; border: 1px solid #86efac; }
+    .feedback-box.err { background: var(--danger-bg); color: #7f1d1d; border: 1px solid #fca5a5; }
+    @media (max-width: 560px) {
+      .options-grid { grid-template-columns: 1fr; }
+      .step-ladder { grid-template-columns: 1fr 1fr; }
+      .learn-card { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🧱 悉曇積木王國｜互動記憶闖關營</h1>
+    <p class="subtitle">把字母變成動物與玩具積木 ➔ 換裝配件拼讀 ➔ 四階闖關收服寶可夢！</p>
+  </header>
+
+  <div class="top-nav">
+    <button class="nav-btn active" id="navGame" onclick="switchTopTab('game')">🎮 積木王國闖關（共9關）</button>
+    <button class="nav-btn" id="navPlan" onclick="switchTopTab('plan')">📅 60天每日學習進度表</button>
+  </div>
+
+  <!-- 闖關區 -->
+  <div id="gameSection" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+    <div class="stage-bar" id="stageBar"></div>
+    <div class="panel">
+      <div class="mode-switch">
+        <button class="mode-tab active" id="tabLearn" onclick="setMode('learn')">🧱 第一步：認識積木角色＋聽聲音</button>
+        <button class="mode-tab" id="tabQuiz" onclick="setMode('quiz')">🌟 第二步：小學生四階闖關測驗</button>
+      </div>
+      <div id="learnView">
+        <div class="mnemonic-banner" id="stageStory"></div>
+        <div class="finger-tip">👆 尋寶秘技：把每個字當成「生活動物或玩具」，點卡片聽聲音時用手指在桌上描一遍骨架！</div>
+        <div class="learn-list" id="learnList"></div>
+        <button class="primary-btn" onclick="startQuizStep(1)">準備好了！從「🌟 第1階：看積木猜角色/字義」開始 ➔</button>
+      </div>
+      <div id="quizView" style="display:none;">
+        <div class="step-ladder" id="stepLadder"></div>
+        <div class="quiz-header">
+          <span class="q-type-badge" id="qTypeBadge">階梯任務</span>
+          <span id="qProgress">剩餘題數：5</span>
+        </div>
+        <div class="question-box">
+          <div class="q-prompt" id="qPrompt"></div>
+          <div class="q-display-char" id="qChar" style="display:none;"></div>
+          <button class="audio-replay-btn" id="qAudioBtn" style="display:none;" onclick="replayCurrentQuestionAudio()">🔊 再聽一次發音</button>
+        </div>
+        <div class="options-grid" id="optionsGrid"></div>
+        <div class="feedback-box" id="feedbackBox"></div>
+        <button class="primary-btn" id="nextBtn" style="display:none;" onclick="nextQuestion()">下一題 ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 60天進度表區 -->
+  <div id="planSection" class="panel" style="display:none;">
+    <div class="progress-summary">
+      <div style="display:flex; justify-content:space-between; font-weight:800; color:#312e81;">
+        <span>🏆 60天考前總進度（每天只要 15～20 分鐘）</span>
+        <span id="progressText">0 / 16 項任務 (0%)</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
+      </div>
+      <p style="font-size:0.85rem; color:#475569; margin:8px 0 0;">💡 勾選後會自動儲存在你的手機/電腦裡，隨時打開都能接著複習！</p>
+    </div>
+    <div id="planContainer"></div>
+  </div>
+
+  <script>
+    const stages = [
+      {
+        id: "ka-row",
+        title: "第1關：喉音 (ka行)",
+        story: "🦖 <b>喉音恐龍家族（聲音卡在喉嚨咕嚕叫）：</b><br>✂️ <b>ka</b> 手作大剪刀 ｜ 📣 <b>kha</b> 廣播大喇叭 ｜ ⛩️ <b>ga</b> 秘密地下道拱門 ｜ 🐫 <b>gha</b> 雙峰駱駝 ｜ 🤥 <b>ṅa</b> 長鼻子匹諾曹",
+        items: [
+          { char: "𑖎", roman: "ka", toy: "✂️ 手作大剪刀", meaning: "離作業", hint: "【線條特徵】中間一根柱子、左邊圓圈手把、右邊一刀剪下去 ➔ 拿大剪刀剪開「作業」！發音近英文 ga（ㄍㄚ）", audio: { type: "file", file: "audio/ka_01.mp3" }, modakaBase: "ka" },
+          { char: "𑖏", roman: "kha", toy: "📣 廣播大喇叭", meaning: "等虛空", hint: "【線條特徵】左邊小圈、右邊向右大口敞開的弧線 ➔ 像大喇叭向外大口吹氣呼呼叫（等虛空）！發音 ka（ㄎㄚ）出氣", audio: { type: "file", file: "audio/kha_01.mp3" }, modakaBase: "kha" },
+          { char: "𑖐", roman: "ga", toy: "⛩️ 秘密小拱門", meaning: "行", hint: "【線條特徵】乾乾淨淨的一座單一門形（ㄇ字型）➔ 走過秘密地下道小拱門去遠「行」！發音像台語「瓦斯」的瓦", audio: { type: "file", file: "audio/ga_01.mp3" }, modakaBase: "ga" },
+          { char: "𑖑", roman: "gha", toy: "🐫 雙峰駱駝", meaning: "一合", hint: "【線條特徵】底座連著兩個波浪弧形 w ➔ 背上有兩個凸凸駝峰的雙峰駱駝（雙峰「一合」）；台語「瓦」加出氣", audio: { type: "file", file: "audio/gha_01.mp3" }, modakaBase: "gha" },
+          { char: "𑖒", roman: "ṅa", toy: "🤥 長鼻子匹諾曹", meaning: "沉沒", hint: "【線條特徵】上方一頂帽子、下方往右翹出去像數字 5 下半部 ➔ 愛說謊長出翹翹大鼻子發鼻音 ṅa（鼻子太重「沉沒」啦）", audio: { type: "file", file: "audio/nga_01.mp3" }, modakaBase: "nga" }
+        ]
+      },
+      {
+        id: "ca-row",
+        title: "第2關：口蓋音 (ca行)",
+        story: "🥄 <b>口蓋音玩具盒（舌面往上頂住天花板）：</b><br>🥄 <b>ca</b> 彎彎小湯勺 ｜ 👓 <b>cha</b> 柯南雙環眼鏡 ｜ 梳 <b>ja</b> 媽媽的梳子 ｜ ⚡ <b>jha</b> 閃電霹靂劍 ｜ 🏯 <b>ña</b> 雙柱小宮殿",
+        items: [
+          { char: "𑖓", roman: "ca", toy: "🥄 彎彎小湯勺", meaning: "離一切遷變", hint: "【線條特徵】一豎底端向左彎出半圓弧 ➔ 像一支舀湯的小湯勺；發音 za（ㄗㄚ）", audio: { type: "file", file: "audio/ca_01.mp3" }, modakaBase: "ca" },
+          { char: "𑖔", roman: "cha", toy: "👓 柯南雙環眼鏡", meaning: "影像", hint: "【線條特徵】掛在橫樑下的兩顆圓圈圈 ➔ 像柯南的雙環眼鏡（照出「影像」）；次清出氣音", audio: { type: "file", file: "audio/cha_01.mp3" }, modakaBase: "cha" },
+          { char: "𑖕", roman: "ja", toy: "梳 媽媽的梳子", meaning: "生", hint: "【線條特徵】左邊像英文字母 E 的三根長長梳齒，右邊接一豎 ➔ 媽媽的梳子；濁音須振聲帶", audio: { type: "file", file: "audio/ja_01.mp3" }, modakaBase: "ja" },
+          { char: "𑖖", roman: "jha", toy: "⚡ 閃電霹靂劍", meaning: "戰敵", hint: "【線條特徵】中間斜斜折來折去的 Z 字折線 ➔ 揮舞閃電霹靂劍打「戰敵」人；ja 加出氣音", audio: { type: "range", file: "audio/35consonants_clean.mp3", start: 10.385, end: 11.247 } },
+          { char: "𑖗", roman: "ña", toy: "🏯 雙柱小宮殿", meaning: "智", hint: "【線條特徵】左邊彎鉤＋右邊直柱撐起大屋頂 ➔ 結構最華麗的智慧小宮殿；口蓋鼻音", audio: { type: "file", file: "audio/nya_01.mp3" }, modakaBase: "nya" }
+        ]
+      },
+      {
+        id: "tta-row",
+        title: "第3關：反舌音 (ṭa行)",
+        story: "👅 <b>捲舌音動物樂園（舌尖往後捲起來）：</b><br>🪝 <b>ṭa</b> 海盜小鐵鉤 ｜ 🍩 <b>ṭha</b> 甜甜圈 ｜ 🦢 <b>ḍa</b> S型小天鵝 ｜ 🎈 <b>ḍha</b> 天鵝叼氣球 ｜ ⛰️ <b>ṇa</b> 三座小山峰",
+        items: [
+          { char: "𑖘", roman: "ṭa", toy: "🪝 海盜小鐵鉤", meaning: "慢", hint: "【線條特徵】橫蓋底下一個開口朝右的半圓 C 字鉤 ➔ 像海盜船長的小鐵鉤（也是捲起來的舌尖）；3號捲舌音", audio: { type: "file", file: "audio/tta_01.mp3" }, modakaBase: "tta" },
+          { char: "𑖙", roman: "ṭha", toy: "🍩 圓滾滾甜甜圈", meaning: "長養", hint: "【線條特徵】把剛才的鐵鉤封起來變成飽滿大圓圈 O ➔ 吃甜甜圈「長養」身體；捲舌送氣", audio: { type: "file", file: "audio/ttha_01.mp3" }, modakaBase: "ttha" },
+          { char: "𑖚", roman: "ḍa", toy: "🦢 S型小天鵝", meaning: "施", hint: "【線條特徵】線條優雅彎出兩道弧度 ➔ 像一隻 S 型小白鵝；反舌濁音", audio: { type: "file", file: "audio/dda_01.mp3" }, modakaBase: "dda" },
+          { char: "𑖛", roman: "ḍha", toy: "🎈 天鵝叼氣球", meaning: "法界", hint: "【線條特徵】跟小天鵝 ḍa 一樣是 S 型，但尾巴多捲出一個圓球氣球（包羅「法界」）；ḍa 加出氣", audio: { type: "file", file: "audio/ddha_01.mp3" }, modakaBase: "ddha" },
+          { char: "𑖜", roman: "ṇa", toy: "⛰️ 三座小山峰", meaning: "本性寂", hint: "【線條特徵】三個拱形並排矗立 ➔ 像三座安靜的小山峰（倒過來的 m）；捲舌鼻音", audio: { type: "file", file: "audio/nna_01.mp3" }, modakaBase: "nna" }
+        ]
+      },
+      {
+        id: "ta-row",
+        title: "第4關：齒音 (ta行)",
+        story: "🛝 <b>齒音遊樂場（舌尖頂住上排牙齒）：</b><br>🛝 <b>ta</b> 公園溜滑梯 ｜ 🏠 <b>tha</b> 雙層小木屋 ｜ 🥊 <b>da</b> 拳擊大手套 ｜ 🥣 <b>dha</b> 半圓大湯碗 ｜ 🐘 <b>na</b> 捲鼻子小象",
+        items: [
+          { char: "𑖝", roman: "ta", toy: "🛝 公園溜滑梯", meaning: "慢", hint: "【線條特徵】橫蓋底下一豎＋向左斜出的長線條 ➔ 像公園的溜滑梯；發音近英文 da", audio: { type: "file", file: "audio/ta_01.mp3" }, modakaBase: "ta" },
+          { char: "𑖞", roman: "tha", toy: "🏠 雙層小木屋", meaning: "住處", hint: "【線條特徵】左邊上下兩個小房間＋右邊一豎封住 ➔ 像雙層小木屋（「住處」）；發音 ta（ㄊㄚ）出氣", audio: { type: "file", file: "audio/tha_01.mp3" }, modakaBase: "tha" },
+          { char: "𑖟", roman: "da", toy: "🥊 拳擊大手套", meaning: "怨敵", hint: "【線條特徵】橫梁底下一個鼓鼓的弧形 ➔ 戴上拳擊大手套「打（da）怨敵」！濁音須振聲帶", audio: { type: "file", file: "audio/da_01.mp3" }, modakaBase: "da" },
+          { char: "𑖠", roman: "dha", toy: "🥣 半圓大湯碗", meaning: "執持", hint: "【線條特徵】左邊一個大大的半圓月牙碗，右邊靠著一豎 ➔ 雙手「執持」大湯碗；發音 da 加出氣音", audio: { type: "file", file: "audio/dha_01.mp3" }, modakaBase: "dha" },
+          { char: "𑖡", roman: "na", toy: "🐘 捲鼻子小象", meaning: "名", hint: "【線條特徵】跟溜滑梯 ta 很像，但左邊多捲了一個圓圈圈 ➔ 像捲起長鼻子的小象；發音 na（ㄋㄚ）", audio: { type: "file", file: "audio/na_01.mp3" }, modakaBase: "na" }
+        ]
+      },
+      {
+        id: "pa-row",
+        title: "第5關：唇音 (pa行)",
+        story: "🫧 <b>唇音吹泡泡隊（嘟起上下嘴唇爆破）：</b><br>🧺 <b>pa</b> 開口大籃子 ｜ 🫧 <b>pha</b> 籃子吹泡泡 ｜ 📦 <b>ba</b> 綁緊正方形禮盒 ｜ ☕ <b>bha</b> 缺口馬克杯 ｜ 🐌 <b>ma</b> 背殼小蝸牛",
+        items: [
+          { char: "𑖢", roman: "pa", toy: "🧺 開口大籃子", meaning: "第一義諦", hint: "【線條特徵】上方敞開的大 U 字型 ➔ 像一個開口大籃子；發音近英文 ba", audio: { type: "file", file: "audio/pa_01.mp3" }, modakaBase: "pa" },
+          { char: "𑖣", roman: "pha", toy: "🫧 籃子吹泡泡", meaning: "不堅如聚沫", hint: "【線條特徵】就是大籃子 pa 的右邊外側多掛一顆圓泡泡（送氣吹出泡泡，「不堅如聚沫」）；pa（ㄆㄚ）出氣", audio: { type: "file", file: "audio/pha_01.mp3" }, modakaBase: "pha" },
+          { char: "𑖤", roman: "ba", toy: "📦 綁緊正方形禮盒", meaning: "縛", hint: "【線條特徵】四面都封起來的大正方形框框 ➔ 把禮物緊緊「束縛」在盒子裡；發音似台語「肉」音", audio: { type: "file", file: "audio/ba_01.mp3" }, modakaBase: "ba" },
+          { char: "𑖥", roman: "bha", toy: "☕ 缺口馬克杯", meaning: "有", hint: "【線條特徵】左邊有小彎鉤、右邊一豎 ➔ 像有握把的馬克杯；發音 ba 加出氣音", audio: { type: "file", file: "audio/bha_01.mp3" }, modakaBase: "bha" },
+          { char: "𑖦", roman: "ma", toy: "🐌 背殼小蝸牛", meaning: "我", hint: "【線條特徵】左邊一顆圓圓的蝸牛殼＋右邊接 U 型身體 ➔ 背著殼慢慢爬的小蝸牛（「我」）；發音 ma（ㄇㄚ）", audio: { type: "file", file: "audio/ma_01.mp3" }, modakaBase: "ma" }
+        ]
+      },
+      {
+        id: "ya-row",
+        title: "第6關：遍口音 (ya~va)",
+        story: "⛵ <b>冒險交通工具組：</b><br>⛵ <b>ya</b> 乘風小帆船 ｜ 🧹 <b>ra</b> 魔法掃把 ｜ 〰️ <b>la</b> 海浪波浪線 ｜ 📐 <b>va</b> 三角飯糰",
+        items: [
+          { char: "𑖧", roman: "ya", toy: "⛵ 乘風小帆船", meaning: "乘", hint: "【線條特徵】左邊彎弧＋中間直豎＋右邊U型 ➔ 像一艘載人「乘」風破浪的小帆船；發音 ya（ㄧㄚ）", audio: { type: "file", file: "audio/ya_01.mp3" }, modakaBase: "ya" },
+          { char: "𑖨", roman: "ra", toy: "🧹 魔法掃把", meaning: "離諸塵染", hint: "【線條特徵】最簡潔的一根直豎＋頂端小橫蓋 ➔ 像一根直立的魔法掃把掃光「塵染」；彈舌音", audio: { type: "file", file: "audio/ra_01.mp3" }, modakaBase: "ra" },
+          { char: "𑖩", roman: "la", toy: "〰️ 海浪波浪線", meaning: "相", hint: "【線條特徵】左邊連續起伏的波浪弧線＋右邊直柱 ➔ 像海浪起伏的外「相」；發音 la（ㄌㄚ）", audio: { type: "file", file: "audio/la_01.mp3" }, modakaBase: "la" },
+          { char: "𑖪", roman: "va", toy: "📐 三角飯糰", meaning: "語言道斷", hint: "【線條特徵】左邊鼓出一個尖尖的三角形＋右邊直豎 ➔ 像一顆可愛的三角飯糰（吃飯閉嘴「語言道斷」）；發音 va（ㄨㄚ）", audio: { type: "file", file: "audio/va_01.mp3" }, modakaBase: "va" }
+        ]
+      },
+      {
+        id: "sha-row",
+        title: "第7關：吹氣與合體 (śa~kṣa)",
+        story: "🌬️ <b>吹氣精靈與終極合體獸：</b><br>⛩️ <b>śa</b> 雙柱神廟門 ｜ 🪟 <b>ṣa</b> 田字小窗戶 ｜ 🐍 <b>sa</b> 左勾小蛇 ｜ 🦩 <b>ha</b> 彎脖子紅鶴 ｜ 🤖 <b>kṣa</b> 剪刀＋窗戶合體獸",
+        items: [
+          { char: "𑖫", roman: "śa", toy: "⛩️ 雙柱神廟門", meaning: "本性寂", hint: "【線條特徵】兩根直柱撐起圓拱屋頂 ➔ 像安靜莊嚴的雙柱神廟門（「本性寂」）；發音：西 / ㄒㄧㄚ", audio: { type: "file", file: "audio/sha_01.mp3" }, modakaBase: "sha" },
+          { char: "𑖬", roman: "ṣa", toy: "🪟 斜線小窗戶", meaning: "性鈍", hint: "【線條特徵】像大籃子 pa 中間多了一條斜斜的窗棂 ➔ 斜線小窗戶；反舌吹氣音 沙（ㄕㄚ）", audio: { type: "file", file: "audio/ssa_01.mp3" }, modakaBase: "ssa" },
+          { char: "𑖭", roman: "sa", toy: "🐍 左勾小蛇", meaning: "一切諦", hint: "【線條特徵】左邊彎彎扭動＋右邊直立 ➔ 像一條昂首的小蛇；齒音吹氣 撒（ㄙㄚ）", audio: { type: "file", file: "audio/sa_01.mp3" }, modakaBase: "sa" },
+          { char: "𑖮", roman: "ha", toy: "🦩 彎脖子紅鶴", meaning: "因", hint: "【線條特徵】上面橫蓋、中間脖子彎來彎去 ➔ 像一隻單腳站立彎脖子的紅鶴；喉音 哈（ㄏㄚ）", audio: { type: "file", file: "audio/ha_01.mp3" }, modakaBase: "ha" },
+          { char: "𑖎𑖿𑖬", roman: "kṣa", toy: "🤖 剪刀窗戶合體獸", meaning: "盡", hint: "【線條特徵】上面是大剪刀 ka ＋ 下面是小窗戶 ṣa 的終極合體字！發音國語「掐（ㄑㄧㄚ）」", audio: { type: "file", file: "audio/kssa_01.mp3" }, modakaBase: "kssa" }
+        ]
+      },
+      {
+        id: "vowels-core",
+        title: "第8關：母音積木與換裝配件",
+        story: "🎒 <b>換裝配件魔法公式（幫積木穿衣服戴帽子！）：</b><br>🎩 戴羽毛帽 <b>i (𑖰)</b> ＝「之根源」｜🛹 踩滑板車 <b>u (𑖲)</b> ＝「之譬喻」｜🧢 戴斜鴨舌帽 <b>e (𑖸)</b> ＝「之求索」｜🛡️ 穿左右護肩 <b>o (𑖺)</b> ＝「之瀑流」｜🔮 頭頂光球 <b>aṃ (𑖼)</b> ＝「之邊際」｜💨 右邊雙排氣管 <b>aḥ (𑖾)</b> ＝「究竟遠離」",
+        items: [
+          { char: "𑖀", roman: "a", toy: "🌱 破土小豆芽", meaning: "本不生（短音）", hint: "【線條特徵】左邊圓弧像胚芽＋右邊直豎 ➔ 破土而出的小豆芽，一切積木的起點！", audio: { type: "file", file: "audio/a.mp3" } },
+          { char: "𑖁", roman: "ā", toy: "🌱+🍶 小豆芽揹水壺", meaning: "寂靜 / 虛空（長音）", hint: "【線條特徵】小豆芽 a 的右邊多揹一根長水壺（多一豎）➔ 聲音拉長變成「啊～～」！", audio: { type: "file", file: "audio/aa.mp3" } },
+          { char: "𑖂", roman: "i", toy: "👽 大眼睛外星人", meaning: "根（短音）", hint: "【線條特徵】上方兩顆圓圓的大眼睛＋底下一條線 ➔ 變身配件「𑖰」像羽毛帽蓋過頭頂（之根源）", audio: { type: "file", file: "audio/i.mp3" } },
+          { char: "𑖄", roman: "u", toy: "🪝 大掛鉤（數字3）", meaning: "譬喻（短音）", hint: "【線條特徵】向右下翹起來的大掛鉤 ➔ 變身配件「𑖲」像腳底踩滑板車（之譬喻）", audio: { type: "file", file: "audio/u.mp3" } },
+          { char: "𑖊", roman: "e", toy: "▶️ 朝右三角箭頭", meaning: "求（長音）", hint: "【線條特徵】像一個朝右開口的三角形播放鍵 ➔ 變身配件「𑖸」像左上角戴斜鴨舌帽（之求索）", audio: { type: "file", file: "audio/e.mp3" } },
+          { char: "𑖌", roman: "o", toy: "👑 戴皇冠的小豆芽", meaning: "瀑流（長音）", hint: "【線條特徵】小豆芽頭頂戴了一頂波浪皇冠 ➔ 變身配件「𑖺」像左右護肩夾住身體（之瀑流）", audio: { type: "file", file: "audio/o.mp3" } },
+          { char: "𑖀𑖼", roman: "aṃ", toy: "🔮 頭頂懸浮魔法光球", meaning: "邊際（仰月點）", hint: "【線條特徵】正頭頂放一顆小圓球「𑖼」➔ 頭上亮光球發出鼻音（之邊際）", audio: { type: "file", file: "audio/am.mp3" } },
+          { char: "𑖀𑖾", roman: "aḥ", toy: "💨 右邊雙孔排氣管", meaning: "遠離（涅槃點）", hint: "【線條特徵】右邊上下垂直兩顆圓點「𑖾」（像冒號 :）➔ 從排氣管把氣吐光光（究竟遠離）", audio: { type: "file", file: "audio/ah.mp3" } }
+        ]
+      },
+      {
+        id: "mantra-practice",
+        title: "第9關：儀軌真言尋寶獵人",
+        isMantra: true,
+        story: "🔍 <b>尋寶獵人實戰任務：</b>看到一長串咒語別怕！只要在裡面找出你剛剛收集到的角色（例如開頭戴皇冠光球的 <b>𑖌𑖼 oṃ</b>、三角飯糰 <b>𑖪 va</b>、小帆船 <b>𑖧 ya</b>），就能秒認整句真言！",
+        items: [
+          {
+            char: "𑖌𑖼 𑖭𑖨𑖿𑖪 𑖝𑖞𑖯𑖐𑖝 𑖮𑖡𑖦𑖡 𑖡𑖺𑖎𑖨𑖺𑖦𑖰",
+            roman: "oṃ sarva tathāgata hanamana nokaromi",
+            toy: "🙏 尋寶線索：sarva + tathāgata",
+            meaning: "壇前普禮真言",
+            hint: "看到 sarva（一切）+ tathāgata（如來，裡面藏著小拱門 𑖐 ga！），就是壇前普禮真言！"
+          },
+          {
+            char: "𑖌𑖼 𑖭𑖿𑖪𑖥𑖯𑖪 𑖫𑖲𑖟𑖿𑖠 𑖭𑖨𑖿𑖪 𑖠𑖨𑖿𑖦 𑖭𑖿𑖪𑖥𑖯𑖪 𑖫𑖲𑖟𑖿𑖠𑖺𑖮𑖼",
+            roman: "oṃ svabhāva śuddha sarva dharma svabhāva śuddho'haṃ",
+            toy: "✨ 尋寶線索：śuddha 重複兩次",
+            meaning: "淨三業真言（一切法清淨，我亦自清淨）",
+            hint: "認出「śuddha（清淨）」和「dharma（法）」重複出現兩次，就是淨三業真言！"
+          },
+          {
+            char: "𑖌𑖼 𑖝𑖞𑖯𑖐𑖝𑖺𑖟𑖿𑖥𑖪𑖯𑖧 𑖭𑖿𑖪𑖯𑖮𑖯",
+            roman: "oṃ tathāgatodbhavāya svāhā",
+            toy: "🪷 尋寶線索：tathāgato（如來）",
+            meaning: "佛部三昧耶真言（如來發生成就）",
+            hint: "開頭是 tathāgato（如來），結尾 svāhā（成就），印五處求身業清淨。"
+          },
+          {
+            char: "𑖌𑖼 𑖢𑖟𑖿𑖦𑖺𑖟𑖿𑖥𑖪𑖯𑖧 𑖭𑖿𑖪𑖯𑖮𑖯",
+            roman: "oṃ padmodbhavāya svāhā",
+            toy: "🌸 尋寶線索：padmo（蓮花）",
+            meaning: "蓮花部三昧耶真言（蓮花發生成就）",
+            hint: "把佛部的如來換成 padmo（蓮花，開頭是開口大籃子 𑖢 pa！），求語業清淨。"
+          },
+          {
+            char: "𑖌𑖼 𑖪𑖕𑖿𑖨𑖺𑖟𑖿𑖥𑖪𑖯𑖧 𑖭𑖿𑖪𑖯𑖮𑖯",
+            roman: "oṃ vajrodbhavāya svāhā",
+            toy: "⚡ 尋寶線索：vajro（金剛）",
+            meaning: "金剛部三昧耶真言（金剛發生成就）",
+            hint: "開頭變成 vajro（金剛，開頭是三角飯糰 𑖪 va！），求意業清淨、證菩提心。"
+          },
+          {
+            char: "𑖌𑖼 𑖪𑖕𑖿𑖨𑖯𑖐𑖿𑖡𑖰 𑖢𑖿𑖨𑖟𑖱𑖢𑖿𑖝𑖯𑖧 𑖭𑖿𑖪𑖯𑖮𑖯",
+            roman: "oṃ vajrāgni pradīptāya svāhā",
+            toy: "🔥 尋寶線索：vajrāgni（金剛火）",
+            meaning: "被甲護身真言（金剛火熾盛）",
+            hint: "vajrāgni（金剛火）+ pradīptāya（熾盛），觀想穿上大慈大悲鎧甲保護自己。"
+          },
+          {
+            char: "𑖌𑖼 𑖤𑖺𑖠𑖰𑖓𑖰𑖝𑖿𑖝 𑖦𑖲𑖝𑖿𑖢𑖯𑖟𑖧𑖯𑖦𑖰",
+            roman: "oṃ bodhicitta mutpādayāmi",
+            toy: "💎 尋寶線索：bodhicitta（菩提心）",
+            meaning: "發菩提心真言",
+            hint: "看到 bodhicitta（菩提心，開頭是正方形禮盒 𑖤 ba 戴護肩！）就是發菩提心真言。"
+          },
+          {
+            char: "𑖌𑖼 𑖭𑖦𑖧 𑖭𑖝𑖿𑖪𑖼",
+            roman: "oṃ samaya satvaṃ",
+            toy: "🌟 尋寶線索：只有三個詞！",
+            meaning: "三昧耶戒真言",
+            hint: "最短的一句！samaya（三昧耶）+ satvaṃ（薩埵），一眼就能認出來！"
+          }
+        ]
+      }
+    ];
+
+    const studyPlan = [
+      {
+        week: "第 1 週（Day 1 ~ Day 7）：收集基本五音積木角色（每天 1 關）",
+        tasks: [
+          { id: "w1d1", text: "Day 1：收服【第1關：喉音恐龍家族】5 個角色（大剪刀、喇叭、拱門、駱駝、匹諾曹）", stageIdx: 0 },
+          { id: "w1d2", text: "Day 2：收服【第2關：口蓋音玩具盒】5 個角色（湯勺、柯南眼鏡、梳子、閃電劍、宮殿）", stageIdx: 1 },
+          { id: "w1d3", text: "Day 3：收服【第3關：捲舌音動物樂園】5 個角色（海盜鉤、甜甜圈、天鵝、氣球、三座山）", stageIdx: 2 },
+          { id: "w1d4", text: "Day 4：收服【第4關：齒音遊樂場】5 個角色（溜滑梯、小木屋、拳擊手套、湯碗、小象）", stageIdx: 3 },
+          { id: "w1d5", text: "Day 5：收服【第5關：唇音吹泡泡隊】5 個角色（大籃子、泡泡、禮盒、馬克杯、小蝸牛）", stageIdx: 4 },
+          { id: "w1d6", text: "Day 6～7：挑戰第 1～5 關的「階梯 3 聽聲音抓角色」", stageIdx: 0 }
+        ]
+      },
+      {
+        week: "第 2 週（Day 8 ~ Day 14）：交通工具、吹氣精靈與換裝配件",
+        tasks: [
+          { id: "w2d1", text: "Day 8～9：收服【第6關：交通工具組】與【第7關：吹氣精靈與合體獸】", stageIdx: 5 },
+          { id: "w2d2", text: "Day 10～11：玩熟【第8關：母音積木與換裝配件】（羽毛帽 i、滑板車 u、鴨舌帽 e、護肩 o）", stageIdx: 7 },
+          { id: "w2d3", text: "Day 12～14：挑戰「階梯 4 大魔王綜合考」，練習幫角色換裝拼讀", stageIdx: 7 }
+        ]
+      },
+      {
+        week: "第 3～4 週（Day 15 ~ Day 28）：中階儀軌《本尊念誦次第》尋寶獵人",
+        tasks: [
+          { id: "w3d1", text: "第3週前半：用尋寶線索認出【第9關】前 4 句真言（壇前普禮、淨三業、佛部、蓮花部）", stageIdx: 8 },
+          { id: "w3d2", text: "第3週後半：用尋寶線索認出【第9關】後 4 句真言（金剛部、被甲護身、發菩提心、三昧耶戒）", stageIdx: 8 },
+          { id: "w4d1", text: "第4週：對照手邊紙本筆記本（第1～15頁），遮住羅馬拼音練習直接認出角色念出來", stageIdx: 8 }
+        ]
+      },
+      {
+        week: "第 5～6 週（Day 29 ~ Day 42）：易混淆角色大掃除（強化長期記憶）",
+        tasks: [
+          { id: "w5d1", text: "第5週：每天刷 2 關「階梯 4 大魔王考」，把容易認錯的角色抓出來重看線條特徵", stageIdx: 3 },
+          { id: "w6d1", text: "第6週：拿一張白紙，看著角色名字（例如雙峰駱駝、大剪刀）畫出對應的悉曇梵字", stageIdx: 0 }
+        ]
+      },
+      {
+        week: "第 7～8 週（Day 43 ~ Day 60）：考前模擬衝刺（每天 15 分鐘維持手感）",
+        tasks: [
+          { id: "w7d1", text: "第7週：把第 1～9 關全部收集滿星星（每天 2 關，輕鬆無壓力）", stageIdx: 0 },
+          { id: "w8d1", text: "第8週：考前最後一週，專攻【第8關換裝配件】與【第9關真言尋寶】，安心上考場！", stageIdx: 8 }
+        ]
+      }
+    ];
+
+    const modakaRules = [
+      { suffixChar: "𑖰", suffixRoman: "i", idx: "03", toyWear: "戴羽毛帽", meaningTpl: (baseMeaning) => `${baseMeaning}之根源` },
+      { suffixChar: "𑖲", suffixRoman: "u", idx: "05", toyWear: "踩滑板車", meaningTpl: (baseMeaning) => `${baseMeaning}之譬喻` },
+      { suffixChar: "𑖸", suffixRoman: "e", idx: "07", toyWear: "戴斜鴨舌帽", meaningTpl: (baseMeaning) => `${baseMeaning}之求索` },
+      { suffixChar: "𑖺", suffixRoman: "o", idx: "09", toyWear: "穿左右護肩", meaningTpl: (baseMeaning) => `${baseMeaning}之瀑流` },
+      { suffixChar: "𑖼", suffixRoman: "aṃ", idx: "11", toyWear: "頂魔法光球", meaningTpl: (baseMeaning) => `${baseMeaning}之邊際` },
+      { suffixChar: "𑖾", suffixRoman: "aḥ", idx: "12", toyWear: "裝雙排氣管", meaningTpl: (baseMeaning) => `究竟遠離（${baseMeaning}）` }
+    ];
+
+    let currentStageIdx = 0;
+    let currentQuizStep = 1;
+    let clearedStepsMap = JSON.parse(localStorage.getItem("siddham_cleared_steps_v2") || "{}");
+    let checkedTasks = new Set(JSON.parse(localStorage.getItem("siddham_plan_v1") || "[]"));
+    let currentAudio = null;
+    let quizQueue = [];
+    let currentQ = null;
+    let answered = false;
+
+    function init() {
+      renderStageBar();
+      loadStage(0);
+      renderStudyPlan();
+    }
+
+    function switchTopTab(tab) {
+      stopAudio();
+      document.getElementById("navGame").classList.toggle("active", tab === "game");
+      document.getElementById("navPlan").classList.toggle("active", tab === "plan");
+      document.getElementById("gameSection").style.display = tab === "game" ? "flex" : "none";
+      document.getElementById("planSection").style.display = tab === "plan" ? "block" : "none";
+    }
+
+    function renderStudyPlan() {
+      const container = document.getElementById("planContainer");
+      container.innerHTML = "";
+      let totalTasks = 0;
+      let doneCount = 0;
+
+      studyPlan.forEach((weekObj) => {
+        const card = document.createElement("div");
+        card.className = "week-card";
+        card.innerHTML = `<div class="week-title"><span>${weekObj.week}</span></div>`;
+
+        weekObj.tasks.forEach((t) => {
+          totalTasks++;
+          const isChecked = checkedTasks.has(t.id);
+          if (isChecked) doneCount++;
+
+          const row = document.createElement("div");
+          row.className = `task-item ${isChecked ? "checked" : ""}`;
+          row.innerHTML = `
+            <input type="checkbox" ${isChecked ? "checked" : ""}>
+            <div class="task-text">${t.text}</div>
+            <button class="go-stage-tag" onclick="event.stopPropagation(); jumpToStage(${t.stageIdx})">去練習 ➔</button>
+          `;
+          row.onclick = () => toggleTask(t.id);
+          card.appendChild(row);
+        });
+        container.appendChild(card);
+      });
+
+      const pct = totalTasks === 0 ? 0 : Math.round((doneCount / totalTasks) * 100);
+      document.getElementById("progressText").innerText = `${doneCount} / ${totalTasks} 項任務 (${pct}%)`;
+      document.getElementById("progressBarFill").style.width = `${pct}%`;
+    }
+
+    function toggleTask(taskId) {
+      if (checkedTasks.has(taskId)) checkedTasks.delete(taskId);
+      else checkedTasks.add(taskId);
+      localStorage.setItem("siddham_plan_v1", JSON.stringify([...checkedTasks]));
+      renderStudyPlan();
+    }
+
+    function jumpToStage(idx) {
+      switchTopTab("game");
+      loadStage(idx);
+    }
+
+    function isStageMastered(stageId) {
+      const arr = clearedStepsMap[stageId] || [];
+      return arr.includes(4);
+    }
+
+    function renderStageBar() {
+      const bar = document.getElementById("stageBar");
+      bar.innerHTML = "";
+      stages.forEach((st, idx) => {
+        const btn = document.createElement("button");
+        btn.className = `stage-btn ${idx === currentStageIdx ? "active" : ""} ${isStageMastered(st.id) ? "done" : ""}`;
+        btn.innerText = st.title;
+        btn.onclick = () => loadStage(idx);
+        bar.appendChild(btn);
+      });
+    }
+
+    function loadStage(idx) {
+      currentStageIdx = idx;
+      renderStageBar();
+      setMode("learn");
+      const stage = stages[idx];
+      document.getElementById("stageStory").innerHTML = stage.story;
+      const list = document.getElementById("learnList");
+      list.innerHTML = "";
+      stage.items.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "learn-card";
+        const charClass = stage.isMantra ? "siddham-mantra" : "siddham";
+        const soundBadge = item.audio ? `<div class="sound-icon">🔊</div>` : `<div class="sound-icon" style="font-size:0.85rem; color:#94a3b8;">尋寶</div>`;
+        card.innerHTML = `
+          <div class="char-box" style="${stage.isMantra ? 'min-width:180px;' : ''}">
+            <div class="${charClass}">${item.char}</div>
+            <div class="roman">${item.roman}</div>
+          </div>
+          <div class="info-box">
+            <div>
+              <span class="toy-tag">${item.toy}</span>
+              <span class="meaning-tag">${stage.isMantra ? '真言' : '字義'}：${item.meaning}</span>
+            </div>
+            <div class="hint-text">${item.hint}</div>
+          </div>
+          ${soundBadge}
+        `;
+        if (item.audio) card.onclick = () => playItemAudio(item.audio, card);
+        list.appendChild(card);
+      });
+    }
+
+    function setMode(mode) {
+      stopAudio();
+      document.getElementById("tabLearn").classList.toggle("active", mode === "learn");
+      document.getElementById("tabQuiz").classList.toggle("active", mode === "quiz");
+      document.getElementById("learnView").style.display = mode === "learn" ? "block" : "none";
+      document.getElementById("quizView").style.display = mode === "quiz" ? "block" : "none";
+      if (mode === "quiz") {
+        startQuizStep(currentQuizStep);
+      }
+    }
+
+    function startQuizStep(stepNum) {
+      currentQuizStep = stepNum;
+      document.getElementById("tabLearn").classList.remove("active");
+      document.getElementById("tabQuiz").classList.add("active");
+      document.getElementById("learnView").style.display = "none";
+      document.getElementById("quizView").style.display = "block";
+      renderStepLadder();
+      buildQuizQueueForStep(stepNum);
+      nextQuestion();
+    }
+
+    function renderStepLadder() {
+      const ladder = document.getElementById("stepLadder");
+      const stage = stages[currentStageIdx];
+      const cleared = clearedStepsMap[stage.id] || [];
+      const stepsInfo = [
+        { num: 1, label: "🌟 第1階：認積木角色" },
+        { num: 2, label: "🌟 第2階：選拼音" },
+        { num: 3, label: stage.isMantra ? "🌟 第3階：找咒語" : "🌟 第3階：聽聲音" },
+        { num: 4, label: "👑 第4階：大魔王" }
+      ];
+      ladder.innerHTML = "";
+      stepsInfo.forEach((s) => {
+        const btn = document.createElement("button");
+        const isCleared = cleared.includes(s.num);
+        btn.className = `step-pill ${currentQuizStep === s.num ? "active" : ""} ${isCleared ? "cleared" : ""}`;
+        btn.innerText = isCleared ? `${s.label} ✓` : s.label;
+        btn.onclick = () => startQuizStep(s.num);
+        ladder.appendChild(btn);
+      });
+    }
+
+    function buildQuizQueueForStep(stepNum) {
+      const stage = stages[currentStageIdx];
+      const items = stage.items;
+      let questions = [];
+
+      if (stepNum === 1) {
+        items.forEach((item) => {
+          const labelVal = stage.isMantra ? item.meaning : `${item.toy}（${item.meaning}）`;
+          questions.push({
+            type: "🌟 第1階：看長相認積木角色",
+            prompt: stage.isMantra ? "看這句梵字，它是哪一首真言？" : "看看這個字的線條，它是哪一個積木角色？",
+            displayChar: item.char,
+            isMantraChar: !!stage.isMantra,
+            audio: item.audio || null,
+            correctAnswer: labelVal,
+            isCharOption: false,
+            options: shuffle(pickCustomDistractors(items, item, (x) => stage.isMantra ? x.meaning : `${x.toy}（${x.meaning}）`)),
+            explain: `<b>${item.char}</b> 就是「<b>${item.toy}</b>」（字義：${item.meaning}）！`
+          });
+        });
+      } else if (stepNum === 2) {
+        items.forEach((item) => {
+          questions.push({
+            type: "🌟 第2階：看積木選拼音",
+            prompt: `這個「${item.toy}」積木怎麼唸（羅馬拼音）？`,
+            displayChar: item.char,
+            isMantraChar: !!stage.isMantra,
+            audio: item.audio || null,
+            correctAnswer: item.roman,
+            isCharOption: false,
+            options: shuffle(pickCustomDistractors(items, item, (x) => x.roman)),
+            explain: `<b>${item.char}（${item.toy}）</b> 唸作 <b>${item.roman}</b>（${item.meaning}）。`
+          });
+        });
+      } else if (stepNum === 3) {
+        items.forEach((item) => {
+          if (item.audio) {
+            questions.push({
+              type: "🌟 第3階：聽聲音抓寶可夢",
+              prompt: "仔細聽聲音，把正確的積木角色抓出來！",
+              displayChar: null,
+              audio: item.audio,
+              correctAnswer: item.char,
+              isCharOption: true,
+              options: shuffle(pickCustomDistractors(items, item, (x) => x.char)),
+              explain: `剛才的聲音是 <b>${item.roman}</b>，也就是「<b>${item.toy} ${item.char}</b>」（${item.meaning}）！`
+            });
+          } else {
+            questions.push({
+              type: "🌟 第3階：看真言名稱找梵字",
+              prompt: `哪一句是「${item.meaning}」？`,
+              displayChar: null,
+              audio: null,
+              correctAnswer: item.char,
+              isCharOption: true,
+              options: shuffle(pickCustomDistractors(items, item, (x) => x.char)),
+              explain: `這句就是「<b>${item.meaning}</b>」（${item.roman}）。`
+            });
+          }
+        });
+      } else {
+        items.forEach((item) => {
+          questions.push({
+            type: "👑 第4階：大魔王綜合考",
+            prompt: stage.isMantra ? "這句真言的羅馬拼音是什麼？" : "這個積木的羅馬拼音是什麼？",
+            displayChar: item.char,
+            isMantraChar: !!stage.isMantra,
+            audio: item.audio || null,
+            correctAnswer: item.roman,
+            isCharOption: false,
+            options: shuffle(pickCustomDistractors(items, item, (x) => x.roman)),
+            explain: `<b>${item.char}（${item.toy}）</b> 讀作 <b>${item.roman}</b>（${item.meaning}）。`
+          });
+          if (item.audio) {
+            questions.push({
+              type: "👑 第4階：聽音抓怪獸",
+              prompt: "聽聲音，選出正確的梵字：",
+              displayChar: null,
+              audio: item.audio,
+              correctAnswer: item.char,
+              isCharOption: true,
+              options: shuffle(pickCustomDistractors(items, item, (x) => x.char)),
+              explain: `播放的是 <b>${item.roman}</b>（${item.toy} ${item.char}）。`
+            });
+          }
+        });
+
+        const modakaCandidates = items.filter((it) => it.modakaBase);
+        if (modakaCandidates.length > 0) {
+          const baseItem = modakaCandidates[Math.floor(Math.random() * modakaCandidates.length)];
+          const rule = modakaRules[Math.floor(Math.random() * modakaRules.length)];
+          const combinedChar = baseItem.char + rule.suffixChar;
+          const combinedRoman = baseItem.roman.slice(0, -1) + rule.suffixRoman;
+          const combinedMeaning = rule.meaningTpl(baseItem.meaning);
+          const mp3Path = `audio/${baseItem.modakaBase}_${rule.idx}.mp3`;
+          const otherRules = shuffle(modakaRules.filter((r) => r.suffixRoman !== rule.suffixRoman)).slice(0, 3);
+          const optList = shuffle([
+            `${combinedRoman}（${rule.toyWear} ➔ ${combinedMeaning}）`,
+            ...otherRules.map((r) => {
+              const rRom = baseItem.roman.slice(0, -1) + r.suffixRoman;
+              const rMean = r.meaningTpl(baseItem.meaning);
+              return `${rRom}（${r.toyWear} ➔ ${rMean}）`;
+            })
+          ]);
+          questions.push({
+            type: "👑 第4階：換裝積木合體題",
+            prompt: `「${baseItem.toy} ${baseItem.char}」穿上新配件變成下圖，它的讀音與變身效果是什麼？`,
+            displayChar: combinedChar,
+            audio: { type: "file", file: mp3Path },
+            correctAnswer: `${combinedRoman}（${rule.toyWear} ➔ ${combinedMeaning}）`,
+            isCharOption: false,
+            options: optList,
+            explain: `「${baseItem.toy}」<b>${rule.toyWear}（${rule.suffixChar}）</b>後，讀作 <b>${combinedRoman}</b>，字義變為「<b>${combinedMeaning}</b>」！`
+          });
+        }
+      }
+
+      quizQueue = shuffle(questions).slice(0, 5);
+    }
+
+    function pickCustomDistractors(pool, targetItem, mapperFn) {
+      const targetVal = mapperFn(targetItem);
+      let others = pool.filter((x) => mapperFn(x) !== targetVal).map(mapperFn);
+      if (others.length < 3) {
+        stages.forEach((st) => {
+          if (st.isMantra === stages[currentStageIdx].isMantra) {
+            st.items.forEach((x) => {
+              const val = mapperFn(x);
+              if (val !== targetVal && !others.includes(val)) others.push(val);
+            });
+          }
+        });
+      }
+      return [targetVal, ...shuffle(others).slice(0, 3)];
+    }
+
+    function nextQuestion() {
+      stopAudio();
+      answered = false;
+      document.getElementById("feedbackBox").style.display = "none";
+      document.getElementById("nextBtn").style.display = "none";
+
+      if (quizQueue.length === 0) {
+        const stage = stages[currentStageIdx];
+        if (!clearedStepsMap[stage.id]) clearedStepsMap[stage.id] = [];
+        if (!clearedStepsMap[stage.id].includes(currentQuizStep)) {
+          clearedStepsMap[stage.id].push(currentQuizStep);
+          localStorage.setItem("siddham_cleared_steps_v2", JSON.stringify(clearedStepsMap));
+        }
+        renderStageBar();
+        renderStepLadder();
+
+        document.getElementById("qTypeBadge").innerText = "🎉 本階過關！收服成功 ⭐";
+        document.getElementById("qProgress").innerText = "完成！";
+        document.getElementById("qChar").style.display = "none";
+        document.getElementById("qAudioBtn").style.display = "none";
+        document.getElementById("optionsGrid").innerHTML = "";
+
+        const btn = document.getElementById("nextBtn");
+        btn.style.display = "block";
+
+        if (currentQuizStep < 4) {
+          const nextStep = currentQuizStep + 1;
+          document.getElementById("qPrompt").innerHTML = `太棒了！你已經通過「<b>第 ${currentQuizStep} 階</b>」，準備好挑戰下一階了嗎？`;
+          btn.innerText = `前往「🌟 第 ${nextStep} 階」繼續闖關 ➔`;
+          btn.onclick = () => {
+            btn.onclick = nextQuestion;
+            btn.innerText = "下一題 ➔";
+            startQuizStep(nextStep);
+          };
+        } else {
+          const nextStageIdx = (currentStageIdx + 1) % stages.length;
+          document.getElementById("qPrompt").innerHTML = `🏆 恭喜打敗大魔王！「<b>${stage.title}</b>」全部角色都收服啦！`;
+          btn.innerText = `前往下一關：${stages[nextStageIdx].title} ➔`;
+          btn.onclick = () => {
+            btn.onclick = nextQuestion;
+            btn.innerText = "下一題 ➔";
+            currentQuizStep = 1;
+            loadStage(nextStageIdx);
+          };
+        }
+        return;
+      }
+
+      currentQ = quizQueue.shift();
+      document.getElementById("qTypeBadge").innerText = currentQ.type;
+      document.getElementById("qProgress").innerText = `本階還剩 ${quizQueue.length + 1} 題`;
+      document.getElementById("qPrompt").innerText = currentQ.prompt;
+
+      const qCharEl = document.getElementById("qChar");
+      if (currentQ.displayChar) {
+        qCharEl.style.display = "block";
+        qCharEl.style.fontSize = currentQ.isMantraChar ? "2rem" : "3.6rem";
+        qCharEl.innerText = currentQ.displayChar;
+      } else {
+        qCharEl.style.display = "none";
+      }
+
+      const qAudioBtn = document.getElementById("qAudioBtn");
+      if (currentQ.audio) {
+        qAudioBtn.style.display = "inline-flex";
+        if (currentQuizStep === 3) {
+          setTimeout(() => playItemAudio(currentQ.audio, null), 250);
+        }
+      } else {
+        qAudioBtn.style.display = "none";
+      }
+
+      const grid = document.getElementById("optionsGrid");
+      grid.innerHTML = "";
+      currentQ.options.forEach((optText) => {
+        const btn = document.createElement("button");
+        btn.className = "opt-btn";
+        if (currentQ.isCharOption) btn.innerHTML = `<span class="siddham" style="${stages[currentStageIdx].isMantra ? 'font-size:1.3rem;' : ''}">${optText}</span>`;
+        else btn.innerText = optText;
+        btn.onclick = () => checkAnswer(btn, optText);
+        grid.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selectedBtn, chosenValue) {
+      if (answered) return;
+      answered = true;
+      const isCorrect = chosenValue === currentQ.correctAnswer;
+      document.querySelectorAll(".opt-btn").forEach((b) => {
+        b.disabled = true;
+        if (b.innerText.trim() === currentQ.correctAnswer) b.classList.add("correct");
+      });
+      const fb = document.getElementById("feedbackBox");
+      fb.style.display = "block";
+      if (isCorrect) {
+        selectedBtn.classList.add("correct");
+        fb.className = "feedback-box ok";
+        fb.innerHTML = `⭐ <b>收服成功！太厲害了！</b> ${currentQ.explain}`;
+        if (currentQ.audio) playItemAudio(currentQ.audio, null);
+      } else {
+        selectedBtn.classList.add("wrong");
+        fb.className = "feedback-box err";
+        fb.innerHTML = `💡 <b>差一點點！看清楚特徵再抓一次：</b> ${currentQ.explain}<br><small>（這隻角色等一下會再跳出來讓你收服喔！）</small>`;
+        if (currentQ.audio) playItemAudio(currentQ.audio, null);
+        quizQueue.splice(Math.min(2, quizQueue.length), 0, currentQ);
+      }
+      document.getElementById("nextBtn").style.display = "block";
+    }
+
+    function replayCurrentQuestionAudio() { if (currentQ && currentQ.audio) playItemAudio(currentQ.audio, null); }
+
+    function playItemAudio(audioSpec, cardEl) {
+      stopAudio();
+      if (!audioSpec) return;
+      if (cardEl) cardEl.classList.add("playing");
+      currentAudio = new Audio(audioSpec.file);
+      if (audioSpec.type === "range") {
+        currentAudio.currentTime = audioSpec.start;
+        currentAudio.play().catch((e) => console.warn("音檔播放失敗:", e));
+        currentAudio.addEventListener("timeupdate", () => { if (currentAudio && currentAudio.currentTime >= audioSpec.end) stopAudio(); });
+      } else {
+        currentAudio.play().catch((e) => console.warn("音檔播放失敗:", e));
+      }
+      currentAudio.onended = () => stopAudio();
+    }
+
+    function stopAudio() {
+      if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+      document.querySelectorAll(".learn-card.playing").forEach((c) => c.classList.remove("playing"));
+    }
+
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    init();
+  </script>
+</body>
+</html>
